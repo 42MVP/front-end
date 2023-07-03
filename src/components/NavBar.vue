@@ -1,19 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { userStore } from '../stores/user';
+
+const links = [
+  {
+    to: '/chats',
+    text: 'Chats',
+  },
+  {
+    to: '/friends',
+    text: 'Friends',
+  },
+  {
+    to: '/game',
+    text: 'Game',
+  },
+];
 </script>
 
 <template>
   <div class="header">
-    <h1 class="navLogo">PING PONG</h1>
-    <nav class="navItem">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/chat">Chat</RouterLink>
-      <RouterLink to="/friends">Friends</RouterLink>
-      <RouterLink to="/game">Game</RouterLink>
-    </nav>
-    <nav class="userName">
-      <a class="profileImage"></a>
-      <RouterLink to="/friends">User1</RouterLink>
+    <div class="header-left">
+      <h1 class="navLogo" to="/">PING PONG</h1>
+      <nav class="navItems">
+        <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
+      </nav>
+    </div>
+    <nav class="userInfo">
+      <img :src="userStore?.user?.avatarURL" class="profileImage" />
+      <RouterLink to="/friends">{{userStore?.user?.name}}</RouterLink>
     </nav>
   </div>
 </template>
@@ -25,20 +39,32 @@ import { ref } from 'vue';
   display: flex;
   flex-flow: row;
   align-items: center;
-  /* justify-content: space-between; */
+  justify-content: space-between;
+  padding: 0px 30px;
 }
 
-.navItem {
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.navItems {
   display: flex;
   justify-content: space-between;
-  margin-left: 50px;
 }
 
-.navItem a {
+.navItems a {
   font-weight: 900;
   font-size: 32px;
   color: #463f3a;
-  margin-left: 20px;
+  margin-left: 50px;
+  cursor: pointer;
+}
+
+.navItems a:hover {
+  opacity: 0.5;
+  transition: 0.1s ease-out;
 }
 
 .navLogo {
@@ -46,41 +72,32 @@ import { ref } from 'vue';
   font-weight: 900;
   font-size: 64px;
   font-style: italic;
-  margin-left: 20px;
+  cursor: pointer;
 }
 
-/* .navLogo::after {
-  display: block;
-  content: '';
-  right: 40px;
-  top: 30px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: chartreuse;
-} */
-
-.menuBar {
-}
-.userName {
-  margin-left: 300px;
+.userInfo {
   display: flex;
   flex-flow: row;
   align-items: center;
 }
-.userName a {
+
+.userInfo a {
   font-weight: 800;
   font-size: 26px;
   color: black;
-  margin-left: 20px;
+  color: #463f3a;
 }
 
-.profileImage {
+.userInfo a:hover {
+  opacity: 0.5;
+  transition: 0.1s ease-out;
+}
+
+.userInfo img {
   height: 55px;
   width: 55px;
-  background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
-  position: relative;
+  margin-right: 20px;
 }
 </style>

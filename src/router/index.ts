@@ -17,10 +17,10 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
-      path: '/chat',
-      name: 'chat',
+      path: '/chats',
+      name: 'chats',
       component: () => import('../views/ChatView.vue'),
-    }
+    },
   ],
 });
 

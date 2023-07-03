@@ -73,6 +73,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  color: #463F3A;
 }
 
 .chat-info-line-box {
@@ -82,8 +83,6 @@ export default {
   font-size: 24px;
   font-family: Inter;
   font-weight: 500;
-  line-height: 32px;
-  letter-spacing: -0.456px;
 }
 
 .chat-info-line-box-me {
@@ -93,8 +92,6 @@ export default {
   font-size: 24px;
   font-family: Inter;
   font-weight: 500;
-  line-height: 32px;
-  letter-spacing: -0.456px;
   color: #e0afa0;
 }
 
@@ -105,7 +102,6 @@ export default {
   font-family: Inter;
   font-weight: 500;
   line-height: 32px;
-  letter-spacing: -0.456px;
   opacity: 0.5;
 }
 
@@ -115,7 +111,7 @@ export default {
   font-family: Inter;
   font-weight: 500;
   line-height: 32px;
-  color: black;
+  color: #463F3A;
   overflow-wrap: break-word;
 }
 </style>
