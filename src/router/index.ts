@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import FriendsListView from '../views/FriendsListView.vue';
+import GameView from '../views/GameView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +31,11 @@ const router = createRouter({
       path: '/chats',
       name: 'chats',
       component: () => import('../views/ChatView.vue'),
+    },
+    {
+      path: '/friends',
+      name: 'friends',
+      component: FriendsListView,
     },
   ],
 });

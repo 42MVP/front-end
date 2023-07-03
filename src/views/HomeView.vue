@@ -1,8 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Logo from '@/components/HomeComponents/Logo.vue';
+</script>
 
 <template>
-  <router-link to="/about">About</router-link>
-  <h1>This is home page</h1>
+  <main>
+    <Logo />
+  </main>
 </template>
 
 <style>

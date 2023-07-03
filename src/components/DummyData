@@ -1,0 +1,58 @@
+// export friendsList: FriendType[] = [
+//   { userName: 'user1', State: 'onLine', Level: 42, Achievement: 'Achievement1' },
+//   { userName: 'user2', State: 'offLine', Level: 42, Achievement: 'Achievement0' },
+//   { userName: 'user3', State: 'onLine', Level: 42, Achievement: 'Achievement3' },
+//   { userName: 'user4', State: 'onGame', Level: 42, Achievement: 'Achievement2' },
+//   { userName: 'user5', State: 'onGame', Level: 42, Achievement: 'Achievement7' },
+//   { userName: 'user6', State: 'offLine', Level: 42, Achievement: 'Achievement8' },
+//   { userName: 'user7', State: 'offLine', Level: 42, Achievement: 'Achievement12' },
+//   { userName: 'user8', State: 'onLine', Level: 42, Achievement: 'Achievement12' },
+// ];
+
+const friends = {
+  user: 'hejang',
+  friends: [
+    {
+      userName: 'User1',
+      State: 'onLine',
+      Level: '42',
+      Achievement: 'Achievement1',
+    },
+    {
+      userName: 'User2',
+      State: 'onLine',
+      Level: '42',
+      Achievement: 'Achievement2',
+    },
+    {
+      userName: 'User3',
+      State: 'offLine',
+      Level: '24',
+      Achievement: 'Achievement1',
+    },
+    {
+      userName: 'User4',
+      State: 'onGame',
+      Level: '42',
+      Achievement: 'Achievement4',
+    },
+    {
+      userName: 'User5',
+      State: 'onGame',
+      Level: '2',
+      Achievement: 'Achievement2',
+    },
+    {
+      userName: 'User6',
+      State: 'offLine',
+      Level: '22',
+      Achievement: 'Achievement9',
+    },
+    {
+      userName: 'User7',
+      State: 'onLine',
+      Level: '44',
+      Achievement: 'Achievement0',
+    },
+  ],
+};

@@ -9,6 +9,10 @@ export default {
 </script>
 
 <template>
-  <NavBar />
-  <router-view />
+  <main>
+    <header v-if="$route.path !== '/'">
+      <NavBar />
+    </header>
+    <RouterView />
+  </main>
 </template>
