@@ -4,7 +4,7 @@ import BasicButton from '../../BasicButton.vue';
 import TextInputBox from '../../TextInputBox.vue';
 
 export default {
-  emits: ['close'],
+  emits: ['close', 'submit'],
   components: {
     Modal,
     TextInputBox,
@@ -34,7 +34,7 @@ export default {
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" />
+      <BasicButton text="확인" @click="$emit('submit')" />
     </template>
   </Modal>
 </template>

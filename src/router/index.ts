@@ -25,10 +25,10 @@ const router = createRouter({
       props: route => ({ user_id: route.params.id }),
     },
     {
-      path: '/chat',
-      name: 'chat',
+      path: '/chats',
+      name: 'chats',
       component: () => import('../views/ChatView.vue'),
-    }
+    },
   ],
 });
 
