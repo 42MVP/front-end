@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext"
+  },
   "files": [],
   "references": [
     {
