@@ -61,6 +61,7 @@ export default {
 
 .modal-body {
   margin: 20px 0;
+  color: #463f3a;
 }
 
 .modal-footer {

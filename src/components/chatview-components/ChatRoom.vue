@@ -11,6 +11,11 @@ import DropdownMenu from '../dropdown-component/DropdownMenu.vue';
 import BasicListElement from '../BasicListElement.vue';
 
 export default {
+  watch: {
+    chatInfo() {
+      this.isSelect = true;
+    },
+  },
   components: {
     JoinChannelPasswordModal,
     ManageChannelMemberModal,
@@ -22,13 +27,17 @@ export default {
     DropdownMenu,
     BasicListElement,
   },
+  props: {
+    chatInfo: {},
+    friends: [],
+  },
   methods: {
     setModal(name: string) {
       this.modalName = name;
     },
-    addChannelChat(newMessage: string) {
-      this.selectChannel.chats = [
-        ...this.selectChannel.chats,
+    addChat(newMessage: string) {
+      this.chatInfo.chats = [
+        ...this.chatInfo.chats,
         {
           id: 1,
           username: 'kanghyki',
@@ -37,122 +46,14 @@ export default {
           date: new Date(),
         },
       ];
-      this.chats = this.selectChannel.chats;
-    },
-    addUserChat(newMessage: string) {
-      this.selectUser.chats = [
-        ...this.selectUser.chats,
-        {
-          id: 1,
-          username: 'kanghyki',
-          userAvatarURL: '',
-          message: newMessage,
-          date: new Date(),
-        },
-      ];
-      this.chats = this.selectUser.chats;
+      this.chatInfo.chats = this.chatInfo.chats;
     },
   },
   data() {
     return {
+      isSelect: false,
       modalName: '',
-      isSelect: true,
-      isChannel: true,
-      isChannelMenu: false,
-      selectChannel: {
-        id: 1,
-        name: '42mvp',
-        clickEvent: 'channelclick',
-        avatarURL: '',
-        alertCount: 42,
-        hasPassword: false,
-        users: [
-          {
-            id: 1,
-            name: 'kanghyki',
-            avatarURL: '',
-          },
-          {
-            id: 2,
-            name: 'hyeongki',
-            avatarURL: '',
-          },
-        ],
-        banUsers: [
-          {
-            id: 3,
-            name: 'badguy',
-            avatarURL: '',
-          },
-          {
-            id: 4,
-            name: 'whoami',
-            avatarURL: '',
-          },
-        ],
-        chats: [
-          {
-            id: 1,
-            username: 'kanghyki',
-            userAvatarURL: '',
-            message: '이거봐봐 어때?',
-            date: new Date(),
-          },
-          {
-            id: 2,
-            username: 'hyeognki',
-            userAvatarURL: '',
-            message: '오 대단한걸?',
-            date: new Date(),
-          },
-        ],
-      },
-      selectUser: {
-        id: 1,
-        name: 'hyeongki',
-        avatarURL: '',
-        clickEvent: 'userclick',
-        alertCount: 12,
-        chats: [
-          {
-            id: 1,
-            username: 'hyeongki',
-            userAvatarURL: '',
-            message: '이건 두번째 메세지',
-            date: new Date(),
-          },
-        ],
-      },
-      friend_list_elements: [
-        {
-          id: 1,
-          name: 'daram',
-          avatarURL: '',
-          clickEvent: 'friendclick',
-        },
-        {
-          id: 2,
-          name: 'goyang',
-          avatarURL: '',
-          clickEvent: 'friendclick',
-        },
-      ],
-      chats: [
-        {
-          id: 1,
-          username: 'kanghyki',
-          userAvatarURL: '',
-          message: '이거봐봐 어때?',
-          date: new Date(),
-        },
-        {
-          id: 2,
-          username: 'hyeognki',
-          userAvatarURL: '',
-          message: '오 대단한걸?',
-          date: new Date(),
-        },
-      ],
+      isActiveDropdown: false,
     };
   },
 };
@@ -165,7 +66,7 @@ export default {
     :isShow="modalName === '비밀번호 설정'"
     @close="modalName = ''"
     @submit="
-      selectChannel.hasPassword = true;
+      chatInfo.hasPassword = true;
       modalName = '';
     "
   />
@@ -173,22 +74,22 @@ export default {
     :isShow="modalName === '비밀번호 해제'"
     @close="modalName = ''"
     @submit="
-      selectChannel.hasPassword = false;
+      chatInfo.hasPassword = false;
       modalName = '';
     "
   />
   <div v-if="isSelect" class="chat-list-container">
-    <div v-if="isChannel" class="chat-box-list-name">
+    <div v-if="chatInfo.isChannel" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
-        <div class="chat-box-list-name-left-word">{{ selectChannel.name }}</div>
+        <div class="chat-box-list-name-left-word">{{ chatInfo.name }}</div>
         <div class="chat-box-list-name-left-icon-container">
-          <div class="chat-box-list-name-left-icon" @click="isChannelMenu = !isChannelMenu">
-            {{ !isChannelMenu ? '⊕' : '⊖' }}
+          <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
+            {{ !isActiveDropdown ? '⊕' : '⊖' }}
           </div>
-          <DropdownMenu v-if="isChannelMenu" style="width: 400px">
+          <DropdownMenu v-if="isActiveDropdown" style="width: 400px">
             <template #dropdown-element>
               <BasicListElement
-                v-for="friend in friend_list_elements"
+                v-for="friend in friends"
                 :key="friend.id"
                 :id="friend.id"
                 :name="friend.name"
@@ -203,13 +104,8 @@ export default {
       <div class="chat-box-list-name-right">
         <div class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div v-if="selectChannel.hasPassword" class="chat-box-icon" @click="setModal('비밀번호 변경')">🔐</div>
-          <div
-            v-if="selectChannel.hasPassword"
-            class="chat-box-icon"
-            @click="setModal('비밀번호 해제')"
-            style="border: 0px"
-          >
+          <div v-if="chatInfo.hasPassword" class="chat-box-icon" @click="setModal('비밀번호 변경')">🔐</div>
+          <div v-if="chatInfo.hasPassword" class="chat-box-icon" @click="setModal('비밀번호 해제')" style="border: 0px">
             🔓
           </div>
           <div v-else class="chat-box-icon" @click="setModal('비밀번호 설정')" style="border: 0px">🔒</div>
@@ -217,19 +113,16 @@ export default {
       </div>
     </div>
     <div v-else class="chat-box-list-name">
-      <div class="chat-box-list-name-left-word">{{ selectUser.name }}님과의 대화</div>
+      <div class="chat-box-list-name-left-word">{{ chatInfo.name }}님과의 대화</div>
     </div>
-    <MessageList :chats="chats" />
-    <ChatInputBox v-if="isChannel" @response="newMessage => addChannelChat(newMessage)" :maxLength="150" />
-    <ChatInputBox v-else @response="newMessage => addUserChat(newMessage)" :maxLength="150" />
+    <MessageList :chats="chatInfo.chats" />
+    <ChatInputBox @response="newMessage => addChat(newMessage)" :maxLength="150" />
   </div>
   <div v-else class="chat-box-unchoose">☺️</div>
 </template>
 
 <style scoped>
 .chat-box-unchoose {
-  width: 900px;
-  height: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -237,6 +130,7 @@ export default {
   opacity: 0.1;
   width: 100%;
   height: 100%;
+  color: #463f3a;
 }
 
 .title-icon-relative {

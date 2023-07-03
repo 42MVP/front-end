@@ -7,9 +7,10 @@ import DropdownMenuElement from '../dropdown-component/DropdownMenuElement.vue';
 import SearchChannelModal from '../chatview-components/modals/SearchChannelModal.vue';
 import MakeDmModal from '../chatview-components/modals/MakeDmModal.vue';
 import MakeChannelModal from '../chatview-components/modals/MakeChannelModal.vue';
+import JoinChannelPasswordModal from './modals/JoinChannelPasswordModal.vue';
 
 export default {
-  emits: ['selectchat'],
+  emits: ['selectchat', 'reset'],
   components: {
     BasicList,
     BasicListElement,
@@ -18,6 +19,10 @@ export default {
     SearchChannelModal,
     MakeDmModal,
     MakeChannelModal,
+    JoinChannelPasswordModal
+  },
+  props: {
+    chatInfos: [],
   },
   data() {
     return {
@@ -29,47 +34,26 @@ export default {
       modalName: '',
       isMenu: false,
       eventResponse: '',
-      chatList: [
-        {
-          id: 1,
-          name: '42mvp',
-          avatarURL: '',
-          type: 'channel',
-          alertCount: 42,
-        },
-        {
-          id: 2,
-          name: 'kanghyki',
-          avatarURL: '',
-          type: 'dm',
-          alertCount: 12,
-        },
-        {
-          id: 3,
-          name: 'hyeognki',
-          avatarURL: '',
-          type: 'dm',
-          alertCount: 0,
-        },
-      ],
     };
   },
   watch: {
     eventResponse() {
       if (!this.eventResponse) return;
       const sp = this.eventResponse.split(':');
-      const chatID = parseInt(sp[0]);
+      const index  = parseInt(sp[0]);
       const eventName = sp[1];
-      const chat = this.chatList.find(e => e.id === chatID);
+      const chatInfo = this.chatInfos[index];
       if (eventName === 'click') {
         console.log('click');
-        this.$emit('selectchat', chatID);
-      } else if (eventName === 'quit') {
-        console.log('quit');
-        this.chatList = this.chatList.filter(e => e.id !== chatID);
+        if (chatInfo.hasPassword) {
+          this.setModal('채널 비밀번호 입력');
+        }
+        else {
+          this.$emit('selectchat', index);
+        }
       }
     },
-    chatList() {
+    chatInfos() {
       this.$nextTick(() => {
         let userList = document.querySelector('.user-list-container');
         userList.scrollTo({ top: userList.scrollHeight, behavior: 'smooth' });
@@ -88,6 +72,7 @@ export default {
   <SearchChannelModal :isShow="modalName === '채널 탐색'" @close="modalName = ''" />
   <MakeDmModal :isShow="modalName === 'DM 생성'" @close="modalName = ''" />
   <MakeChannelModal :isShow="modalName === '채널 생성'" @close="modalName = ''" />
+  <JoinChannelPasswordModal :isShow="modalName === '채널 비밀번호 입력'" @close="$emit('reset'); modalName = ''" />
   <BasicList :elements="user_list_elements">
     <template #title> 채팅 </template>
     <template #title-icon>
@@ -106,9 +91,9 @@ export default {
     </template>
     <template #user-element>
       <BasicListElement
-        v-for="element in chatList"
+        v-for="(element, index) in chatInfos"
         :key="element.id"
-        :id="element.id"
+        :id="index"
         :name="element.name"
         :avatarURL="element.avatarURL"
         :alertCount="element.alertCount"

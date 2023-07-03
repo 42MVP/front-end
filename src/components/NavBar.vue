@@ -27,14 +27,15 @@ const links = [
     </div>
     <nav class="userInfo">
       <img :src="userStore?.user?.avatarURL" class="profileImage" />
-      <RouterLink to="/friends">{{userStore?.user?.name}}</RouterLink>
+      <RouterLink to="/friends">{{ userStore?.user?.name }}</RouterLink>
     </nav>
   </div>
 </template>
 
 <style scoped>
 .header {
-  min-width: 100vh;
+  width: 100%;
+  height: 90px;
   background-color: #e0afa0;
   display: flex;
   flex-flow: row;
@@ -58,8 +59,9 @@ const links = [
   font-weight: 900;
   font-size: 32px;
   color: #463f3a;
-  margin-left: 50px;
+  margin-right: 30px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .navItems a:hover {
@@ -73,6 +75,7 @@ const links = [
   font-size: 64px;
   font-style: italic;
   cursor: pointer;
+  margin-right: 50px;
 }
 
 .userInfo {
@@ -86,6 +89,7 @@ const links = [
   font-size: 26px;
   color: black;
   color: #463f3a;
+  text-decoration: none;
 }
 
 .userInfo a:hover {

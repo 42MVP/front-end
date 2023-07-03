@@ -26,13 +26,7 @@ export default {
     >
       <div class="list-element-avatar">
         <p v-if="alertCount > 0">{{ alertCount > 99 ? '99+' : alertCount }}</p>
-        <img
-          :src="
-            avatarURL !== ''
-              ? avatarURL
-              : ''
-          "
-        />
+        <img :src="avatarURL !== '' ? avatarURL : ''" />
       </div>
       <span :style="{ fontWeight: alertCount > 0 && '700' }">{{ name }}</span>
     </div>
