@@ -20,14 +20,15 @@ const links = [
 <template>
   <div class="header">
     <div class="header-left">
-      <h1 class="navLogo" to="/">PING PONG</h1>
+      <RouterLink to="/"> <h1 class="navLogo">PING PONG</h1></RouterLink>
+      <div class="ball" />
       <nav class="navItems">
         <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
       </nav>
     </div>
     <nav class="userInfo">
       <img :src="userStore?.user?.avatarURL" class="profileImage" />
-      <RouterLink to="/friends">{{ userStore?.user?.name }}</RouterLink>
+      <RouterLink :to="'/users/' + userStore?.user?.name">{{ userStore?.user?.name }}</RouterLink>
     </nav>
   </div>
 </template>
@@ -76,6 +77,19 @@ const links = [
   font-style: italic;
   cursor: pointer;
   margin-right: 50px;
+  min-width:max-content;
+}
+
+.ball {
+  background: var(--base-pink, #e0afa0);
+  border-radius: 50%;
+  width: 53px;
+  height: 54.33px;
+  position: absolute;
+  left: 370px;
+  top: -8px;
+  padding: -10px 0px 0px 0px;
+  box-sizing: border-box;
 }
 
 .userInfo {
@@ -103,5 +117,12 @@ const links = [
   border-radius: 50%;
   display: inline-block;
   margin-right: 20px;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none !important;
 }
 </style>
