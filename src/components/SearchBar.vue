@@ -1,36 +1,31 @@
-<script lang="ts">
-import DropdownMenu from '../components/dropdown-component/DropdownMenu.vue';
+<script setup lang="ts">
+import { ref } from 'vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 
-export default {
-  emits: ['response'],
-  data() {
-    return {
-      search_text: '',
-    };
-  },
-  watch: {
-    search_text() {
-      this.$emit('response', this.search_text);
-    },
-  },
-  props: {
-    placeholderText: '',
-    isMenu: false,
-    icon: '',
-  },
-  components: {
-    DropdownMenu,
-  },
-};
+const props = defineProps({
+  placeholderText: { type: String, default: '' },
+  isMenu: { default: false },
+  icon: { default: '' },
+});
+
+const emits = defineEmits(['response']); // REVIEW : update:search_text
+
+const search_text = ref('');
+
 </script>
 
 <template>
   <div class="search-bar-relative">
     <div class="search-bar-main-container">
-      <div class="search-bar-icon">{{ icon }}</div>
-      <input v-model="search_text" :placeholder="placeholderText" class="search-bar-input" />
+      <div class="search-bar-icon">{{ props.icon }}</div>
+      <input
+        v-model="search_text"
+        :placeholder="props.placeholderText"
+        class="search-bar-input"
+        @input="emits('response', search_text)"
+      />
     </div>
-    <DropdownMenu v-if="isMenu" style="width: 100%; max-height: 300px">
+    <DropdownMenu v-if="props.isMenu" style="width: 100%; max-height: 300px">
       <template #dropdown-element>
         <slot name="search-bar-element" />
       </template>

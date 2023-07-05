@@ -1,21 +1,19 @@
-<script lang="ts">
-export default {
-  data() {
-    return {};
+<script setup lang="ts">
+// TODO : mv Modal.vue BasicModal.vue
+const props = defineProps({
+  title: { type: String, default: '' },
+  show: {
+    type: Boolean,
+    default: true,
   },
-  props: {
-    title: '',
-    show: Boolean,
-  },
-  components: {},
-};
+});
 </script>
 
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
+    <div v-if="props.show" class="modal-mask">
       <div class="modal-container">
-        <div class="modal-header">{{ title }}</div>
+        <div class="modal-header">{{ props.title }}</div>
         <div class="modal-body">
           <slot name="body"></slot>
         </div>

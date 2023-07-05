@@ -1,19 +1,22 @@
-<script lang="ts">
-export default {
-  emits: ['response'],
-  props: {
-    text: '',
-    type: {
-      default: true,
-    },
+<script setup lang="ts">
+const props = defineProps({
+  text: { type: String, default: '' },
+  type: {
+    default: true,
   },
+});
+
+const emits = defineEmits(['response']);
+
+const onClick = () => {
+  // NOTE : 부모에 넘겨줄 데이터
+  emits('response', { text: props.text, type: props.type });
 };
 </script>
+
 <template>
-  <div
-    :style="{ backgroundColor : type ? '#463f3a' : '#f4f3ee' }"
-    class="basic-button-container" @click="this.$emit('response', 'clicked')">
-    <p :style="{ color : type ? '#f4f3ee' : '#463f3a' }">{{ text }}</p>
+  <div :style="{ backgroundColor: type ? '#463f3a' : '#f4f3ee' }" class="basic-button-container" @click="onClick">
+    <p :style="{ color: props.type ? '#f4f3ee' : '#463f3a' }">{{ props.text }}</p>
   </div>
 </template>
 

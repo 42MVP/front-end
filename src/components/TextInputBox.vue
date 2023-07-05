@@ -1,43 +1,38 @@
-<script>
-export default {
-  emits: ['response'],
-  data() {
-    return {
-      text: '',
-    };
-  },
-  props: {
-    maxLength: 0,
-    placeholderText: '',
-    type: false,
-  },
-  watch: {
-    text() {
-      this.$emit('response', this.text);
-    },
-  },
-  computed: {
-    isTextOver() {
-      if (this.text.length >= this.maxLength) {
-        return true;
-      }
-      return false;
-    },
-    limitText() {
-      if (this.text.length > this.maxLength) {
-        this.text = this.text.slice(0, this.maxLength);
-      }
-      return this.text;
-    },
-  },
-};
+<script setup lang="ts">
+import { ref, computed, watchEffect } from 'vue';
+
+const props = defineProps({
+  maxLength: { type: Number, default: 0 },
+  placeholderText: { type: String, default: '' },
+  type: { default: '' },
+});
+
+const text = ref('');
+
+const emits = defineEmits(['response']); // REVIEW : update:text
+
+const isTextOver = ref(false);
+watchEffect(() => {
+  isTextOver.value = text.value.length >= props.maxLength;
+});
+
+const limitText = computed(() => {
+  const textLimit = text.value;
+  return text.value.length > props.maxLength ? textLimit : textLimit.slice(0, props.maxLength);
+});
 </script>
 
 <template>
   <div class="text-input-box-container">
-    <input :type="type" v-model="text" class="text-input-box" :placeholder="placeholderText" />
+    <input
+      :type="props.type"
+      v-model="text"
+      class="text-input-box"
+      :placeholder="placeholderText"
+      @input="emits('response', text)"
+    />
     <p :class="{ 'text-input-box-counter': !isTextOver, 'text-input-box-counter-false': isTextOver }">
-      {{ limitText.length }}/{{ maxLength }}
+      {{ limitText.length }}/{{ props.maxLength }}
     </p>
   </div>
 </template>

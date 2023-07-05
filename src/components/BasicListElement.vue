@@ -1,19 +1,21 @@
-<script lang="ts">
-import { IIconButton } from '../interfaces/IconButton.interface';
+<script setup lang="ts">
+import type { IIconButton } from '@/interfaces/IconButton.interface';
 
-export default {
-  emits: ['response'],
-  props: {
-    id: 0,
-    alertCount: 0,
-    clickEvent: '',
-    avatarURL: {
-      type: String,
-      default: '',
-    },
-    name: '',
-    iconButtons: [] as IIconButton[],
+const props = defineProps({
+  id: { type: Number, default: 0 },
+  alertCount: { type: Number, default: 0 },
+  clickEvent: { default: '' },
+  avatarURL: {
+    type: String,
+    default: '',
   },
+  name: { type: String, default: '' },
+  iconButtons: { type: Array<IIconButton>, default: [] as IIconButton[] },
+});
+
+const emits = defineEmits(['response']);
+const onClick = (id: number, iconEvent: string) => {
+  emits('response', `${id}:${iconEvent}`);
 };
 </script>
 
@@ -22,20 +24,16 @@ export default {
     <div
       class="list-element-info-container"
       :style="{ cursor: clickEvent && 'pointer' }"
-      @click="clickEvent && this.$emit('response', `${id}:${clickEvent}`)"
+      @click="clickEvent && onClick(props.id, clickEvent)"
     >
       <div class="list-element-avatar">
         <p v-if="alertCount > 0">{{ alertCount > 99 ? '99+' : alertCount }}</p>
         <img :src="avatarURL !== '' ? avatarURL : ''" />
       </div>
-      <span :style="{ fontWeight: alertCount > 0 && '700' }">{{ name }}</span>
+      <span :style="{ fontWeight: alertCount > 0 ? '700' : undefined }">{{ name }}</span>
     </div>
     <div class="list-element-icon-container">
-      <button
-        v-for="iconButton in iconButtons"
-        :key="iconButton.id"
-        @click="this.$emit('response', `${id}:${iconButton.event}`)"
-      >
+      <button v-for="(iconButton, index) in iconButtons" :key="index" @click="onClick(props.id, iconButton.event)">
         {{ iconButton.emoji }}
       </button>
     </div>
