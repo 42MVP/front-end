@@ -1,16 +1,22 @@
-<script lang="ts">
-export default {
-  emits: ['click'],
-  props: {
-    text: '',
-    isActive: false,
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  value: { type: Number, default: null },
+  text: { type: String, default: '' },
+  isActive: {
+    default: false,
   },
-};
+});
+
+const emits = defineEmits(['click']);
+
+const className = computed(() => [{ 'radio-button': !props.isActive }, { 'radio-button-click': props.isActive }]);
 </script>
 
 <template>
   <div class="radio-button-container">
-    <div @click="$emit('click')" :class="{ 'radio-button': !isActive, 'radio-button-click': isActive }" />
+    <div @click="emits('click', props.value || props.text)" :class="className" />
     <p>{{ text }}</p>
   </div>
 </template>
