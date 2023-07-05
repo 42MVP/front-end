@@ -1,7 +1,6 @@
-<script lang="ts">
-export default {
-  emits: ['response'],
-};
+<script setup lang="ts">
+// NOTE : unused-vars
+const emits = defineEmits(['response']);
 </script>
 
 <template>
