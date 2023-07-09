@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import GameSettingsModal from '@/components/gameview-components/modals/GameSettingsModal.vue';
 import MatchingModal from '@/components/gameview-components/modals/MatchingModal.vue';
@@ -30,6 +30,10 @@ const status: Record<string, number> = {
   게임시작: 6,
 };
 
+const props = defineProps({
+  opponent: { type: String, default: '' },
+});
+
 const currentStatus = ref<number>(status['게임설정']);
 
 const isStatusMatched = (modalName: string) => {
@@ -40,6 +44,10 @@ const changeStatus = (modalName: string) => {
   currentStatus.value = status[modalName];
   console.log('changeStatus', modalName, currentStatus.value);
 };
+
+onMounted(() => {
+  if (props.opponent) currentStatus.value = status['상대방대기'];
+});
 </script>
 
 <style scoped>
