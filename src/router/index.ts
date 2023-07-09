@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import FriendsListView from '../views/FriendsListView.vue';
 import GameView from '../views/GameView.vue';
+import SignInView from '../views/SignInView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,6 +11,29 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
+    },
+    {
+      path: '/signIn',
+      name: 'signIn',
+      component: () => import('../views/SignInView.vue'),
+    },
+    {
+      path: '/signUp',
+      name: 'signUp',
+      component: () => import('../views/SignUpView.vue'),
+      redirect: 'signUp/setProfile',
+      children: [
+        {
+          path: 'setProfile',
+          name: 'setProfile',
+          component: () => import('@/components/SignInComponents/SetProfile.vue'),
+        },
+        {
+          path: 'completed',
+          name: 'complete',
+          component: () => import('@/components/SignInComponents/SignUpCompleted.vue'),
+        },
+      ],
     },
     {
       path: '/game',

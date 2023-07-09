@@ -11,9 +11,11 @@ export default {
 </script>
 <template>
   <div
-    :style="{ backgroundColor : type ? '#463f3a' : '#f4f3ee' }"
-    class="basic-button-container" @click="this.$emit('response', 'clicked')">
-    <p :style="{ color : type ? '#f4f3ee' : '#463f3a' }">{{ text }}</p>
+    :style="{ backgroundColor: type ? '#463f3a' : '#f4f3ee' }"
+    class="basic-button-container"
+    @click="this.$emit('response', 'clicked')"
+  >
+    <p :style="{ color: type ? '#f4f3ee' : '#463f3a' }">{{ text }}</p>
   </div>
 </template>
 

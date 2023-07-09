@@ -4,17 +4,12 @@ import Image from '../icons/PongImage.vue';
 </script>
 
 <template>
-  <div class="wrap">
-    <div class="logoWrap">
-      <h1 class="mainLogo">PINGPONG</h1>
-      <Image />
-    </div>
-    <div class="mainNav">
-      <RouterLink to="/game">GAME -></RouterLink>
-      <RouterLink to="/chat">CHAT -></RouterLink>
-      <RouterLink to="/friends">FRIENDS -></RouterLink>
-    </div>
+  <!-- <div class="wrap"> -->
+  <div class="logoWrap">
+    <h1 class="mainLogo">PINGPONG</h1>
+    <Image />
   </div>
+  <!-- </div> -->
 </template>
 
 <style scoped>
@@ -42,19 +37,6 @@ import Image from '../icons/PongImage.vue';
   margin-top: 200px;
 }
 
-.mainNav {
-  display: flex;
-  flex-flow: column;
-  align-items: left;
-  margin-left: 50px;
-}
-
-.mainNav a {
-  color: #8a817c;
-  font-weight: 900;
-  font-size: 70px;
-  font-style: italic;
-}
 svg {
   width: 50%;
   height: 50%;

@@ -3,25 +3,33 @@ import Logo from '@/components/HomeComponents/Logo.vue';
 </script>
 
 <template>
-  <main>
+  <main class="wrap">
     <Logo />
+    <div class="mainNav">
+      <RouterLink to="/game">GAME -></RouterLink>
+      <RouterLink to="/chat">CHAT -></RouterLink>
+      <RouterLink to="/friends">FRIENDS -></RouterLink>
+    </div>
   </main>
 </template>
 
 <style>
-a:link {
-  text-decoration: none;
+.wrap {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+.mainNav {
+  display: flex;
+  flex-flow: column;
+  align-items: left;
+  margin-left: 50px;
 }
 
-a:visited {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-a:active {
-  text-decoration: none;
+.mainNav a {
+  color: #8a817c;
+  font-weight: 900;
+  font-size: 70px;
+  font-style: italic;
 }
 </style>

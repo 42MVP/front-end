@@ -28,11 +28,7 @@ const getColor = () => {
 
 const bgColor = getColor();
 
-const stateColor = {
-  color: {
-    if
-  }
-};
+const stateColor = {};
 </script>
 
 <template>

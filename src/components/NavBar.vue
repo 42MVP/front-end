@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { userStore } from '../stores/user';
+import { userStore } from '@/stores/user';
 
 const links = [
   {
