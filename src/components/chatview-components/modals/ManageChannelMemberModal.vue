@@ -1,106 +1,45 @@
-<script lang="ts">
-import Modal from '../../Modal.vue';
-import SearchBar from '../../SearchBar.vue';
-import BasicListElement from '../../BasicListElement.vue';
-import BasicButton from '../../BasicButton.vue';
+<script setup lang="ts">
+import { ref } from 'vue';
+import Modal from '@/components/Modal.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import BasicListElement from '@/components/BasicListElement.vue';
+import BasicButton from '@/components/BasicButton.vue';
 
-export default {
-  emits: ['close'],
-  components: {
-    Modal,
-    SearchBar,
-    BasicListElement,
-    BasicButton,
+const userTabIcon = [
+  { emoji: '😷', event: 'abong' },
+  { emoji: '🏁', event: 'flag' },
+  { emoji: '❌', event: 'quit' },
+]
+const banTabIcon = [
+  { emoji: '⊖', event: 'unban' }
+]
+const isUserTab = ref(true);
+const tempIsSearch = ref(false);
+
+const emits = defineEmits(['close']);
+const props = defineProps({
+  friends: [],
+  chatInfo: {},
+  isShow: {
+    type: Boolean,
+    default: false,
   },
-  data() {
-    return {
-      friend_list_elements: [
-        {
-          id: 1,
-          name: 'daram',
-          avatarURL: '',
-          clickEvent: 'friendclick',
-        },
-        {
-          id: 2,
-          name: 'goyang',
-          avatarURL: '',
-          clickEvent: 'friendclick',
-        },
-      ],
-      isChannelUser: true,
-      search_channel_list_elements: [],
-      selectChannel: {
-        id: 1,
-        name: '42mvp',
-        clickEvent: 'channelclick',
-        avatarURL: '',
-        alertCount: 42,
-        hasPassword: false,
-        users: [
-          {
-            id: 1,
-            name: 'kanghyki',
-            avatarURL: '',
-          },
-          {
-            id: 2,
-            name: 'hyeongki',
-            avatarURL: '',
-          },
-        ],
-        banUsers: [
-          {
-            id: 3,
-            name: 'badguy',
-            avatarURL: '',
-          },
-          {
-            id: 4,
-            name: 'whoami',
-            avatarURL: '',
-          },
-        ],
-        chats: [
-          {
-            id: 1,
-            username: 'kanghyki',
-            userAvatarURL: '',
-            message: '이거봐봐',
-            date: new Date(),
-          },
-          {
-            id: 2,
-            username: 'hyeognki',
-            userAvatarURL: '',
-            message: '오 대단한걸?',
-            date: new Date(),
-          },
-        ],
-      },
-    };
-  },
-  props: {
-    isShow: {
-      default: false,
-    },
-  },
-};
+});
 </script>
 
 <template>
-  <Modal title="채널 탐색" :show="isShow">
+  <Modal title="멤버 관리" :show="isShow">
     <template #body>
       <div class="choice-block-container">
         <div
-          :class="{ 'choice-block': isChannelUser, 'choice-block-unchoose': !isChannelUser }"
-          @click="isChannelUser = true"
+          :class="{ 'choice-block': isUserTab, 'choice-block-unchoose': !isUserTab }"
+          @click="isUserTab = true"
         >
           채널 유저
         </div>
         <div
-          :class="{ 'choice-block': !isChannelUser, 'choice-block-unchoose': isChannelUser }"
-          @click="isChannelUser = false"
+          :class="{ 'choice-block': !isUserTab, 'choice-block-unchoose': isUserTab }"
+          @click="isUserTab = false"
         >
           차단 유저
         </div>
@@ -108,43 +47,21 @@ export default {
       <SearchBar
         placeholderText="유저명을 입력하세요"
         icon="👩‍🌾"
-        :isMenu="search_channel_list_elements.length > 0"
-        @response="
-          e => {
-            if (e === '') {
-              search_channel_list_elements = [];
-              return;
-            }
-            search_channel_list_elements = [
-              {
-                id: 1,
-                name: '42my',
-                clickEvent: 'channelclick',
-                avatarURL: '',
-              },
-              {
-                id: 2,
-                name: '42party',
-                clickEvent: 'channelclick',
-                avatarURL: '',
-              },
-              {
-                id: 3,
-                name: '42mario',
-                clickEvent: 'channelclick',
-                avatarURL: '',
-              },
-            ];
-          }
-        "
+        :isMenu="tempIsSearch"
+        @response="e => {
+          if (e === '')
+            tempIsSearch = false;
+          else
+            tempIsSearch = true;
+        }"
       >
-        <template v-if="isChannelUser" #search-bar-element>
+        <template v-if="isUserTab" #search-bar-element>
           <BasicListElement
             @click="
-              search_channel_list_elements = [];
-              isChannelUser ? selectChannel.users.push(element) : selectChannel.banUsers.push(element);
+            tempIsSearch = false;
+            isUserTab ? chatInfo.users.push(element) : chatInfo.banUsers.push(element);
             "
-            v-for="element in friend_list_elements"
+            v-for="element in friends"
             :key="element.id"
             :id="element.id"
             :name="element.name"
@@ -157,10 +74,10 @@ export default {
         <template v-else #search-bar-element>
           <BasicListElement
             @click="
-              search_channel_list_elements = [];
-              isChannelUser ? selectChannel.users.push(element) : selectChannel.banUsers.push(element);
+            tempIsSearch = false;
+            isUserTab ? chatInfo.users.push(element) : chatInfo.banUsers.push(element);
             "
-            v-for="element in friend_list_elements"
+            v-for="element in friends"
             :key="element.id"
             :id="element.id"
             :name="element.name"
@@ -171,18 +88,14 @@ export default {
           />
         </template>
       </SearchBar>
-      <div v-if="isChannelUser" class="modal-user-list-container">
+      <div v-if="isUserTab" class="modal-user-list-container">
         <BasicListElement
-          v-for="element in selectChannel.users"
+          v-for="element in chatInfo.users"
           :key="element.id"
           :id="element.id"
           :name="element.name"
           :avatarURL="element.avatarURL"
-          :iconButtons="[
-            { emoji: '😷', event: 'abong' },
-            { emoji: '🏁', event: 'flag' },
-            { emoji: '❌', event: 'quit' },
-          ]"
+          :iconButtons="userTabIcon"
           style="position: relative"
           @response="
             e => {
@@ -192,7 +105,7 @@ export default {
             }
           "
         >
-          <DropdownMenu v-if="isAbong" style="position: fixed; width: 150px">
+          <DropdownMenu v-if="isAbong" style="width: 150px">
             <template #dropdown-element>
               <DropdownMenuElement text="1분" @click="isAbong = false" />
               <DropdownMenuElement text="5분" @click="isAbong = false" />
@@ -206,18 +119,18 @@ export default {
       </div>
       <div v-else class="modal-user-list-container">
         <BasicListElement
-          v-for="element in selectChannel.banUsers"
+          v-for="element in chatInfo.banUsers"
           :key="element.id"
           :id="element.id"
           :name="element.name"
           :avatarURL="element.avatarURL"
-          :iconButtons="[{ emoji: '⊖', event: 'unban' }]"
+          :iconButtons="banTabIcon"
           @response="e => console.log(e)"
         />
       </div>
     </template>
     <template #footer>
-      <BasicButton text="닫기" @click="$emit('close')" />
+      <BasicButton text="닫기" @click="emits('close')" />
     </template>
   </Modal>
 </template>
@@ -257,5 +170,10 @@ export default {
   font-size: 24px;
   font-family: Inter;
   font-weight: 500;
+}
+
+.modal-user-list-container {
+  overflow: auto;
+  max-height: 300px;
 }
 </style>

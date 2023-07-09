@@ -1,19 +1,3 @@
-<script lang="ts">
-import { chat } from './MessageList.vue';
-import { userStore } from '../../stores/user';
-
-export default {
-  data() {
-    return {
-      login_username: userStore?.user?.name,
-    };
-  },
-  props: {
-    chat: {} as chat,
-  },
-};
-</script>
-
 <template>
   <div class="chat-box">
     <div class="chat-info-line">
@@ -30,9 +14,8 @@ export default {
           {{ chat.username }}
         </p>
         <p class="chat-info-line-time">
-          {{ chat.date.getHours() > 12 ? '오후' : '오전' }} {{ chat.date.getHours() % 12 }}:{{
-            chat.date.getMinutes() < 10 ? `0${chat.date.getMinutes()}` : chat.date.getMinutes()
-          }}
+          {{ chat.date.getHours() > 12 ? '오후' : '오전' }}
+          {{ chat.date.getHours() % 12 }}:{{ chat.date.getMinutes() < 10 ? '0' : '' }}{{ chat.date.getMinutes() }}
         </p>
       </div>
     </div>
@@ -41,6 +24,16 @@ export default {
     </p>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { userStore } from '../../stores/user';
+
+const login_username = ref(userStore?.user?.name);
+const props = defineProps({
+  chat: {},
+});
+</script>
 
 <style scoped>
 .chat-box {
@@ -73,7 +66,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  color: #463F3A;
+  color: #463f3a;
 }
 
 .chat-info-line-box {
@@ -111,7 +104,7 @@ export default {
   font-family: Inter;
   font-weight: 500;
   line-height: 32px;
-  color: #463F3A;
+  color: #463f3a;
   overflow-wrap: break-word;
 }
 </style>

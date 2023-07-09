@@ -1,30 +1,3 @@
-<script lang="ts">
-import Modal from '../../Modal.vue';
-import SearchBar from '../../SearchBar.vue';
-import BasicListElement from '../../BasicListElement.vue';
-import BasicButton from '../../BasicButton.vue';
-
-export default {
-  emits: ['close'],
-  components: {
-    Modal,
-    SearchBar,
-    BasicListElement,
-    BasicButton,
-  },
-  data() {
-    return {
-      search_channel_list_elements: [],
-    };
-  },
-  props: {
-    isShow: {
-      default: false,
-    },
-  },
-};
-</script>
-
 <template>
   <Modal title="DM 생성" :show="isShow">
     <template #body>
@@ -81,5 +54,19 @@ export default {
     </template>
   </Modal>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import Modal from '@/components/Modal.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import BasicListElement from '@/components/BasicListElement.vue';
+import BasicButton from '@/components/BasicButton.vue';
+
+const search_channel_list_elements = ref([]);
+const emits = defineEmits(['close', 'submit']);
+const props = defineProps({
+  isShow: { type: Boolean, default: false },
+});
+</script>
 
 <style scoped></style>

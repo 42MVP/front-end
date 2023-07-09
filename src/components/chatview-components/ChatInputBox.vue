@@ -1,39 +1,3 @@
-<script>
-import BasicButton from '../BasicButton.vue';
-
-export default {
-  emits: ['response'],
-  data() {
-    return {
-      text: '',
-      buttonEvent: '',
-    };
-  },
-  components: {
-    BasicButton,
-  },
-  props: {
-    maxLength: 0,
-  },
-  computed: {
-    limitText() {
-      if (this.text.length > this.maxLength) {
-        this.text = this.text.slice(0, this.maxLength);
-      }
-      return this.text;
-    },
-  },
-  methods: {
-    sendEvent() {
-      if (this.text.length > 0) {
-        this.$emit('response', this.text);
-        this.text = '';
-      }
-    },
-  },
-};
-</script>
-
 <template>
   <div class="chat-input-box-container">
     <input
@@ -43,11 +7,37 @@ export default {
       placeholder="메세지를 입력해주세요"
     />
     <p :style="{ color: limitText.length >= maxLength ? '#e0afa0' : '#463f3a' }" class="chat-input-box-counter">
-      {{ limitText.length }}/{{ maxLength }}
+      {{ limitText.value.length }}/{{ maxLength }}
     </p>
     <BasicButton @click="sendEvent()" text="버튼" />
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import BasicButton from '../BasicButton.vue';
+
+const text = ref('');
+const buttonEvent = ref('');
+const emits = defineEmits(['response']);
+const props = defineProps({
+  maxLength: { type: Number, default: 0 },
+});
+
+const limitText = computed(() => {
+  if (text.value.length > props.maxLength) {
+    text.value = text.value.slice(0, props.maxLength);
+  }
+  return text;
+});
+
+function sendEvent() {
+  if (text.value.length > 0) {
+    emits('response', text.value);
+    text.value = '';
+  }
+}
+</script>
 
 <style scoped>
 .chat-input-box-container {

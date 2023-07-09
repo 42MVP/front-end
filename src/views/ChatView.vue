@@ -1,26 +1,3 @@
-<script lang="ts">
-import ChatList from '../components/chatview-components/ChatList.vue';
-import ChatRoom from '../components/chatview-components/ChatRoom.vue';
-
-import * as mock from '../contexts/fecthChat';
-
-export default {
-  mounted() {
-    this.chatInfos = mock.getChatInfos();
-    this.friends = mock.getFriend();
-  },
-  data() {
-    return {
-      chatInfos: [],
-      index: 0,
-    };
-  },
-  components: {
-    ChatList,
-    ChatRoom,
-  },
-};
-</script>
 <template>
   <div class="container">
     <div class="chat-left">
@@ -31,6 +8,23 @@ export default {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import ChatList from '@/components/chatview-components/ChatList.vue';
+import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
+import * as mock from '@/contexts/fecthChat';
+
+const chatInfos = ref([]);
+const friends = ref([]);
+const index = ref(0);
+
+onMounted(() => {
+  console.log('asd');
+  chatInfos.value = mock.getChatInfos();
+  friends.value = mock.getFriend();
+});
+</script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');

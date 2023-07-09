@@ -1,3 +1,27 @@
+<template>
+  <Modal title="채널 생성" :show="props.isShow">
+    <template #body>
+      <TextInputBox placeholderText="채팅방 이름 입력" :maxLength="15" @response="e => console.log(e)" />
+      <div class="radio-button-out-div">
+        <RadioButton :value="1" text="public" @click="selectButton" :isActive="setActive(1)" />
+        <RadioButton :value="2" text="protected" @click="selectButton" :isActive="setActive(2)" />
+        <RadioButton :value="3" text="private" @click="selectButton" :isActive="setActive(3)" />
+      </div>
+      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => console.log(e)" />
+      <TextInputBox
+        type="password"
+        placeholderText="비밀번호 입력 확인"
+        :maxLength="15"
+        @response="e => console.log(e)"
+      />
+    </template>
+    <template #footer>
+      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
+      <BasicButton text="확인" />
+    </template>
+  </Modal>
+</template>
+
 <script setup lang="ts">
 import { ref } from 'vue';
 
@@ -23,30 +47,6 @@ const setActive = (index: number) => {
   return selectedMode.value === index;
 };
 </script>
-
-<template>
-  <Modal title="채널 생성" :show="props.isShow">
-    <template #body>
-      <TextInputBox placeholderText="채팅방 이름 입력" :maxLength="15" @response="e => console.log(e)" />
-      <div class="radio-button-out-div">
-        <RadioButton :value="1" text="public" @click="selectButton" :isActive="setActive(1)" />
-        <RadioButton :value="2" text="protected" @click="selectButton" :isActive="setActive(2)" />
-        <RadioButton :value="3" text="private" @click="selectButton" :isActive="setActive(3)" />
-      </div>
-      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => console.log(e)" />
-      <TextInputBox
-        type="password"
-        placeholderText="비밀번호 입력 확인"
-        :maxLength="15"
-        @response="e => console.log(e)"
-      />
-    </template>
-    <template #footer>
-      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" />
-    </template>
-  </Modal>
-</template>
 
 <style scoped>
 .radio-button-out-div {

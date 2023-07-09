@@ -1,26 +1,3 @@
-<script lang="ts">
-import Modal from '../../Modal.vue';
-import BasicButton from '../../BasicButton.vue';
-import TextInputBox from '../../TextInputBox.vue';
-
-export default {
-  emits: ['close', 'submit'],
-  components: {
-    Modal,
-    TextInputBox,
-    BasicButton,
-  },
-  data() {
-    return {};
-  },
-  props: {
-    isShow: {
-      default: false,
-    },
-  },
-};
-</script>
-
 <template>
   <Modal title="비밀번호 변경" :show="isShow">
     <template #body>
@@ -38,5 +15,16 @@ export default {
     </template>
   </Modal>
 </template>
+
+<script setup lang="ts">
+import Modal from '@/components/Modal.vue';
+import BasicButton from '@/components/BasicButton.vue';
+import TextInputBox from '@/components/TextInputBox.vue';
+
+const emits = defineEmits(['close', 'submit']);
+const props = defineProps({
+  isShow: { type: Boolean, default: false },
+});
+</script>
 
 <style scoped></style>

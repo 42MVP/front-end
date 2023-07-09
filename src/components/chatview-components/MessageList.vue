@@ -1,5 +1,35 @@
-<script lang="ts">
+<template>
+  <div class="chat-box-container" ref="chatref">
+    <MessageBox v-for="chat in chats" :key="chat.id" :chat="chat" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, watch, nextTick, ref } from 'vue';
 import MessageBox from './MessageBox.vue';
+
+let chatref = ref(null);
+
+onMounted(() => {
+  chatref.value.scrollTop = chatref.value.scrollHeight;
+});
+
+const props = defineProps({
+  chats: {},
+});
+
+watch(
+  () => props.chats,
+  () => {
+    scrollToLatestMsg();
+  },
+);
+
+function scrollToLatestMsg() {
+  nextTick(() => {
+    chatref.value.scrollTo({ top: chatref.value.scrollHeight, behavior: 'smooth' });
+  });
+}
 
 export interface chat {
   id: number;
@@ -8,35 +38,7 @@ export interface chat {
   message: string;
   date: Date;
 }
-
-export default {
-  components: {
-    MessageBox,
-  },
-  props: {
-    chats: {} as chat[],
-  },
-  watch: {
-    chats() {
-      this.$nextTick(() => {
-        let chatList = this.$refs.chatref;
-        //        let chatList = document.querySelector('.chat-box-container');
-        chatList.scrollTo({ top: chatList.scrollHeight, behavior: 'smooth' });
-      });
-    },
-  },
-  mounted() {
-    let chatList = document.querySelector('.chat-box-container');
-    chatList.scrollTop = chatList.scrollHeight;
-  },
-};
 </script>
-
-<template>
-  <div class="chat-box-container" ref="chatref">
-    <MessageBox v-for="chat in chats" :key="chat.id" :chat="chat" />
-  </div>
-</template>
 
 <style>
 .chat-box-container {
