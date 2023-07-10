@@ -20,7 +20,6 @@ const friends = ref([]);
 const index = ref(0);
 
 onMounted(() => {
-  console.log('asd');
   chatInfos.value = mock.getChatInfos();
   friends.value = mock.getFriend();
 });

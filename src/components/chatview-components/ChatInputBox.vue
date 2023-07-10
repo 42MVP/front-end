@@ -6,29 +6,27 @@
       v-model="text"
       placeholder="메세지를 입력해주세요"
     />
-    <p :style="{ color: limitText.length >= maxLength ? '#e0afa0' : '#463f3a' }" class="chat-input-box-counter">
-      {{ limitText.value.length }}/{{ maxLength }}
+    <p :style="{ color: text.length >= maxLength ? '#e0afa0' : '#463f3a' }" class="chat-input-box-counter">
+      {{ text.length }}/{{ maxLength }}
     </p>
     <BasicButton @click="sendEvent()" text="버튼" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import BasicButton from '../BasicButton.vue';
+import { watch, ref } from 'vue';
+import BasicButton from '@/components/BasicButton.vue';
 
 const text = ref('');
-const buttonEvent = ref('');
 const emits = defineEmits(['response']);
 const props = defineProps({
   maxLength: { type: Number, default: 0 },
 });
 
-const limitText = computed(() => {
+watch(text, () => {
   if (text.value.length > props.maxLength) {
     text.value = text.value.slice(0, props.maxLength);
   }
-  return text;
 });
 
 function sendEvent() {
