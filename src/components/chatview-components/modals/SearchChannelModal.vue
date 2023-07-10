@@ -1,5 +1,5 @@
 <template>
-  <Modal title="채널 탐색" :show="isShow">
+  <Modal title="채널 탐색" :show="props.isShow">
     <template #body>
       <SearchBar
         placeholderText="채널명을 입력하세요"
@@ -49,7 +49,7 @@
       </SearchBar>
     </template>
     <template #footer>
-      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
+      <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
       <BasicButton :type="true" text="확인" />
     </template>
   </Modal>
@@ -63,6 +63,7 @@ import BasicListElement from '@/components/BasicListElement.vue';
 import BasicButton from '@/components/BasicButton.vue';
 
 const search_channel_list_elements = ref([]);
+const emits = defineEmits(['close']);
 const props = defineProps({
   isShow: { type: Boolean, default: false },
 });

@@ -1,5 +1,5 @@
 <template>
-  <Modal title="DM 생성" :show="isShow">
+  <Modal title="DM 생성" :show="props.isShow">
     <template #body>
       <SearchBar
         placeholderText="유저명을 입력하세요"
@@ -49,7 +49,7 @@
       </SearchBar>
     </template>
     <template #footer>
-      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
+      <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
       <BasicButton :type="true" text="확인" />
     </template>
   </Modal>

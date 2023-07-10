@@ -16,7 +16,7 @@
       />
     </template>
     <template #footer>
-      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
+      <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
       <BasicButton text="확인" />
     </template>
   </Modal>
@@ -26,11 +26,11 @@
 import { ref } from 'vue';
 
 import Modal from '@/components/Modal.vue';
-import SearchBar from '@/components/SearchBar.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
+const emits = defineEmits(['close']);
 const props = defineProps({
   isShow: {
     default: false,

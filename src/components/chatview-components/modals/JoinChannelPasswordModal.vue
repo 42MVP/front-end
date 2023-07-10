@@ -1,10 +1,10 @@
 <template>
-  <Modal title="채널 비밀번호 입력" :show="isShow">
+  <Modal title="채널 비밀번호 입력" :show="props.isShow">
     <template #body>
       <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => console.log(e)" />
     </template>
     <template #footer>
-      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
+      <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
       <BasicButton text="확인" />
     </template>
   </Modal>
