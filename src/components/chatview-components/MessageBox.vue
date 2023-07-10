@@ -2,7 +2,7 @@
   <div class="chat-box">
     <div class="chat-info-line">
       <div class="chat-info-line-box">
-        <img :src="props.chat.userAvatarURL !== '' ? props.chat.userAvatarURL : ''" class="user-avatar" />
+        <img :src="props.chat.avatarURL !== '' ? props.chat.avatarURL : ''" class="user-avatar" />
       </div>
       <div class="chat-info-line-text">
         <p
@@ -26,26 +26,24 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { userStore } from '../../stores/user';
+import { userStore } from '@/stores/user';
+import type { IChat } from '@/interfaces/Chat.interface';
 
 const login_username = ref(userStore?.user?.name);
 
-const props = defineProps({
-  chat: {},
-});
+const props = defineProps<{ chat: IChat }>();
 
 const isMyMessage = computed(() => {
   return props.chat.username === login_username.value;
 });
 
 const timeString = computed(() => {
-  return `${props.chat.date.getHours() > 12 ? "오후" : '오전'} \
-${ props.chat.date.getHours() % 12 }\
+  return `${props.chat.date.getHours() > 12 ? '오후' : '오전'} \
+${props.chat.date.getHours() % 12}\
 :\
-${ props.chat.date.getMinutes() < 10 ? '0' : '' }\
-${ props.chat.date.getMinutes() }`
+${props.chat.date.getMinutes() < 10 ? '0' : ''}\
+${props.chat.date.getMinutes()}`;
 });
-
 </script>
 
 <style scoped>

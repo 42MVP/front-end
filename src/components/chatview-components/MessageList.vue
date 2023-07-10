@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import { onMounted, watch, nextTick, ref } from 'vue';
 import MessageBox from './MessageBox.vue';
+import type { IChat } from '@/interfaces/Chat.interface';
 
 let chatref = ref(null);
 
@@ -14,9 +15,7 @@ onMounted(() => {
   chatref.value.scrollTop = chatref.value.scrollHeight;
 });
 
-const props = defineProps({
-  chats: {},
-});
+const props = defineProps<{ chats: IChat[] }>();
 
 watch(
   () => props.chats,
@@ -29,14 +28,6 @@ function scrollToLatestMsg() {
   nextTick(() => {
     chatref.value.scrollTo({ top: chatref.value.scrollHeight, behavior: 'smooth' });
   });
-}
-
-export interface chat {
-  id: number;
-  username: string;
-  userAvatarURL: string;
-  message: string;
-  date: Date;
 }
 </script>
 

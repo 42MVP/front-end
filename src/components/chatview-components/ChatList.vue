@@ -46,11 +46,12 @@ import SearchChannelModal from '@/components/chatview-components/modals/SearchCh
 import MakeDmModal from '@/components/chatview-components/modals/MakeDmModal.vue';
 import MakeChannelModal from '@/components/chatview-components/modals/MakeChannelModal.vue';
 import JoinChannelPasswordModal from '@/components/chatview-components/modals/JoinChannelPasswordModal.vue';
+import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
 
 const emits = defineEmits(['selectchat', 'reset']);
-const props = defineProps({
-  chatInfos: [],
-});
+const props = defineProps<{
+  chatInfos: IChatInfo[];
+}>();
 
 const iconButtons = [
   { emoji: '✉️', event: 'email' },
@@ -83,7 +84,7 @@ watch(
   () => {
     nextTick(() => {
       let userList = document.querySelector('.user-list-container');
-      userList.scrollTo({ top: userList.scrollHeight, behavior: 'smooth' });
+      userList?.scrollTo({ top: userList.scrollHeight, behavior: 'smooth' });
     });
   },
 );

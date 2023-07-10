@@ -4,43 +4,34 @@ import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicListElement from '@/components/BasicListElement.vue';
 import BasicButton from '@/components/BasicButton.vue';
+import type { IUser } from '@/interfaces/User.interface';
+import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
 
 const userTabIcon = [
   { emoji: '😷', event: 'abong' },
   { emoji: '🏁', event: 'flag' },
   { emoji: '❌', event: 'quit' },
-]
-const banTabIcon = [
-  { emoji: '⊖', event: 'unban' }
-]
+];
+const banTabIcon = [{ emoji: '⊖', event: 'unban' }];
 const isUserTab = ref(true);
 const tempIsSearch = ref(false);
 
 const emits = defineEmits(['close']);
-const props = defineProps({
-  friends: [],
-  chatInfo: {},
-  isShow: {
-    type: Boolean,
-    default: false,
-  },
-});
+const props = defineProps<{
+  friends: IUser[];
+  chatInfo: IChatInfo;
+  isShow: boolean;
+}>();
 </script>
 
 <template>
   <Modal title="멤버 관리" :show="isShow">
     <template #body>
       <div class="choice-block-container">
-        <div
-          :class="{ 'choice-block': isUserTab, 'choice-block-unchoose': !isUserTab }"
-          @click="isUserTab = true"
-        >
+        <div :class="{ 'choice-block': isUserTab, 'choice-block-unchoose': !isUserTab }" @click="isUserTab = true">
           채널 유저
         </div>
-        <div
-          :class="{ 'choice-block': !isUserTab, 'choice-block-unchoose': isUserTab }"
-          @click="isUserTab = false"
-        >
+        <div :class="{ 'choice-block': !isUserTab, 'choice-block-unchoose': isUserTab }" @click="isUserTab = false">
           차단 유저
         </div>
       </div>
@@ -48,20 +39,20 @@ const props = defineProps({
         placeholderText="유저명을 입력하세요"
         icon="👩‍🌾"
         :isMenu="tempIsSearch"
-        @response="e => {
-          if (e === '')
-            tempIsSearch = false;
-          else
-            tempIsSearch = true;
-        }"
+        @response="
+          e => {
+            if (e === '') tempIsSearch = false;
+            else tempIsSearch = true;
+          }
+        "
       >
         <template v-if="isUserTab" #search-bar-element>
           <BasicListElement
             @click="
-            tempIsSearch = false;
-            isUserTab ? chatInfo.users.push(element) : chatInfo.banUsers.push(element);
+              tempIsSearch = false;
+              isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
             "
-            v-for="element in friends"
+            v-for="element in props.friends"
             :key="element.id"
             :id="element.id"
             :name="element.name"
@@ -74,10 +65,10 @@ const props = defineProps({
         <template v-else #search-bar-element>
           <BasicListElement
             @click="
-            tempIsSearch = false;
-            isUserTab ? chatInfo.users.push(element) : chatInfo.banUsers.push(element);
+              tempIsSearch = false;
+              isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
             "
-            v-for="element in friends"
+            v-for="element in props.friends"
             :key="element.id"
             :id="element.id"
             :name="element.name"
@@ -97,14 +88,9 @@ const props = defineProps({
           :avatarURL="element.avatarURL"
           :iconButtons="userTabIcon"
           style="position: relative"
-          @response="
-            e => {
-              console.log(e);
-              if (e.split(':')[1] === 'abong') isAbong = true;
-              console.log(isAbong);
-            }
-          "
+          @response=""
         >
+          <!-- 
           <DropdownMenu v-if="isAbong" style="width: 150px">
             <template #dropdown-element>
               <DropdownMenuElement text="1분" @click="isAbong = false" />
@@ -115,6 +101,7 @@ const props = defineProps({
               <DropdownMenuElement text="취소" @click="isAbong = false" />
             </template>
           </DropdownMenu>
+          -->
         </BasicListElement>
       </div>
       <div v-else class="modal-user-list-container">

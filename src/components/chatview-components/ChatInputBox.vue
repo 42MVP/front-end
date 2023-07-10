@@ -17,11 +17,9 @@
 import { watch, ref } from 'vue';
 import BasicButton from '@/components/BasicButton.vue';
 
-const text = ref('');
+const text = ref<string>('');
 const emits = defineEmits(['response']);
-const props = defineProps({
-  maxLength: { type: Number, default: 0 },
-});
+const props = defineProps<{ maxLength: number }>();
 
 watch(text, () => {
   if (text.value.length > props.maxLength) {
