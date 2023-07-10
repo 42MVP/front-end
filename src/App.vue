@@ -10,7 +10,7 @@ export default {
 
 <template>
   <main>
-    <header v-if="!$route.path.includes('/') || !$route.path.includes('/sign')">
+    <header v-if="$route.path !== '/' && !$route.path.includes('/sign')">
       <NavBar />
     </header>
     <RouterView />

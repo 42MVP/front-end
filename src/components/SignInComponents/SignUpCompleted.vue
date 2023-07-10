@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-</script>
-
 <template>
   <div class="message">
     <h1>Thank you for signing up!</h1>
@@ -9,6 +5,10 @@ import { ref } from 'vue';
     <RouterLink class="redirect" to="/signIn">Back to SignIn!</RouterLink>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+</script>
 
 <style scoped>
 .message {
