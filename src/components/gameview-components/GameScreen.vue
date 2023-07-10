@@ -8,15 +8,24 @@
       <ProfileCard user_id="hyeongki" img="4.png" img_size="100" />
     </div>
   </div>
+  <!-- TODO : canvase -->
   <div class="table-div">
     <div class="stick-div" />
+    <div v-if="!isGameConnected" class="user-info-div bold">
+      {{ 'Lose🍂' }} <br />
+      {{ 1899 - 12 }} ({{ -12 }})
+    </div>
     <div class="net-div" />
+    <div v-if="!isGameConnected" class="user-info-div bold">{{ 'Win👑' }} <br />{{ 1899 + 12 }} (+{{ 12 }})</div>
     <div class="stick-div" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import ProfileCard from '../profileview-components/ProfileCard.vue';
+
+const isGameConnected = ref<boolean>(false);
 </script>
 
 <style scoped>
@@ -60,5 +69,21 @@ import ProfileCard from '../profileview-components/ProfileCard.vue';
     height: 60px;
     margin: 5px 10px;
   }
+}
+
+.user-info-div {
+  margin: 0 100px;
+  align-self: center;
+  text-align: center;
+  font: var(--large);
+}
+
+.score-div {
+  font: var(--extra-large);
+  align-self: center;
+  font-weight: bolder;
+}
+.bold {
+  font-weight: bold;
 }
 </style>
