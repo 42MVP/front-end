@@ -1,13 +1,14 @@
-<script lang="ts">
-export default {
-  props: {
-    text: '',
-  },
-};
+<script setup lang="ts">
+const props = defineProps({
+  text: {
+    type: String,
+    default: ''
+  }
+});
 </script>
 
 <template>
-  <li class="drop-down-menu-element">{{ text }}</li>
+  <li class="drop-down-menu-element">{{ props.text }}</li>
 </template>
 
 <style>

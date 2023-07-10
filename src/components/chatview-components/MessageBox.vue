@@ -2,37 +2,50 @@
   <div class="chat-box">
     <div class="chat-info-line">
       <div class="chat-info-line-box">
-        <img :src="chat.userAvatarURL !== '' ? chat.userAvatarURL : ''" class="user-avatar" />
+        <img :src="props.chat.userAvatarURL !== '' ? props.chat.userAvatarURL : ''" class="user-avatar" />
       </div>
       <div class="chat-info-line-text">
         <p
           :class="{
-            'chat-info-line-box': chat.username !== login_username,
-            'chat-info-line-box-me': chat.username === login_username,
+            'chat-info-line-box': !isMyMessage,
+            'chat-info-line-box-me': isMyMessage,
           }"
         >
-          {{ chat.username }}
+          {{ props.chat.username }}
         </p>
         <p class="chat-info-line-time">
-          {{ chat.date.getHours() > 12 ? '오후' : '오전' }}
-          {{ chat.date.getHours() % 12 }}:{{ chat.date.getMinutes() < 10 ? '0' : '' }}{{ chat.date.getMinutes() }}
+          {{ timeString }}
         </p>
       </div>
     </div>
     <p class="chat-message">
-      {{ chat.message }}
+      {{ props.chat.message }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { userStore } from '../../stores/user';
 
 const login_username = ref(userStore?.user?.name);
+
 const props = defineProps({
   chat: {},
 });
+
+const isMyMessage = computed(() => {
+  return props.chat.username === login_username.value;
+});
+
+const timeString = computed(() => {
+  return `${props.chat.date.getHours() > 12 ? "오후" : '오전'} \
+${ props.chat.date.getHours() % 12 }\
+:\
+${ props.chat.date.getMinutes() < 10 ? '0' : '' }\
+${ props.chat.date.getMinutes() }`
+});
+
 </script>
 
 <style scoped>
