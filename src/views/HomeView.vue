@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import Logo from '@/components/HomeComponents/Logo.vue';
-</script>
-
 <template>
   <main class="wrap">
     <Logo />
@@ -13,7 +9,11 @@ import Logo from '@/components/HomeComponents/Logo.vue';
   </main>
 </template>
 
-<style>
+<script setup lang="ts">
+import Logo from '@/components/HomeComponents/Logo.vue';
+</script>
+
+<style scoped>
 .wrap {
   display: flex;
   flex-flow: row;

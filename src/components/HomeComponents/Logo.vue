@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import Image from '../icons/PongImage.vue';
-</script>
-
 <template>
   <!-- <div class="wrap"> -->
   <div class="logoWrap">
@@ -11,6 +6,11 @@ import Image from '../icons/PongImage.vue';
   </div>
   <!-- </div> -->
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import Image from '../icons/PongImage.vue';
+</script>
 
 <style scoped>
 .wrap {

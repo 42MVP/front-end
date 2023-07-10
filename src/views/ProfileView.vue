@@ -30,7 +30,7 @@
 import { ref } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import DButton from '@/components/tmp/DefaultButton.vue';
-import Card from '@/components/profileview-components/ProfileCard.vue';
+import Card from '@/components/common/ProfileCard.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import GameHistory from '@/components/profileview-components/GameHistory.vue';
 

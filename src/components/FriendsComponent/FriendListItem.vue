@@ -1,7 +1,19 @@
+<template>
+  <div class="container">
+    <div class="profileContent">
+      <a class="profileImage"></a>
+      <div class="profileText">
+        <h3>{{ friend.userName }}</h3>
+        <p>{{ friend.Level }} {{ friend.Achievement }}</p>
+      </div>
+    </div>
+    <BasicButton :text="getButtonTitle()" @click="$emit('removeFromList', friend.userName)" />
+  </div>
+</template>
+2
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import Button from '../Button.vue';
-import type { FriendType } from '../FriendsData';
+import BasicButton from '../BasicButton.vue';
+import type { FriendType } from '@/components/FriendsData';
 
 const props = defineProps<{
   listType: string;
@@ -26,23 +38,10 @@ const getColor = () => {
   }
 };
 
-const bgColor = getColor();
+// const bgColor = getColor();
 
-const stateColor = {};
+// const stateColor = {};
 </script>
-
-<template>
-  <div class="container">
-    <div class="profileContent">
-      <a class="profileImage"></a>
-      <div class="profileText">
-        <h3>{{ friend.userName }}</h3>
-        <p>{{ friend.Level }} {{ friend.Achievement }}</p>
-      </div>
-    </div>
-    <Button :buttonTitle="getButtonTitle()" @click="$emit('removeFromList', friend.userName)" />
-  </div>
-</template>
 
 <style scoped>
 .profileContent {

@@ -13,12 +13,40 @@
       </div>
     </div>
     <ul class="listBox">
-      <li v-for="friend in friendsList">
-        <FriendListItem v-on:removeFromList="removeFromList" :listType="ListType" :friend="friend" />
+      <li v-for="(friend, idx) in friendsList" :key="idx">
+        <FriendListItem @removeFromList="removeFromList" :listType="ListType" :friend="friend" />
       </li>
     </ul>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import FriendListItem from './FriendListItem.vue';
+import { type FriendType } from '../FriendsData';
+
+var friendsList = ref<FriendType[]>([
+  { userName: 'user1', State: 'onLine', Level: 42, Achievement: 'Achievement1' },
+  { userName: 'user2', State: 'offLine', Level: 42, Achievement: 'Achievement0' },
+  { userName: 'user3', State: 'onLine', Level: 42, Achievement: 'Achievement3' },
+  { userName: 'user4', State: 'onGame', Level: 42, Achievement: 'Achievement2' },
+  { userName: 'user5', State: 'onGame', Level: 42, Achievement: 'Achievement7' },
+  { userName: 'user6', State: 'offLine', Level: 42, Achievement: 'Achievement8' },
+  { userName: 'user7', State: 'offLine', Level: 42, Achievement: 'Achievement12' },
+  { userName: 'user8', State: 'onLine', Level: 42, Achievement: 'Achievement12' },
+]);
+
+const ListType = ref<string>('Friends');
+
+const removeFromList = (name: string) => {
+  // friendsList.value.filter(friend => friend.name !== name);
+  friendsList.value.forEach((item, index) => {
+    if (item.userName === name) {
+      friendsList.value.splice(index, 1);
+    }
+  });
+};
+</script>
 
 <style scoped>
 .wrap {
@@ -119,30 +147,3 @@
   margin-left: 10px;
 }
 </style>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-import FriendListItem from './FriendListItem.vue';
-import { type FriendType } from '../FriendsData';
-
-var friendsList = ref<FriendType[]>([
-  { userName: 'user1', State: 'onLine', Level: 42, Achievement: 'Achievement1' },
-  { userName: 'user2', State: 'offLine', Level: 42, Achievement: 'Achievement0' },
-  { userName: 'user3', State: 'onLine', Level: 42, Achievement: 'Achievement3' },
-  { userName: 'user4', State: 'onGame', Level: 42, Achievement: 'Achievement2' },
-  { userName: 'user5', State: 'onGame', Level: 42, Achievement: 'Achievement7' },
-  { userName: 'user6', State: 'offLine', Level: 42, Achievement: 'Achievement8' },
-  { userName: 'user7', State: 'offLine', Level: 42, Achievement: 'Achievement12' },
-  { userName: 'user8', State: 'onLine', Level: 42, Achievement: 'Achievement12' },
-]);
-
-const ListType = ref<string>('Friends');
-
-const removeFromList = (name: string) => {
-  friendsList.value.forEach((item, index) => {
-    if (item.userName === name) {
-      friendsList.value.splice(index, 1);
-    }
-  });
-};
-</script>

@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import Loading from './icons/loadingIcon.vue';
-</script>
-
 <template>
   <div class="wrap">
     <h1 class="title">매칭중</h1>
@@ -10,6 +5,11 @@ import Loading from './icons/loadingIcon.vue';
     <button class="cancelButton">취소</button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import Loading from './icons/loadingIcon.vue';
+</script>
 
 <style scoped>
 .wrap {

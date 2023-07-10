@@ -38,17 +38,17 @@ const router = createRouter({
     {
       path: '/game',
       name: 'game',
-      component: () => import('../views/GameView.vue'),
+      component: () => import('@/views/GameView.vue'),
     },
     {
       path: '/users',
       name: 'users',
-      component: () => import(/* webpackChunkName: "user" */ '../views/MyProfileView.vue'),
+      component: () => import('@/views/MyProfileView.vue'),
     },
     {
       path: '/users/:id',
       name: 'profile',
-      component: () => import(/* webpackChunkName: "user" */ '../views/ProfileView.vue'),
+      component: () => import('../views/ProfileView.vue'),
       props: route => ({ user_id: route.params.id }),
     },
     {

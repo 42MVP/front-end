@@ -15,7 +15,7 @@
         <TextInputBox placeholderText="닉네임입력" type="name" :maxLength="15" />
       </div>
       <div class="submitButton">
-        <BasicButton @click="Submit()" text="제출" />
+        <BasicButton @click="submitInfo()" text="제출" />
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@ const addImage = (e: Event) => {
   }
 };
 
-const Submit = () => {};
+const submitInfo = () => {};
 </script>
 
 <style scoped>
