@@ -13,8 +13,14 @@
       </div>
     </div>
     <ul class="listBox">
-      <li v-for="(friend, idx) in friendsList" :key="idx">
-        <FriendListItem @removeFromList="removeFromList" :listType="ListType" :friend="friend" />
+      <li v-for="(friend, idx) in users" :key="idx">
+        <FriendListItem
+          @click="$emit('updateSelection', friend.name)"
+          @removeFromList="removeFromList"
+          :listType="ListType"
+          :friend="friend"
+          :selectedUser="props.selectedUser"
+        />
       </li>
     </ul>
   </div>
@@ -25,24 +31,25 @@ import { ref } from 'vue';
 import FriendListItem from './FriendListItem.vue';
 import { type FriendType } from '../FriendsData';
 
-var friendsList = ref<FriendType[]>([
-  { userName: 'user1', State: 'onLine', Level: 42, Achievement: 'Achievement1' },
-  { userName: 'user2', State: 'offLine', Level: 42, Achievement: 'Achievement0' },
-  { userName: 'user3', State: 'onLine', Level: 42, Achievement: 'Achievement3' },
-  { userName: 'user4', State: 'onGame', Level: 42, Achievement: 'Achievement2' },
-  { userName: 'user5', State: 'onGame', Level: 42, Achievement: 'Achievement7' },
-  { userName: 'user6', State: 'offLine', Level: 42, Achievement: 'Achievement8' },
-  { userName: 'user7', State: 'offLine', Level: 42, Achievement: 'Achievement12' },
-  { userName: 'user8', State: 'onLine', Level: 42, Achievement: 'Achievement12' },
+const props = defineProps<{
+  selectedUser: string;
+}>();
+
+var users = ref<FriendType[]>([
+  { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
+  { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
+  { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
+  { _id: 4, name: 'hyeonki', img: '4.png', isFollow: false, isBlock: false, Level: 52, Achievement: 'Achievement1' },
+  { _id: 5, name: 'hyeonkkim', img: '5.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
 ]);
 
 const ListType = ref<string>('Friends');
 
 const removeFromList = (name: string) => {
-  // friendsList.value.filter(friend => friend.name !== name);
-  friendsList.value.forEach((item, index) => {
-    if (item.userName === name) {
-      friendsList.value.splice(index, 1);
+  users.value.filter(friend => friend.name !== name);
+  users.value.forEach((item, index) => {
+    if (item.name === name) {
+      users.value.splice(index, 1);
     }
   });
 };
@@ -145,5 +152,9 @@ const removeFromList = (name: string) => {
   border-right: 10px solid transparent;
   border-top: 15px solid #fff;
   margin-left: 10px;
+}
+
+ul {
+  list-style-type: none;
 }
 </style>

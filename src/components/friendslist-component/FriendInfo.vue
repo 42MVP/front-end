@@ -1,12 +1,12 @@
 <template>
   <div class="wrap">
-    <div v-if="!selectedUser">
-      No data
-      <!-- TODO : 404 not found -->
+    <div v-if="!user">
+      <!-- {{ selectedUser.name }} -->
+      not found
     </div>
     <div v-else class="p-container">
       <div class="top">
-        <Card class="p-info" :user_id="selectedUser.name" :img="selectedUser.img"> </Card>
+        <Card class="p-info" :user_id="user.name" :img="user.img"> </Card>
         <div class="g-info">
           <GBox :rate="1000" />
           <Achieve class="achieve"></Achieve>
@@ -19,64 +19,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
-import DButton from '@/components/tmp/DefaultButton.vue';
 import Card from '@/components/profileview-components/ProfileCard.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
-import GameHistory from '@/components/profileview-components/GameHistory.vue';
+import { type FriendType } from '@/components/FriendsData';
 
-interface UserInfo {
-  _id: number;
-  name: string;
-  img: string;
-  isFollow: boolean;
-  isBlock: boolean;
-}
-
-const users: UserInfo[] = [
-  { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false },
-  { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false },
-  { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false },
-  { _id: 4, name: 'hyeonki', img: '4.png', isFollow: false, isBlock: false },
-  { _id: 5, name: 'hyeonkkim', img: '5.png', isFollow: false, isBlock: false },
-];
-
-const props = defineProps({
-  user_id: { type: String, default: undefined },
-});
-
-// const selectedUser
-const selectedUser = ref(findUserInfoByName(users, 'hejang'));
-
-function findUserInfoByName(users: UserInfo[], name: string | undefined): UserInfo | undefined {
-  return users.find(user => user.name === name);
-}
-
-const followButton = () => {
-  if (selectedUser.value) {
-    selectedUser.value.isFollow = true;
-  }
-  console.log(selectedUser.value);
-};
-
-const unFollowButton = () => {
-  if (selectedUser.value) {
-    selectedUser.value.isFollow = false;
-  }
-  console.log(selectedUser.value);
-};
-
-const blockButton = () => {
-  if (selectedUser.value) {
-    selectedUser.value.isBlock = true;
-    selectedUser.value.isFollow = false;
-  }
-};
-
-const unBlockButton = () => {
-  if (selectedUser.value) {
-    selectedUser.value.isBlock = false;
-  }
-};
+const props = defineProps<{
+  user: FriendType | undefined;
+}>();
 </script>
 
 <style scoped>
@@ -99,9 +48,13 @@ const unBlockButton = () => {
 }
 
 .top {
+  display: flex;
+  flex-flow: column;
   justify-content: space-evenly;
   position: relative;
-  margin-left: 100px;
+  margin-left: 60px;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 .p-info {
@@ -122,6 +75,7 @@ const unBlockButton = () => {
 }
 
 .g-info {
+  margin-top: 20px;
   flex-direction: column;
   gap: 5px;
 }

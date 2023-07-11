@@ -3,14 +3,14 @@
     <div class="profileContent">
       <a class="profileImage"></a>
       <div class="profileText">
-        <h3>{{ friend.userName }}</h3>
-        <p>{{ friend.Level }} {{ friend.Achievement }}</p>
+        <h3>{{ friend.name }}</h3>
+        <p>[{{ friend.Level }}] {{ friend.Achievement }}</p>
       </div>
     </div>
-    <BasicButton :text="getButtonTitle()" @click="$emit('removeFromList', friend.userName)" />
+    <BasicButton :text="getButtonTitle()" @click="$emit('removeFromList', friend.name)" />
   </div>
 </template>
-2
+
 <script setup lang="ts">
 import BasicButton from '@/components/BasicButton.vue';
 import type { FriendType } from '@/components/FriendsData';
@@ -18,6 +18,7 @@ import type { FriendType } from '@/components/FriendsData';
 const props = defineProps<{
   listType: string;
   friend: FriendType;
+  selectedUser: string;
 }>();
 
 const getButtonTitle = () => {
@@ -28,19 +29,15 @@ const getButtonTitle = () => {
   }
 };
 
-const getColor = () => {
-  if (props.friend.State === 'onLine') {
-    return 'green';
-  } else if (props.friend.State === 'offLine') {
-    return 'gray';
-  } else {
-    return 'red';
-  }
-};
-
-// const bgColor = getColor();
-
-// const stateColor = {};
+// const getColor = () => {
+//   if (props.friend.State === 'onLine') {
+//     return 'green';
+//   } else if (props.friend.State === 'offLine') {
+//     return 'gray';
+//   } else {
+//     return 'red';
+//   }
+// };
 </script>
 
 <style scoped>
@@ -82,5 +79,10 @@ const getColor = () => {
   color: #000;
   line-height: 1.5;
   margin-left: 10px;
+}
+
+h3 {
+  font-weight: 600;
+  cursor: pointer;
 }
 </style>
