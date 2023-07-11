@@ -2,7 +2,7 @@
 
 <template>
   <ul class="drop-down-menu-container">
-    <slot name="dropdown-element"></slot>
+    <slot name="dropdown-item"></slot>
   </ul>
 </template>
 

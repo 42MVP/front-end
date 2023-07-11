@@ -12,10 +12,10 @@
     </template>
     <template #title-icon-menu>
       <DropdownMenu v-if="isMenu" style="width: 150px">
-        <template #dropdown-element>
-          <DropdownMenuElement text="채널 탐색" @click="setModal('채널 탐색')" />
-          <DropdownMenuElement text="채널 생성" @click="setModal('채널 생성')" />
-          <DropdownMenuElement text="DM 생성" @click="setModal('DM 생성')" />
+        <template #dropdown-item>
+          <DropdownMenuItem text="채널 탐색" @click="setModal('채널 탐색')" />
+          <DropdownMenuItem text="채널 생성" @click="setModal('채널 생성')" />
+          <DropdownMenuItem text="DM 생성" @click="setModal('DM 생성')" />
         </template>
       </DropdownMenu>
     </template>
@@ -40,7 +40,7 @@ import { nextTick, ref, watch } from 'vue';
 import BasicList from '@/components/BasicList.vue';
 import BasicListElement from '@/components/BasicListElement.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
-import DropdownMenuElement from '@/components/dropdown-component/DropdownMenuElement.vue';
+import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 
 import SearchChannelModal from '@/components/chatview-components/modals/SearchChannelModal.vue';
 import MakeDmModal from '@/components/chatview-components/modals/MakeDmModal.vue';
