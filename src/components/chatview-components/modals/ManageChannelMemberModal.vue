@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
-import BasicListElement from '@/components/BasicListElement.vue';
+import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import type { IUser } from '@/interfaces/User.interface';
 import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
@@ -47,7 +47,7 @@ const props = defineProps<{
         "
       >
         <template v-if="isUserTab" #search-bar-element>
-          <BasicListElement
+          <BasicListItem
             @click="
               tempIsSearch = false;
               isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
@@ -63,7 +63,7 @@ const props = defineProps<{
           />
         </template>
         <template v-else #search-bar-element>
-          <BasicListElement
+          <BasicListItem
             @click="
               tempIsSearch = false;
               isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
@@ -80,7 +80,7 @@ const props = defineProps<{
         </template>
       </SearchBar>
       <div v-if="isUserTab" class="modal-user-list-container">
-        <BasicListElement
+        <BasicListItem
           v-for="element in chatInfo.users"
           :key="element.id"
           :id="element.id"
@@ -102,10 +102,10 @@ const props = defineProps<{
             </template>
           </DropdownMenu>
           -->
-        </BasicListElement>
+        </BasicListItem>
       </div>
       <div v-else class="modal-user-list-container">
-        <BasicListElement
+        <BasicListItem
           v-for="element in chatInfo.banUsers"
           :key="element.id"
           :id="element.id"

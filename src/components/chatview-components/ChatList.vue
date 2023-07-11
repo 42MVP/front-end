@@ -20,7 +20,7 @@
       </DropdownMenu>
     </template>
     <template #user-element>
-      <BasicListElement
+      <BasicListItem
         v-for="(element, index) in chatInfos"
         :key="element.id"
         :id="index"
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue';
 import BasicList from '@/components/BasicList.vue';
-import BasicListElement from '@/components/BasicListElement.vue';
+import BasicListItem from '@/components/BasicListItem.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 
