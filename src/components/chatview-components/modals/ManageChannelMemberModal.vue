@@ -46,7 +46,7 @@ const props = defineProps<{
           }
         "
       >
-        <template v-if="isUserTab" #search-bar-element>
+        <template v-if="isUserTab" #search-bar-item>
           <BasicListItem
             @click="
               tempIsSearch = false;
@@ -62,7 +62,7 @@ const props = defineProps<{
             @response="e => console.log(e)"
           />
         </template>
-        <template v-else #search-bar-element>
+        <template v-else #search-bar-item>
           <BasicListItem
             @click="
               tempIsSearch = false;

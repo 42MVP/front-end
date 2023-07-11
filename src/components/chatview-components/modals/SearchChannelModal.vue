@@ -31,7 +31,7 @@
           }
         "
       >
-        <template #search-bar-element>
+        <template #search-bar-item>
           <BasicListItem
             @click="chat_list_elements = []"
             v-for="element in chat_list_elements"
