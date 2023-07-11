@@ -32,7 +32,7 @@
         "
       >
         <template #search-bar-element>
-          <BasicListElement
+          <BasicListItem
             @click="chat_list_elements = []"
             v-for="element in chat_list_elements"
             :key="element.id"
@@ -56,7 +56,7 @@
 import { ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
-import BasicListElement from '@/components/BasicListElement.vue';
+import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
 
 const chat_list_elements = ref<
