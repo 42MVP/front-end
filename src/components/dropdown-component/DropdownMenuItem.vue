@@ -2,17 +2,17 @@
 const props = defineProps({
   text: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 });
 </script>
 
 <template>
-  <li class="drop-down-menu-element">{{ props.text }}</li>
+  <li class="drop-down-menu-item">{{ props.text }}</li>
 </template>
 
-<style>
-.drop-down-menu-element {
+<style scoped>
+.drop-down-menu-item {
   width: 100%;
   color: #463f3a;
   font-size: 16px;
@@ -23,7 +23,7 @@ const props = defineProps({
   cursor: pointer;
 }
 
-.drop-down-menu-element:hover {
+.drop-down-menu-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
   transition: 0.1s ease-out;
 }
