@@ -26,7 +26,7 @@ const search_text = ref('');
     </div>
     <DropdownMenu v-if="props.isMenu" style="width: 100%; max-height: 300px">
       <template #dropdown-item>
-        <slot name="search-bar-element" />
+        <slot name="search-bar-item" />
       </template>
     </DropdownMenu>
   </div>
