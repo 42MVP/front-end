@@ -193,13 +193,13 @@ export default {
           "
         >
           <DropdownMenu v-if="isAbong" style="position: fixed; width: 150px">
-            <template #dropdown-element>
-              <DropdownMenuElement text="1분" @click="isAbong = false" />
-              <DropdownMenuElement text="5분" @click="isAbong = false" />
-              <DropdownMenuElement text="10분" @click="isAbong = false" />
-              <DropdownMenuElement text="30분" @click="isAbong = false" />
-              <DropdownMenuElement text="1시간" @click="isAbong = false" />
-              <DropdownMenuElement text="취소" @click="isAbong = false" />
+            <template #dropdown-item>
+              <DropdownMenuItem text="1분" @click="isAbong = false" />
+              <DropdownMenuItem text="5분" @click="isAbong = false" />
+              <DropdownMenuItem text="10분" @click="isAbong = false" />
+              <DropdownMenuItem text="30분" @click="isAbong = false" />
+              <DropdownMenuItem text="1시간" @click="isAbong = false" />
+              <DropdownMenuItem text="취소" @click="isAbong = false" />
             </template>
           </DropdownMenu>
         </BasicListElement>

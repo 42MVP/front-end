@@ -87,7 +87,7 @@ export default {
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
           </div>
           <DropdownMenu v-if="isActiveDropdown" style="width: 400px">
-            <template #dropdown-element>
+            <template #dropdown-item>
               <BasicListElement
                 v-for="friend in friends"
                 :key="friend.id"

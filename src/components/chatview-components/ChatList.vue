@@ -2,7 +2,7 @@
 import BasicList from '../BasicList.vue';
 import BasicListElement from '../BasicListElement.vue';
 import DropdownMenu from '../dropdown-component/DropdownMenu.vue';
-import DropdownMenuElement from '../dropdown-component/DropdownMenuElement.vue';
+import DropdownMenuItem from '../dropdown-component/DropdownMenuItem.vue';
 
 import SearchChannelModal from '../chatview-components/modals/SearchChannelModal.vue';
 import MakeDmModal from '../chatview-components/modals/MakeDmModal.vue';
@@ -15,11 +15,11 @@ export default {
     BasicList,
     BasicListElement,
     DropdownMenu,
-    DropdownMenuElement,
+    DropdownMenuItem,
     SearchChannelModal,
     MakeDmModal,
     MakeChannelModal,
-    JoinChannelPasswordModal
+    JoinChannelPasswordModal,
   },
   props: {
     chatInfos: [],
@@ -40,15 +40,14 @@ export default {
     eventResponse() {
       if (!this.eventResponse) return;
       const sp = this.eventResponse.split(':');
-      const index  = parseInt(sp[0]);
+      const index = parseInt(sp[0]);
       const eventName = sp[1];
       const chatInfo = this.chatInfos[index];
       if (eventName === 'click') {
         console.log('click');
         if (chatInfo.hasPassword) {
           this.setModal('채널 비밀번호 입력');
-        }
-        else {
+        } else {
           this.$emit('selectchat', index);
         }
       }
@@ -72,7 +71,13 @@ export default {
   <SearchChannelModal :isShow="modalName === '채널 탐색'" @close="modalName = ''" />
   <MakeDmModal :isShow="modalName === 'DM 생성'" @close="modalName = ''" />
   <MakeChannelModal :isShow="modalName === '채널 생성'" @close="modalName = ''" />
-  <JoinChannelPasswordModal :isShow="modalName === '채널 비밀번호 입력'" @close="$emit('reset'); modalName = ''" />
+  <JoinChannelPasswordModal
+    :isShow="modalName === '채널 비밀번호 입력'"
+    @close="
+      $emit('reset');
+      modalName = '';
+    "
+  />
   <BasicList :elements="user_list_elements">
     <template #title> 채팅 </template>
     <template #title-icon>
@@ -82,10 +87,10 @@ export default {
     </template>
     <template #title-icon-menu>
       <DropdownMenu v-if="isMenu" style="width: 150px">
-        <template #dropdown-element>
-          <DropdownMenuElement text="채널 탐색" @click="setModal('채널 탐색')" />
-          <DropdownMenuElement text="채널 생성" @click="setModal('채널 생성')" />
-          <DropdownMenuElement text="DM 생성" @click="setModal('DM 생성')" />
+        <template #dropdown-item>
+          <DropdownMenuItem text="채널 탐색" @click="setModal('채널 탐색')" />
+          <DropdownMenuItem text="채널 생성" @click="setModal('채널 생성')" />
+          <DropdownMenuItem text="DM 생성" @click="setModal('DM 생성')" />
         </template>
       </DropdownMenu>
     </template>

@@ -11,7 +11,6 @@ const props = defineProps({
 const emits = defineEmits(['response']); // REVIEW : update:search_text
 
 const search_text = ref('');
-
 </script>
 
 <template>
@@ -26,7 +25,7 @@ const search_text = ref('');
       />
     </div>
     <DropdownMenu v-if="props.isMenu" style="width: 100%; max-height: 300px">
-      <template #dropdown-element>
+      <template #dropdown-item>
         <slot name="search-bar-element" />
       </template>
     </DropdownMenu>
