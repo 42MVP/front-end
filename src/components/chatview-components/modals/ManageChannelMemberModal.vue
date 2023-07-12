@@ -52,11 +52,11 @@ const props = defineProps<{
               tempIsSearch = false;
               isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
             "
-            v-for="element in props.friends"
-            :key="element.id"
-            :id="element.id"
-            :name="element.name"
-            :avatarURL="element.avatarURL"
+            v-for="friend in props.friends"
+            :key="friend.id"
+            :id="friend.id"
+            :name="friend.name"
+            :avatarURL="friend.avatarURL"
             :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
             clickEvent="good~"
             @response="e => console.log(e)"
