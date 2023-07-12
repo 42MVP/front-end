@@ -11,7 +11,7 @@ import { ref } from 'vue';
 import GameMatching from '@/components/gameview-components/GameMatching.vue';
 import GameScreen from '@/components/gameview-components/GameScreen.vue';
 
-const isMatched = ref(1);
+const isMatched = ref<boolean>(false);
 </script>
 
 <style scoped>

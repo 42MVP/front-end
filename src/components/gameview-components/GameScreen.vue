@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ProfileCard from '../profileview-components/ProfileCard.vue';
+import ProfileCard from '@/components/profileview-components/ProfileCard.vue';
 
 const isGameConnected = ref<boolean>(false);
 </script>

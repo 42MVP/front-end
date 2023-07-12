@@ -31,7 +31,7 @@ import Modal from '@/components/Modal.vue';
 import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
-const selectedOption = ref(1);
+const selectedOption = ref<number>(1);
 
 const selectButton = (index: number) => {
   selectedOption.value = index;
