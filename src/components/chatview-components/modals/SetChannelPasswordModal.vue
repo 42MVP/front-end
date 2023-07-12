@@ -22,9 +22,7 @@ import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
 const emits = defineEmits(['close', 'submit']);
-const props = defineProps({
-  isShow: { type: Boolean, default: false },
-});
+const props = defineProps<{ isShow: boolean }>();
 </script>
 
 <style scoped></style>

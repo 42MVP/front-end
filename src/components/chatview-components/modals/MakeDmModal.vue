@@ -4,30 +4,27 @@
       <SearchBar
         placeholderText="유저명을 입력하세요"
         icon="🔍"
-        :isMenu="search_channel_list_elements.length > 0"
+        :isMenu="chat_list_elements.length > 0"
         @response="
           e => {
             if (e === '') {
-              search_channel_list_elements = [];
+              chat_list_elements = [];
               return;
             }
-            search_channel_list_elements = [
+            chat_list_elements = [
               {
                 id: 1,
                 name: '42my',
-                clickEvent: 'channelclick',
                 avatarURL: '',
               },
               {
                 id: 2,
                 name: '42party',
-                clickEvent: 'channelclick',
                 avatarURL: '',
               },
               {
                 id: 3,
                 name: '42mario',
-                clickEvent: 'channelclick',
                 avatarURL: '',
               },
             ];
@@ -36,8 +33,8 @@
       >
         <template #search-bar-element>
           <BasicListElement
-            @click="search_channel_list_elements = []"
-            v-for="element in search_channel_list_elements"
+            @click="chat_list_elements = []"
+            v-for="element in chat_list_elements"
             :key="element.id"
             :id="element.id"
             :name="element.name"
@@ -62,11 +59,15 @@ import SearchBar from '@/components/SearchBar.vue';
 import BasicListElement from '@/components/BasicListElement.vue';
 import BasicButton from '@/components/BasicButton.vue';
 
-const search_channel_list_elements = ref([]);
+const chat_list_elements = ref<
+  {
+    id: number;
+    name: string;
+    avatarURL: string;
+  }[]
+>([]);
 const emits = defineEmits(['close', 'submit']);
-const props = defineProps({
-  isShow: { type: Boolean, default: false },
-});
+const props = defineProps<{ isShow: boolean }>();
 </script>
 
 <style scoped></style>

@@ -1,5 +1,5 @@
-import { IChat } from './Chat.interface';
-import { IUser } from './User.interface';
+import type { IChat } from './Chat.interface';
+import type { IUser } from './User.interface';
 
 export interface IChatInfo {
   id: number;

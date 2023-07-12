@@ -31,13 +31,9 @@ import RadioButton from '@/components/RadioButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
 const emits = defineEmits(['close']);
-const props = defineProps({
-  isShow: {
-    default: false,
-  },
-});
+const props = defineProps<{ isShow: boolean }>();
 
-const selectedMode = ref(1);
+const selectedMode = ref<number>(1);
 
 const selectButton = (index: number) => {
   selectedMode.value = index;

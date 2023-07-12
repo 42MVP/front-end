@@ -13,9 +13,7 @@ import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 
 const emits = defineEmits(['close', 'submit']);
-const props = defineProps({
-  isShow: { type: Boolean, default: false },
-});
+const props = defineProps<{ isShow: boolean }>();
 </script>
 
 <style scoped></style>
