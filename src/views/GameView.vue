@@ -1,33 +1,27 @@
-<script setup lang="ts">
-import GameLoading from '@/components/gameview-components/GameLoading.vue';
-import { ref } from 'vue';
-</script>
-
 <template>
-  <!-- <div class="bg"> -->
-  <div class="mm">
-    <GameLoading />
+  <GameMatching v-if="!isMatched" />
+  <div v-else class="game-screen-div">
+    <GameScreen />
   </div>
-  <!-- </div> -->
 </template>
 
-<style scoped>
-.bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  transform: translateZ(0);
-  color: aquamarine;
-}
+<script setup lang="ts">
+import { ref } from 'vue';
 
-.mm {
-  background-color: #fff;
-  width: 100%;
-  height: 100vh;
+import GameMatching from '@/components/gameview-components/GameMatching.vue';
+import GameScreen from '@/components/gameview-components/GameScreen.vue';
+
+const isMatched = ref<boolean>(false);
+</script>
+
+<style scoped>
+.game-screen-div {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
 }
 </style>
