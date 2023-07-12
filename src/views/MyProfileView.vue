@@ -1,5 +1,5 @@
 <template>
-  <!-- {{ console.log(user) }} -->
+  <!-- {{ console.log(user) }}
   <div class="p-container">
     <Card class="p-info" :img="user.img">
       <div class="button-slot">
@@ -20,13 +20,36 @@
         <DButton class="cancle-button" label="취소" @click="editButton()" />
       </div>
     </div>
+  </div> -->
+  <div class="wrap">
+    <UploadImage />
+    <div class="p-info">
+      <div class="name">
+        <h3>닉네임 설정</h3>
+        <TextInputBox placeholderText="닉네임입력" type="name" :maxLength="15" required />
+      </div>
+      <div class="auth">
+        <h3>2차인증</h3>
+        <TButton />
+      </div>
+      <div class="mail">
+        <h3>인증메일</h3>
+        <a>hejang@student.42seoul.kr</a>
+      </div>
+      <div class="two-buttons">
+        <!-- <button type="button" :disabled="src" class="test">완료</button> -->
+        <BasicButton text="완료" />
+        <BasicButton text="취소" :type="false" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import DButton from '@/components/tmp/DefaultButton.vue';
 import TButton from '@/components/common/ToggleButton.vue';
-import Card from '@/components/profileview-components/ProfileCard.vue';
+import UploadImage from '@/components/common/UploadImage.vue';
+import TextInputBox from '@/components/TextInputBox.vue';
+import BasicButton from '@/components/BasicButton.vue';
 import { ref } from 'vue';
 
 // const props = defineProps({
@@ -57,51 +80,61 @@ const editButton = () => {
 </script>
 
 <style scoped>
-.p-container,
-.p-container * {
-  display: grid;
-  box-sizing: border-box;
-  position: relative;
+.wrap {
+  display: flex;
+  /* flex-flow: row; */
   align-items: center;
-}
-.p-container {
-  grid-template-columns: 2fr 3fr;
-  width: 100%;
-  height: 100%;
-  justify-content: space-evenly;
+  margin-left: 100px;
+  margin-top: 70px;
+  gap: 70px;
 }
 
 .p-info {
-  justify-self: right;
   display: flex;
-  flex-direction: column;
-}
-.button-slot {
-  margin: 10px 10px;
-}
-
-.input-file {
-  position: absolute;
-}
-
-.e-info {
-  display: grid;
-  grid-template-columns: 100px auto;
-  grid-template-rows: 3fr 2fr 2fr 5fr;
-  justify-self: center;
-  grid-gap: 30px;
-  /* flex-direction: column; */
+  flex-flow: column;
+  align-items: flex-start;
+  gap: 30px;
+  margin-left: 30px;
+  flex-shrink: 0;
+  margin-top: 50px;
 }
 
 .two-buttons {
-  grid-area: span 1 / 2;
-  grid-template-columns: 50px 50px;
-  gap: 50px;
-  justify-self: left;
+  display: flex;
+  flex-flow: row;
+  margin-top: 50px;
+  margin-left: 120px;
+  /* grid-area: span 1 / 2; */
+  /* grid-template-columns: 50px 50px; */
+  gap: 80px;
+  /* justify-self: left; */
 }
 
-.end-align {
-  /* align-self: end; */
-  text-align: end;
+.auth {
+  display: flex;
+  flex-flow: row;
+  gap: 64px;
+}
+.mail {
+  display: flex;
+  flex-flow: row;
+  gap: 60px;
+}
+.name {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 30px;
+}
+
+h3 {
+  color: var(--brown, #463f3a);
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px;
 }
 </style>

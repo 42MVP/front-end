@@ -1,8 +1,8 @@
-<script lang="ts"></script>
+<script setup lang="ts"></script>
 
 <template>
   <ul class="drop-down-menu-container">
-    <slot name="dropdown-element"></slot>
+    <slot name="dropdown-item"></slot>
   </ul>
 </template>
 
