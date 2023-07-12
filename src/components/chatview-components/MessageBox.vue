@@ -1,46 +1,50 @@
-<script lang="ts">
-import { chat } from './MessageList.vue';
-import { userStore } from '../../stores/user';
-
-export default {
-  data() {
-    return {
-      login_username: userStore?.user?.name,
-    };
-  },
-  props: {
-    chat: {} as chat,
-  },
-};
-</script>
-
 <template>
   <div class="chat-box">
     <div class="chat-info-line">
       <div class="chat-info-line-box">
-        <img :src="chat.userAvatarURL !== '' ? chat.userAvatarURL : ''" class="user-avatar" />
+        <img :src="props.chat.avatarURL !== '' ? props.chat.avatarURL : ''" class="user-avatar" />
       </div>
       <div class="chat-info-line-text">
         <p
           :class="{
-            'chat-info-line-box': chat.username !== login_username,
-            'chat-info-line-box-me': chat.username === login_username,
+            'chat-info-line-box': !isMyMessage,
+            'chat-info-line-box-me': isMyMessage,
           }"
         >
-          {{ chat.username }}
+          {{ props.chat.username }}
         </p>
         <p class="chat-info-line-time">
-          {{ chat.date.getHours() > 12 ? '오후' : '오전' }} {{ chat.date.getHours() % 12 }}:{{
-            chat.date.getMinutes() < 10 ? `0${chat.date.getMinutes()}` : chat.date.getMinutes()
-          }}
+          {{ timeString }}
         </p>
       </div>
     </div>
     <p class="chat-message">
-      {{ chat.message }}
+      {{ props.chat.message }}
     </p>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { userStore } from '@/stores/user';
+import type { IChat } from '@/interfaces/Chat.interface';
+
+const login_username = ref(userStore?.user?.name);
+
+const props = defineProps<{ chat: IChat }>();
+
+const isMyMessage = computed(() => {
+  return props.chat.username === login_username.value;
+});
+
+const timeString = computed(() => {
+  return `${props.chat.date.getHours() > 12 ? '오후' : '오전'} \
+${props.chat.date.getHours() % 12}\
+:\
+${props.chat.date.getMinutes() < 10 ? '0' : ''}\
+${props.chat.date.getMinutes()}`;
+});
+</script>
 
 <style scoped>
 .chat-box {
@@ -73,7 +77,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  color: #463F3A;
+  color: #463f3a;
 }
 
 .chat-info-line-box {
@@ -111,7 +115,7 @@ export default {
   font-family: Inter;
   font-weight: 500;
   line-height: 32px;
-  color: #463F3A;
+  color: #463f3a;
   overflow-wrap: break-word;
 }
 </style>

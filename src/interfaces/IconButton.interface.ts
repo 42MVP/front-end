@@ -1,5 +1,4 @@
 export interface IIconButton {
-  emoji: string,
-  event: string,
+  emoji: string;
+  event: string;
 }
-

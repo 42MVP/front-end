@@ -1,29 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-
-import Modal from '@/components/Modal.vue';
-import SearchBar from '@/components/SearchBar.vue';
-import BasicButton from '@/components/BasicButton.vue';
-import RadioButton from '@/components/RadioButton.vue';
-import TextInputBox from '@/components/TextInputBox.vue';
-
-const props = defineProps({
-  isShow: {
-    default: false,
-  },
-});
-
-const selectedMode = ref(1);
-
-const selectButton = (index: number) => {
-  selectedMode.value = index;
-};
-
-const setActive = (index: number) => {
-  return selectedMode.value === index;
-};
-</script>
-
 <template>
   <Modal title="채널 생성" :show="props.isShow">
     <template #body>
@@ -42,11 +16,33 @@ const setActive = (index: number) => {
       />
     </template>
     <template #footer>
-      <BasicButton :type="false" text="취소" @click="$emit('close')" style="margin-right: 5px" />
+      <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
       <BasicButton text="확인" />
     </template>
   </Modal>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+import Modal from '@/components/Modal.vue';
+import BasicButton from '@/components/BasicButton.vue';
+import RadioButton from '@/components/RadioButton.vue';
+import TextInputBox from '@/components/TextInputBox.vue';
+
+const emits = defineEmits(['close']);
+const props = defineProps<{ isShow: boolean }>();
+
+const selectedMode = ref<number>(1);
+
+const selectButton = (index: number) => {
+  selectedMode.value = index;
+};
+
+const setActive = (index: number) => {
+  return selectedMode.value === index;
+};
+</script>
 
 <style scoped>
 .radio-button-out-div {

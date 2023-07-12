@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue'),
+      component: () => import('@/views/HomeView.vue'),
     },
     {
       path: '/signIn',
@@ -43,18 +43,20 @@ const router = createRouter({
     {
       path: '/users',
       name: 'users',
-      component: () => import('@/views/MyProfileView.vue'),
+
+      component: () => import(/* webpackChunkName: "user" */ '@/views/MyProfileView.vue'),
     },
     {
       path: '/users/:id',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue'),
+
+      component: () => import(/* webpackChunkName: "user" */ '@/views/ProfileView.vue'),
       props: route => ({ user_id: route.params.id }),
     },
     {
       path: '/chats',
       name: 'chats',
-      component: () => import('../views/ChatView.vue'),
+      component: () => import('@/views/ChatView.vue'),
     },
     {
       path: '/friends',
