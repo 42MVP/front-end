@@ -52,7 +52,7 @@ watch(text, () => {
   border: 2px solid #bcb8b1;
   border-radius: 15px;
   background-color: inherit;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
   font-size: 24px;
   font-family: Inter;
   font-weight: 500;
@@ -67,7 +67,7 @@ watch(text, () => {
 }
 
 .text-input-box-counter {
-  color: #8a817c;
+  color: var(--semi-brown, #8a817c);
   text-align: right;
   font-size: 12px;
   font-family: Inter;
@@ -76,7 +76,7 @@ watch(text, () => {
 }
 
 .text-input-box-counter-false {
-  color: #e0afa0;
+  color: var(--base-pink, #e0afa0);
   text-align: right;
   font-size: 12px;
   font-family: Inter;

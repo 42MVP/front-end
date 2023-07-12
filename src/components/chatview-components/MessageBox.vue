@@ -47,7 +47,7 @@ const timeString = computed(() => {
 .chat-box {
   border-radius: 20px;
   padding: 10px 20px;
-  background-color: #f4f3ee;
+  background-color: var(--base-ivory, #f4f3ee);
   margin: 15px 5px;
 }
 
@@ -74,7 +74,7 @@ const timeString = computed(() => {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
 }
 
 .chat-info-line-box {
@@ -93,7 +93,7 @@ const timeString = computed(() => {
   font-size: 24px;
   font-family: Inter;
   font-weight: 500;
-  color: #e0afa0;
+  color: var(--base-pink, #e0afa0);
 }
 
 .chat-info-line-time {
@@ -112,7 +112,7 @@ const timeString = computed(() => {
   font-family: Inter;
   font-weight: 500;
   line-height: 32px;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
   overflow-wrap: break-word;
 }
 </style>

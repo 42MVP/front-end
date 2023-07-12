@@ -9,7 +9,7 @@ const props = defineProps<{ text: string }>();
 <style scoped>
 .drop-down-menu-item {
   width: 100%;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
   font-size: 16px;
   font-family: Inter;
   font-weight: 500;

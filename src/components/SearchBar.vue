@@ -61,6 +61,6 @@ const search_text = ref('');
   height: 100%;
   outline: none;
   border: none;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
 }
 </style>

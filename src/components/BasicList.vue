@@ -38,13 +38,13 @@ const emits = defineEmits(['response']);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #8a817c;
+  background-color: var(--semi-brown, #8a817c);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
 
 .user-list-title {
-  color: #f4f3ee;
+  color: var(--base-ivory, #f4f3ee);
   font-size: 32px;
   font-family: Inter;
   font-weight: 700;
@@ -60,7 +60,7 @@ const emits = defineEmits(['response']);
   width: 100%;
   height: 100%;
   flex-direction: column;
-  background-color: #f4f3ee;
+  background-color: var(--base-ivory, #f4f3ee);
   overflow: auto;
 }
 
@@ -69,7 +69,7 @@ const emits = defineEmits(['response']);
 }
 
 .title-icon {
-  color: #f4f3ee;
+  color: var(--base-ivory, #f4f3ee);
   font-size: 24px;
   cursor: pointer;
 }

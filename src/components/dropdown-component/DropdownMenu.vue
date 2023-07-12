@@ -18,7 +18,7 @@
   margin: 0;
   padding: 0;
   border: 1px solid #8A817C;
-  background-color: #F4F3EE;
+  background-color: var(--base-ivory, #f4f3ee);
   max-height: 500px;
   overflow: auto;
 }

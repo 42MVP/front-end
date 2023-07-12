@@ -44,6 +44,6 @@ const onClick = () => {
   font-family: Inter;
   font-weight: 700;
   line-height: 24px;
-  color: #f4f3ee;
+  color: var(--base-ivory, #f4f3ee);
 }
 </style>

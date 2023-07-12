@@ -147,7 +147,7 @@ const addChat: Function = (newMessage: string) => {
   font-family: Inter;
   font-weight: 700;
   margin-right: 10px;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
 }
 
 .chat-box-list-name-left-icon-container {
@@ -160,7 +160,7 @@ const addChat: Function = (newMessage: string) => {
   align-content: center;
   cursor: pointer;
   font-size: 24px;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
 }
 
 .chat-box-list-name-left-icon:hover {

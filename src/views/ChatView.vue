@@ -78,6 +78,6 @@ watch(index, () => {
   opacity: 0.1;
   width: 100%;
   height: 100%;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
 }
 </style>
