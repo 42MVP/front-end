@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue';
+import { watch, ref } from 'vue';
 
 const props = defineProps({
   maxLength: { type: Number, default: 0 },
@@ -9,16 +9,15 @@ const props = defineProps({
 
 const text = ref('');
 
-const emits = defineEmits(['response']); // REVIEW : update:text
+const emits = defineEmits(['response']);
 
 const isTextOver = ref(false);
-watchEffect(() => {
-  isTextOver.value = text.value.length >= props.maxLength;
-});
 
-const limitText = computed(() => {
-  const textLimit = text.value;
-  return text.value.length > props.maxLength ? textLimit : textLimit.slice(0, props.maxLength);
+watch(text, () => {
+  if (text.value.length > props.maxLength) {
+    text.value = text.value.slice(0, props.maxLength);
+    isTextOver.value = true;
+  }
 });
 </script>
 
@@ -32,7 +31,7 @@ const limitText = computed(() => {
       @input="emits('response', text)"
     />
     <p :class="{ 'text-input-box-counter': !isTextOver, 'text-input-box-counter-false': isTextOver }">
-      {{ limitText.length }}/{{ props.maxLength }}
+      {{ text.length }}/{{ props.maxLength }}
     </p>
   </div>
 </template>
