@@ -89,9 +89,9 @@ watch(
   },
 );
 
-function setModal(name: string) {
+const setModal: Function = (name: string) => {
   modalName.value = name;
-}
+};
 </script>
 
 <style scoped>

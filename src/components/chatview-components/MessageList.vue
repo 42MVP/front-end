@@ -24,11 +24,11 @@ watch(
   },
 );
 
-function scrollToLatestMsg() {
+const scrollToLatestMsg: Function = () => {
   nextTick(() => {
     chatref.value.scrollTo({ top: chatref.value.scrollHeight, behavior: 'smooth' });
   });
-}
+};
 </script>
 
 <style>
