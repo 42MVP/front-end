@@ -1,7 +1,7 @@
 import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
 import type { IUser } from '@/interfaces/User.interface';
 
-export function getChatInfos(): IChatInfo[] {
+export const getChatInfos: Function = (): IChatInfo[] => {
   return [
     {
       id: 1,
@@ -89,9 +89,9 @@ export function getChatInfos(): IChatInfo[] {
       ],
     },
   ];
-}
+};
 
-export function getFriend(): IUser[] {
+export const getFriend: Function = (): IUser[] => {
   return [
     {
       id: 1,
@@ -104,4 +104,4 @@ export function getFriend(): IUser[] {
       avatarURL: '',
     },
   ];
-}
+};

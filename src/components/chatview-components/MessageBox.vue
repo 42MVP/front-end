@@ -38,11 +38,8 @@ const isMyMessage = computed(() => {
 });
 
 const timeString = computed(() => {
-  return `${props.chat.date.getHours() > 12 ? '오후' : '오전'} \
-${props.chat.date.getHours() % 12}\
-:\
-${props.chat.date.getMinutes() < 10 ? '0' : ''}\
-${props.chat.date.getMinutes()}`;
+  return `${props.chat.date.getHours() > 12 ? '오후' : '오전'}\
+  ${props.chat.date.getHours() % 12}:${props.chat.date.getMinutes().toString().padStart(2, '0')}`;
 });
 </script>
 

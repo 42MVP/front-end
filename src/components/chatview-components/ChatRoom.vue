@@ -99,11 +99,11 @@ watch(
   },
 );
 
-function setModal(name: string) {
+const setModal: Function = (name: string) => {
   modalName.value = name;
-}
+};
 
-function addChat(newMessage: string) {
+const addChat: Function = (newMessage: string) => {
   props.chatInfo.chats = [
     ...props.chatInfo.chats,
     {
@@ -115,7 +115,7 @@ function addChat(newMessage: string) {
     },
   ];
   props.chatInfo.chats = props.chatInfo.chats;
-}
+};
 </script>
 
 <style scoped>

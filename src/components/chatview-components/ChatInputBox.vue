@@ -27,12 +27,12 @@ watch(text, () => {
   }
 });
 
-function sendEvent() {
+const sendEvent: Function = () => {
   if (text.value.length > 0) {
     emits('response', text.value);
     text.value = '';
   }
-}
+};
 </script>
 
 <style scoped>
