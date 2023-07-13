@@ -50,13 +50,9 @@ const props = defineProps({
 
 .modal-header {
   color: var(--brown, #463f3a);
-  font-size: 40px;
-  font-family: Inter;
-  font-weight: 800;
-  line-height: 56px;
-  letter-spacing: -0.88px;
+  font: var(--large);
+  font-weight: 700;
 }
-
 .modal-body {
   margin: 20px 0;
   color: var(--brown, #463f3a);

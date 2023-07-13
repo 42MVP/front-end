@@ -40,10 +40,8 @@ const onClick = () => {
 
 .basic-button-container p {
   margin: auto 0;
-  font-size: 16px;
-  font-family: Inter;
+  font: var(--small);
   font-weight: 700;
-  line-height: 24px;
   color: var(--base-ivory, #f4f3ee);
 }
 </style>

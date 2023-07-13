@@ -45,14 +45,8 @@ const emits = defineEmits(['response']);
 
 .user-list-title {
   color: var(--base-ivory, #f4f3ee);
-  font-size: 32px;
-  font-family: Inter;
+  font: var(--medium);
   font-weight: 700;
-}
-
-.title-icon:hover {
-  opacity: 0.5;
-  transition: 0.1s ease-out;
 }
 
 .user-list-container {
@@ -70,8 +64,14 @@ const emits = defineEmits(['response']);
 
 .title-icon {
   color: var(--base-ivory, #f4f3ee);
-  font-size: 24px;
+  font: var(--medium);
+  font-weight: 700;
   cursor: pointer;
+}
+
+.title-icon:hover {
+  opacity: 0.5;
+  transition: 0.1s ease-out;
 }
 
 .title-icon-menu {

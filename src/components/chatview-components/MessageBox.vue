@@ -81,37 +81,27 @@ const timeString = computed(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
+  font: var(--medium);
 }
 
 .chat-info-line-box-me {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
+  font: var(--medium);
   color: var(--base-pink, #e0afa0);
 }
 
 .chat-info-line-time {
   display: flex;
   align-items: center;
-  font-size: 16px;
-  font-family: Inter;
-  font-weight: 500;
-  line-height: 32px;
+  font: var(--small);
   opacity: 0.5;
 }
 
 .chat-message {
   padding: 10px;
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
-  line-height: 32px;
+  font: var(--medium);
   color: var(--brown, #463f3a);
   overflow-wrap: break-word;
 }

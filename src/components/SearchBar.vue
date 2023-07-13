@@ -49,14 +49,12 @@ const search_text = ref('');
 }
 
 .search-bar-icon {
-  font-size: 24px;
+  font: var(--medium);
   margin: 0 10px;
 }
 
 .search-bar-input {
-  font-size: 16px;
-  font-family: Inter;
-  font-weight: 500;
+  font: var(--small);
   width: 100%;
   height: 100%;
   outline: none;

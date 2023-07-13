@@ -51,18 +51,13 @@ const sendEvent: Function = () => {
   outline: none;
   border: none;
   color: var(--brown, #463f3a);
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
+  font: var(--medium);
 }
 
 .chat-input-box-container p {
   color: var(--semi-brown, #8a817c);
+  font: var(--small);
   text-align: right;
-  font-size: 12px;
-  font-family: Inter;
-  line-height: 24px;
-  letter-spacing: -0.176px;
   margin-right: 20px;
 }
 </style>

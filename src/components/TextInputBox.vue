@@ -53,10 +53,7 @@ watch(text, () => {
   border-radius: 15px;
   background-color: inherit;
   color: var(--brown, #463f3a);
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
-  line-height: 32px;
+  font: var(--medium);
   height: 65px;
   padding: 15px;
   outline: none;

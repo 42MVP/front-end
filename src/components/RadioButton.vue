@@ -56,9 +56,6 @@ const className = computed(() => [{ 'radio-button': !props.isActive }, { 'radio-
 
 .radio-button-container p {
   color: var(--brown, #463f3a);
-  font-size: 16px;
-  font-family: Inter;
-  font-weight: 500;
-  line-height: 24px;
+  font: var(--small);
 }
 </style>

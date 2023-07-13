@@ -10,10 +10,7 @@ const props = defineProps<{ text: string }>();
 .drop-down-menu-item {
   width: 100%;
   color: var(--brown, #463f3a);
-  font-size: 16px;
-  font-family: Inter;
-  font-weight: 500;
-  line-height: 24px;
+  font: var(--small);
   padding: 10px;
   cursor: pointer;
 }

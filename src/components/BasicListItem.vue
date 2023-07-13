@@ -66,8 +66,7 @@ const onClick = (id: number, iconEvent: string) => {
   display: flex;
   align-items: center;
   color: var(--brown, #463f3a);
-  font-size: 16px;
-  font-weight: 500;
+  font: var(--small);
   height: fit-content;
 }
 

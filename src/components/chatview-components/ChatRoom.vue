@@ -143,9 +143,7 @@ const addChat: Function = (newMessage: string) => {
 }
 
 .chat-box-list-name-left-word {
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 700;
+  font: var(--medium);
   margin-right: 10px;
   color: var(--brown, #463f3a);
 }
@@ -159,7 +157,7 @@ const addChat: Function = (newMessage: string) => {
   justify-content: center;
   align-content: center;
   cursor: pointer;
-  font-size: 24px;
+  font: var(--medium);
   color: var(--brown, #463f3a);
 }
 
