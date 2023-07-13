@@ -42,8 +42,8 @@ watch(index, () => {
 
 .container {
   display: flex;
-  width: 100%;
-  height: calc(100% - 90px);
+  width: 100vw;
+  height: calc(100vh - 90px);
 }
 
 .chat-left {
