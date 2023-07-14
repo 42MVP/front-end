@@ -1,4 +1,5 @@
 <template>
+  <FriendListTmp />
   <div class="wrap">
     <div class="head">
       <div class="dropdown">
@@ -30,6 +31,7 @@
 import { ref } from 'vue';
 import FriendListItem from './FriendListItem.vue';
 import { type FriendType } from '../FriendsData';
+import FriendListTmp from './FriendListTmp.vue';
 
 const props = defineProps<{
   selectedUser: string;

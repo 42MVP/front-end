@@ -1,12 +1,14 @@
 <template>
   <main>
-    <FriendList :selectedUser="selectedUser" @updateSelection="updateSelection" />
+    <FriendListTmp :selectedUser="selectedUser" @updateSelection="updateSelection" />
+    <!-- <FriendList :selectedUser="selectedUser" @updateSelection="updateSelection" /> -->
     <FriendInfo :user="getSelectedUser(selectedUser)" />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import FriendListTmp from '@/components/friendslist-component/FriendListTmp.vue';
 import FriendList from '@/components/friendslist-component/FriendList.vue';
 import FriendInfo from '@/components/friendslist-component/FriendInfo.vue';
 import { type FriendType } from '@/components/FriendsData';

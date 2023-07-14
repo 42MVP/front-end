@@ -29,10 +29,10 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-/* .wrap {
+.wrap {
   display: flex;
   flex-flow: row;
-} */
+}
 .p-container,
 .p-container * {
   box-sizing: border-box;
@@ -42,8 +42,8 @@ const props = defineProps<{
   align-items: center;
 }
 .p-container {
-  padding: 15px 0px;
-  gap: 10px;
+  /* padding: 15px 0px; */
+  /* gap: 10px; */
   flex-direction: column;
 }
 
@@ -53,8 +53,7 @@ const props = defineProps<{
   justify-content: space-evenly;
   position: relative;
   margin-left: 60px;
-  margin-top: 20px;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 }
 
 .p-info {
@@ -62,16 +61,6 @@ const props = defineProps<{
   font: 600 40px 'Inter', sans-serif;
   flex-direction: column;
   margin-right: 50px;
-
-  .button-slot {
-    margin: 10px 10px;
-    justify-content: center;
-  }
-}
-
-.two-buttons {
-  justify-content: space-around;
-  width: 100%;
 }
 
 .g-info {
@@ -81,24 +70,8 @@ const props = defineProps<{
 }
 .achieve {
   background: var(--base-ivory);
-  border-radius: 10px;
+  /* border-radius: 10px; */
   padding: 80px 34px 80px 34px;
   justify-content: space-between;
-}
-
-.bottom {
-  align-self: center;
-  padding: 0px 15px;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 10px;
-  font: var(--medium);
-
-  min-height: 100px;
-  max-height: 30vh;
-
-  background: var(--base-gray);
-  opacity: 0.7;
-  overflow: auto;
 }
 </style>
