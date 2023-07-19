@@ -42,8 +42,8 @@ watch(index, () => {
 
 .container {
   display: flex;
-  width: 100%;
-  height: calc(100% - 90px);
+  width: 100vw;
+  height: calc(100vh - 90px);
 }
 
 .chat-left {
@@ -78,6 +78,6 @@ watch(index, () => {
   opacity: 0.1;
   width: 100%;
   height: 100%;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
 }
 </style>

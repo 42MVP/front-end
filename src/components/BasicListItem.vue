@@ -65,9 +65,8 @@ const onClick = (id: number, iconEvent: string) => {
 .list-element-info-container span {
   display: flex;
   align-items: center;
-  color: #463f3a;
-  font-size: 16px;
-  font-weight: 500;
+  color: var(--brown, #463f3a);
+  font: var(--small);
   height: fit-content;
 }
 
@@ -88,9 +87,9 @@ const onClick = (id: number, iconEvent: string) => {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: #e0afa0;
+  background-color: var(--base-pink, #e0afa0);
   font-size: 10px;
-  color: #f4f3ee;
+  color: var(--base-ivory, #f4f3ee);
   font-weight: 700;
   width: 22px;
   height: 22px;
