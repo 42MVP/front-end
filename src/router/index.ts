@@ -16,6 +16,19 @@ const router = createRouter({
       path: '/signIn',
       name: 'signIn',
       component: () => import('../views/SignInView.vue'),
+      redirect: 'signIn/choose',
+      children: [
+        {
+          path: 'choose',
+          name: 'choose',
+          component: () => import('@/components/signup-components/LoginButton.vue'),
+        },
+        {
+          path: 'oauth',
+          name: 'oauth',
+          component: () => import('@/components/signup-components/LoginOauth.vue'),
+        },
+      ],
     },
     {
       path: '/signUp',
