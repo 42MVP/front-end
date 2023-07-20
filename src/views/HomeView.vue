@@ -32,4 +32,9 @@ import Logo from '@/components/homeview-components/MainLogo.vue';
   font-size: 70px;
   font-style: italic;
 }
+
+.mainNav a:hover {
+  opacity: 0.5;
+  transition: 0.1s ease-out;
+}
 </style>
