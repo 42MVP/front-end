@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { userStore } from '../stores/user';
+import DropdownMenu from './dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const isUserDropdownMenu = ref<boolean>(false);
 
 const links = [
   {
@@ -26,10 +33,32 @@ const links = [
         <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
       </nav>
     </div>
-    <nav class="userInfo">
+    <div class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
       <img :src="userStore?.user?.avatarURL" class="profileImage" />
-      <RouterLink :to="'/users/' + userStore?.user?.name">{{ userStore?.user?.name }}</RouterLink>
-    </nav>
+      <p>
+        {{ userStore?.user?.name }}
+        <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
+          <template #dropdown-item>
+            <DropdownMenuItem
+              text="내 정보"
+              @click="
+                () => {
+                  router.push(`/users/${userStore?.user?.name}`);
+                }
+              "
+            />
+            <DropdownMenuItem
+              text="로그아웃"
+              @click="
+                () => {
+                  // TODO: logout
+                }
+              "
+            />
+          </template>
+        </DropdownMenu>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -77,7 +106,7 @@ const links = [
   font-style: italic;
   cursor: pointer;
   margin-right: 50px;
-  min-width:max-content;
+  min-width: max-content;
 }
 
 .ball {
@@ -98,17 +127,13 @@ const links = [
   align-items: center;
 }
 
-.userInfo a {
+.userInfo p {
+  position: relative;
   font-weight: 800;
   font-size: 26px;
   color: black;
   color: #463f3a;
   text-decoration: none;
-}
-
-.userInfo a:hover {
-  opacity: 0.5;
-  transition: 0.1s ease-out;
 }
 
 .userInfo img {
