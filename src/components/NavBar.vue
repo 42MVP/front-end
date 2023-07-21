@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import DropdownMenu from './dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
+
+const isUserDropdownMenu = ref<boolean>(false);
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
 import { onMounted } from 'vue';
@@ -46,10 +50,32 @@ const links = [
         <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
       </nav>
     </div>
-    <nav class="userInfo">
-      <img :src="loginStore?.avatarURL" class="profileImage" />
-      <RouterLink :to="'/users/' + loginStore?.name">{{ loginStore?.name }}</RouterLink>
-    </nav>
+    <div class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
+      <img :src="userStore?.user?.avatarURL" class="profileImage" />
+      <p>
+        {{ userStore?.user?.name }}
+        <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
+          <template #dropdown-item>
+            <DropdownMenuItem
+              text="내 정보"
+              @click="
+                () => {
+                  router.push(`/users/${userStore?.user?.name}`);
+                }
+              "
+            />
+            <DropdownMenuItem
+              text="로그아웃"
+              @click="
+                () => {
+                  // TODO: logout
+                }
+              "
+            />
+          </template>
+        </DropdownMenu>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -118,17 +144,13 @@ const links = [
   align-items: center;
 }
 
-.userInfo a {
+.userInfo p {
+  position: relative;
   font-weight: 800;
   font-size: 26px;
   color: black;
   color: #463f3a;
   text-decoration: none;
-}
-
-.userInfo a:hover {
-  opacity: 0.5;
-  transition: 0.1s ease-out;
 }
 
 .userInfo img {
