@@ -13,6 +13,7 @@ import Image from '@/assets/images/PongImage.vue';
 
 <style scoped>
 .wrap {
+  flex: 1;
   display: flex;
   flex-flow: row;
   align-items: center;

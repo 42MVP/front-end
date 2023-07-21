@@ -1,5 +1,25 @@
 <script setup lang="ts">
-import { userStore } from '../stores/user';
+import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const loginStore = useLoginStore();
+const modalStore = useModalStore();
+const router = useRouter();
+
+onMounted(() => {
+  if (!loginStore.isLogin) {
+    modalStore.on({
+      title: '알림',
+      text: '로그인이 필요합니다.',
+      buttonText: '로그인 하기',
+      buttonFunc: () => {
+        router.push('/signin');
+      },
+    });
+  }
+});
 
 const links = [
   {
@@ -27,8 +47,8 @@ const links = [
       </nav>
     </div>
     <nav class="userInfo">
-      <img :src="userStore?.user?.avatarURL" class="profileImage" />
-      <RouterLink :to="'/users/' + userStore?.user?.name">{{ userStore?.user?.name }}</RouterLink>
+      <img :src="loginStore?.avatarURL" class="profileImage" />
+      <RouterLink :to="'/users/' + loginStore?.name">{{ loginStore?.name }}</RouterLink>
     </nav>
   </div>
 </template>
@@ -77,7 +97,7 @@ const links = [
   font-style: italic;
   cursor: pointer;
   margin-right: 50px;
-  min-width:max-content;
+  min-width: max-content;
 }
 
 .ball {

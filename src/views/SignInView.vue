@@ -1,26 +1,19 @@
+<script setup lang="ts">
+import Logo from '@/components/homeview-components/MainLogo.vue';
+</script>
+
 <template>
   <div class="wrap">
     <Logo />
-    <BasicButton class="buttonStyle" text="42로그인"></BasicButton>
+    <RouterView></RouterView>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import Logo from '@/components/homeview-components/MainLogo.vue';
-import BasicButton from '@/components/BasicButton.vue';
-</script>
-
 <style scoped>
 .wrap {
+  height: 100vh;
   display: flex;
   flex-flow: row;
   align-items: center;
-}
-
-.buttonStyle {
-  margin-left: 250px;
-  width: 240px;
-  height: 50px;
 }
 </style>
