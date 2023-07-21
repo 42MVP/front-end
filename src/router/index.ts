@@ -1,8 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
-import FriendsListView from '@/views/FriendsListView.vue';
-import GameView from '@/views/GameView.vue';
-import SignInView from '@/views/SignInView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,17 +6,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('@/views/HomeView.vue'),
+      component: import('@/views/HomeView.vue'),
     },
     {
       path: '/signIn',
       name: 'signIn',
-      component: () => import('../views/SignInView.vue'),
+      component: () => import('@/views/SignInView.vue'),
     },
     {
       path: '/signUp',
       name: 'signUp',
-      component: () => import('../views/SignUpView.vue'),
+      component: () => import('@/views/SignUpView.vue'),
       redirect: 'signUp/setProfile',
       children: [
         {
@@ -44,13 +40,13 @@ const router = createRouter({
       path: '/users',
       name: 'users',
 
-      component: () => import(/* webpackChunkName: "user" */ '@/views/MyProfileView.vue'),
+      component: () => import('@/views/MyProfileView.vue'),
     },
     {
       path: '/users/:id',
       name: 'profile',
 
-      component: () => import(/* webpackChunkName: "user" */ '@/views/ProfileView.vue'),
+      component: () => import('@/views/ProfileView.vue'),
       props: route => ({ user_id: route.params.id }),
     },
     {
@@ -61,7 +57,7 @@ const router = createRouter({
     {
       path: '/friends',
       name: 'friends',
-      component: FriendsListView,
+      component: () => import('@/views/FriendsListView.vue'),
     },
   ],
 });
