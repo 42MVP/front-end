@@ -3,7 +3,7 @@
     <Logo />
     <div class="mainNav">
       <RouterLink to="/game">GAME -></RouterLink>
-      <RouterLink to="/chat">CHAT -></RouterLink>
+      <RouterLink to="/chats">CHATS -></RouterLink>
       <RouterLink to="/friends">FRIENDS -></RouterLink>
     </div>
   </main>
@@ -31,5 +31,10 @@ import Logo from '@/components/homeview-components/MainLogo.vue';
   font-weight: 900;
   font-size: 70px;
   font-style: italic;
+}
+
+.mainNav a:hover {
+  opacity: 0.5;
+  transition: 0.1s ease-out;
 }
 </style>
