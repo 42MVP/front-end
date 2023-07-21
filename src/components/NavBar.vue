@@ -11,7 +11,6 @@ const router = useRouter();
 onMounted(() => {
   if (!loginStore.isLogin) {
     modalStore.on({
-      isActive: true,
       title: '알림',
       text: '로그인이 필요합니다.',
       buttonText: '로그인 하기',

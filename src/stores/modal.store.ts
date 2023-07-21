@@ -9,8 +9,8 @@ export const useModalStore = defineStore('modal', {
     buttonFunc: () => {},
   }),
   actions: {
-    on(params: { isActive: boolean; title: string; text: string; buttonText: string; buttonFunc: () => void }) {
-      this.isActive = params.isActive;
+    on(params: { title: string; text: string; buttonText: string; buttonFunc: () => void }) {
+      this.isActive = true;
       this.title = params.title;
       this.text = params.text;
       this.buttonText = params.buttonText;

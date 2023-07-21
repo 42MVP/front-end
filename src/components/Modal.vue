@@ -55,6 +55,7 @@ const props = defineProps({
 }
 .modal-body {
   margin: 20px 0;
+  white-space: pre-wrap;
   color: var(--brown, #463f3a);
 }
 

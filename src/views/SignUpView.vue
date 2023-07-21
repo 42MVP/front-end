@@ -11,6 +11,7 @@ import Logo from '@/components/homeview-components/MainLogo.vue';
 
 <style scoped>
 .wrap {
+  height: 100vh;
   display: flex;
   flex-flow: row;
   align-items: center;

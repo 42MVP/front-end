@@ -3,12 +3,10 @@ import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { fecthUserInfo } from '@/contexts/oauth';
 import { useLoginStore } from '@/stores/login.store';
-import { useChatStore } from '@/stores/chat.store';
 
 const route = useRoute();
 const router = useRouter();
 const loginStore = useLoginStore();
-const chatStore = useChatStore();
 
 onMounted(() => {
   const OauthCode = route.query.code;
@@ -21,8 +19,11 @@ onMounted(() => {
       loginStore.refreshToken = res.refreshToken;
       loginStore.accessToken = res.accessToken;
       loginStore.isLogin = true;
-      chatStore.someState = 'asdasdads';
-      router.push('/');
+      if (res.isFirstLogin === true) {
+        router.push('/signUp/setProfile');
+      } else {
+        router.push('/');
+      }
     })
     .catch(e => {
       console.log(e);

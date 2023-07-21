@@ -25,11 +25,12 @@ export const fecthUserInfo = (code: string) => {
         reject('error');
       }
       resolve({
+        isFirstLogin: true,
         id: 1,
         name: 'kanghyki',
         avatarURL: '',
-        refreshToken: '',
-        accessToken: '',
+        refreshToken: 'refresh',
+        accessToken: 'access',
       });
     }, 3000);
   });
