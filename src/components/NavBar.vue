@@ -5,7 +5,7 @@ import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
 const isUserDropdownMenu = ref<boolean>(false);
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const loginStore = useLoginStore();
@@ -51,16 +51,16 @@ const links = [
       </nav>
     </div>
     <div class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
-      <img :src="userStore?.user?.avatarURL" class="profileImage" />
+      <img v-if="loginStore.isLogin" :src="loginStore?.avatarURL" class="profileImage" />
       <p>
-        {{ userStore?.user?.name }}
-        <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
+        {{ loginStore.isLogin ? loginStore?.name : '로그인 필요' }}
+        <DropdownMenu v-if="isUserDropdownMenu && loginStore.isLogin" style="width: 100%">
           <template #dropdown-item>
             <DropdownMenuItem
               text="내 정보"
               @click="
                 () => {
-                  router.push(`/users/${userStore?.user?.name}`);
+                  router.push(`/users/${loginStore?.name}`);
                 }
               "
             />
@@ -68,7 +68,7 @@ const links = [
               text="로그아웃"
               @click="
                 () => {
-                  // TODO: logout
+                  loginStore.resetAll();
                 }
               "
             />

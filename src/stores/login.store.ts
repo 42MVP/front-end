@@ -4,7 +4,7 @@ export const useLoginStore = defineStore('login', {
   state: () => ({
     isLogin: false,
     id: -1,
-    name: 'need login',
+    name: '',
     avatarURL: '',
     refreshToken: '',
     accessToken: '',
@@ -14,7 +14,7 @@ export const useLoginStore = defineStore('login', {
     resetAll() {
       this.isLogin = false;
       this.id = -1;
-      this.name = 'need login';
+      this.name = '';
       this.avatarURL = '';
       this.refreshToken = '';
       this.accessToken = '';
