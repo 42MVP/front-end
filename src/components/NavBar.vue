@@ -1,12 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { userStore } from '../stores/user';
 import DropdownMenu from './dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
+
+const isUserDropdownMenu = ref<boolean>(false);
+import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
+const loginStore = useLoginStore();
+const modalStore = useModalStore();
 const router = useRouter();
-const isUserDropdownMenu = ref<boolean>(false);
+
+onMounted(() => {
+  if (!loginStore.isLogin) {
+    modalStore.on({
+      title: '알림',
+      text: '로그인이 필요합니다.',
+      buttonText: '로그인 하기',
+      buttonFunc: () => {
+        router.push('/signin');
+      },
+    });
+  }
+});
 
 const links = [
   {

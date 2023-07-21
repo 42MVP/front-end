@@ -2,40 +2,69 @@
   <div class="getInfoWrap">
     <UploadImage />
     <div class="setProfile">
-      <a>닉네임 설정 </a>
-      <TextInputBox placeholderText="닉네임입력" type="name" :maxLength="15" required />
+      <a>닉네임 설정</a>
+      <TextInputBox
+        @response="
+          e => {
+            username = e;
+          }
+        "
+        :placeholderText="loginStore?.name"
+        type="name"
+        :maxLength="15"
+        required
+      />
     </div>
     <div class="submitButton">
-      <!-- <button type="button" :disabled="src" class="test">완료</button> -->
-      <BasicButton @click="Submit()" text="완료" />
+      <BasicButton @click="submitNickname()" text="완료" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
+import { ref } from 'vue';
+
 import TextInputBox from '@/components/TextInputBox.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import UploadImage from '../common/UploadImage.vue';
 
-// const uploadedAvatar = ref<File | null>(null);
+const username = ref<string>('');
+const router = useRouter();
+const modalStore = useModalStore();
+const loginStore = useLoginStore();
 
-var profile: {
-  name: '';
-  photo: null; // 업로드한 사진을 저장할 변수
-};
-
-const Submit: Function = () => {
-  if (profile.name.length > 1) {
-    const router = useRouter();
-    router.replace('/signUp/completed');
+const submitNickname: Function = (): void => {
+  if (username.value.length === 0) {
+    modalStore.on({
+      title: '알림',
+      text: '기본 닉네임이 유지됩니다.\n언제든 [유저 - 내 프로필] 에서 변경이 가능합니다.\
+      ',
+      buttonText: '홈으로',
+      buttonFunc: () => {
+        router.push('/');
+      },
+    });
+  } else if (username.value.length < 4) {
+    modalStore.on({
+      title: '알림',
+      text: '최소 5글자 이상 닉네임을 설정할 수 있습니다.',
+      buttonText: '닫기',
+      buttonFunc: () => {},
+    });
+  } else {
+    // TODO: api
+    loginStore.name = username.value;
+    router.push('/');
   }
 };
 </script>
 
 <style scoped>
 .getInfoWrap {
+  flex: 1;
   display: flex;
   flex-flow: column;
   align-items: center;
