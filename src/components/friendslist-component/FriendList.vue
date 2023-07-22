@@ -1,5 +1,4 @@
 <template>
-  <FriendListTmp />
   <div class="wrap">
     <div class="head">
       <div class="dropdown">
@@ -29,15 +28,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import FriendListItem from './FriendListItem.vue';
-import { type FriendType } from '../FriendsData';
+import FriendListItem from '@/components/friendslist-component/FriendListItem.vue';
+import { type FriendInfoType } from '@/interfaces/FriendsInfo.interface';
 import FriendListTmp from './FriendListTmp.vue';
 
 const props = defineProps<{
   selectedUser: string;
 }>();
 
-var users = ref<FriendType[]>([
+var users = ref<FriendInfoType[]>([
   { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
   { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
   { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },

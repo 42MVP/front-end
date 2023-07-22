@@ -3,7 +3,7 @@
     <Logo />
     <div class="mainNav">
       <RouterLink to="/game">GAME -></RouterLink>
-      <RouterLink to="/chat">CHAT -></RouterLink>
+      <RouterLink to="/chats">CHAT -></RouterLink>
       <RouterLink to="/friends">FRIENDS -></RouterLink>
     </div>
   </main>

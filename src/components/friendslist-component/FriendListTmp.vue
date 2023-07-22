@@ -32,10 +32,10 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { type FriendType } from '../FriendsData';
-import BasicList from '../BasicList.vue';
-import DropdownMenu from '../dropdown-component/DropdownMenu.vue';
-import DropdownMenuItem from '../dropdown-component/DropdownMenuItem.vue';
+import { type FriendInfoType } from '@/interfaces/FriendsInfo.interface';
+import BasicList from '@/components/BasicList.vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 import FriendListItem from '@/components/friendslist-component/FriendListItem.vue';
 
 const isMenu = ref(false);
@@ -44,7 +44,7 @@ const props = defineProps<{
   selectedUser: string;
 }>();
 
-var users = ref<FriendType[]>([
+var users = ref<FriendInfoType[]>([
   { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
   { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
   { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },

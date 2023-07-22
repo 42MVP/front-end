@@ -21,10 +21,10 @@ import { ref } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import Card from '@/components/profileview-components/ProfileCard.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
-import { type FriendType } from '@/components/FriendsData';
+import type { FriendInfoType } from '@/interfaces/FriendsInfo.interface';
 
 const props = defineProps<{
-  user: FriendType | undefined;
+  user: FriendInfoType | undefined;
 }>();
 </script>
 
