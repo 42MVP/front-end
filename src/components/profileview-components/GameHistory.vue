@@ -1,102 +1,60 @@
 <template>
-  <li class="item" v-for="history in processedHistories" v-bind:key="history._id">
-    <Card class="p-user" :user_id="props.user_id" :img="props.img" img_size="100" :style="!history.isUserWin && css" />
-    <DBox :top="history.createAt" :middle="history.score + ' vs ' + history.opponent_score" />
-    <Card
+  <li class="item" v-for="history in processedHistories" v-bind:key="history.id">
+    <AvatarItem
+      class="p-user"
+      :username="props.username"
+      :avartarUrl="props.img"
+      imgSize="100"
+      :style="!history.isUserWin && 'opacity: 0.3'"
+    />
+    <DBox :top="history.createAt" :middle="history.score + ' vs ' + history.opponentScore" />
+    <AvatarItem
       class="opponent"
-      :user_id="history.opponent_id"
-      img="profile_0.png"
-      img_size="100"
-      :style="history.isUserWin && css"
+      :username="history.opponent"
+      :avartarUrl="history.opponentAvatarUrl"
+      imgSize="100"
+      :style="history.isUserWin && 'opacity: 0.3'"
     />
   </li>
 </template>
 
 <script setup lang="ts">
-import DBox from '@/components/common/BasicBox.vue';
-import Card from '@/components/profileview-components/ProfileCard.vue';
 import { ref } from 'vue';
-
-interface GameHistory {
-  _id: number;
-  win_score: number;
-  lose_score: number;
-  win_id: string;
-  lose_id: string;
-  createAt: string;
-}
-
-interface GameUserHistory {
-  _id: number;
-  score: number;
-  opponent_id: string;
-  opponent_score: number;
-  isUserWin: boolean;
-  createAt: string;
-}
+import DBox from '@/components/common/BasicBox.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
+import type { GameHistory } from '@/interfaces/GameHistory.interface';
+import type { UserGameHistory } from '@/interfaces/UserGameHistory.interface';
 
 const props = defineProps({
-  user_id: String,
-  img: String,
+  username: { type: String, default: '' },
+  img: { type: String, default: '' },
+  histories: { type: Array<GameHistory>, default: [] as GameHistory[] },
 });
 
-const css = ref('opacity: 0.3');
-const histories: GameHistory[] = [
-  {
-    _id: 1,
-    win_score: 5,
-    lose_score: 2,
-    win_id: 'chaejkim',
-    lose_id: 'kanghyki',
-    // win_img: '1.png',
-    // lose_img: '3.png',
-    createAt: '2023.6.24. 15:23:45',
-  },
-  {
-    _id: 2,
-    win_score: 5,
-    lose_score: 4,
-    win_id: 'hejang',
-    lose_id: 'chaejkim',
-    // win_img: '2.png',
-    // lose_img: '1.png',
-    createAt: '2023.6.24. 15:10:04',
-  },
-  {
-    _id: 3,
-    win_score: 5,
-    lose_score: 2,
-    win_id: 'kanghyki',
-    lose_id: 'chaejkim',
-    // win_img: '2.png',
-    // lose_img: '1.png',
-    createAt: '2023.6.24. 15:10:04',
-  },
-];
-const processedHistories = ref<GameUserHistory[]>([]);
-
-const processGameHistory = (gameHistories: GameHistory[], id: string | undefined): GameUserHistory[] => {
+const processedHistories = ref<UserGameHistory[]>([]);
+const processGameHistory = (gameHistories: GameHistory[], username: string): UserGameHistory[] => {
   return gameHistories.map(history => {
-    const { _id, win_id, lose_id, win_score, lose_score, createAt } = history;
-    const user_id = id || '';
+    const { id, winner, loser, winnerScore, loserScore, createAt, loserAvatarUrl, winnerAvatarUrl } = history;
 
-    const isUserWin = win_id === user_id;
-    const score = isUserWin ? win_score : lose_score;
-    const opponent_id = isUserWin ? lose_id : win_id;
-    const opponent_score = isUserWin ? lose_score : win_score;
+    const isUserWin = winner === username;
+    const score = isUserWin ? winnerScore : loserScore;
+    const opponent = isUserWin ? loser : winner;
+    const opponentScore = isUserWin ? loserScore : winnerScore;
+    const opponentAvatarUrl = isUserWin ? loserAvatarUrl : winnerAvatarUrl;
 
     return {
-      _id,
+      id,
       score,
-      opponent_id,
-      opponent_score,
+      opponent,
+      opponentScore,
+      opponentAvatarUrl,
       isUserWin,
       createAt,
     };
   });
 };
 
-processedHistories.value = processGameHistory(histories, props.user_id);
+processedHistories.value = processGameHistory(props.histories, props.username);
 </script>
 
 <style scoped>
@@ -144,3 +102,4 @@ processedHistories.value = processGameHistory(histories, props.user_id);
   position: relative;
 }
 </style>
+@/contexts/fetchProfile
