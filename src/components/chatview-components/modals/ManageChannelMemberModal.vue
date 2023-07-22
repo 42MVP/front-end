@@ -136,11 +136,9 @@ const props = defineProps<{
   padding: auto;
   width: 150px;
   height: 35px;
-  color: #463f3a;
+  color: var(--brown, #463f3a);
   text-align: center;
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
+  font: var(--medium);
 }
 
 .choice-block-unchoose {
@@ -151,12 +149,10 @@ const props = defineProps<{
   padding: auto;
   width: 150px;
   height: 35px;
-  color: #8a817c;
+  color: var(--semi-brown, #8a817c);
   background: #bcb8b1;
   text-align: center;
-  font-size: 24px;
-  font-family: Inter;
-  font-weight: 500;
+  font: var(--medium);
 }
 
 .modal-user-list-container {

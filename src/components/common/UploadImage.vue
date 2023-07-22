@@ -1,54 +1,43 @@
 <template>
   <div class="wrap">
-    <div v-if="src">
-      <img :src="src" />
-    </div>
-    <div v-else class="circle"></div>
-    <label class="labelButton">
-      Upload New Avatar
-      <input type="file" @change="addImage" />
+    <img :src="loginStore.avatarURL" />
+    <label>
+      <BasicButton class="buttonStyle" text="Upload New Avatar" />
+      <input type="file" @change="addImage" accept="image/*" />
     </label>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useLoginStore } from '@/stores/login.store';
+import BasicButton from '@/components/BasicButton.vue';
 
-const src = ref();
+const loginStore = useLoginStore();
 
 const addImage = (e: Event) => {
-  const [file] = (e.target as HTMLInputElement).files;
+  const file = (e.target as HTMLInputElement).files;
   console.log((e.target as HTMLInputElement).files);
   if (file) {
-    src.value = URL.createObjectURL(file);
+    // TOOD: post -> get/set avatarURL
+    loginStore.avatarURL = URL.createObjectURL(file[0]);
   }
 };
 </script>
 
 <style scoped>
+.buttonStyle {
+  width: 180px;
+  height: 50px;
+  margin-top: 10px;
+}
 .wrap {
   display: flex;
   flex-flow: column;
   align-items: center;
 }
-.labelButton {
-  background-color: #463f3a;
-  color: #fff;
-  border-radius: 10px 10px 10px 10px;
-  padding: 10px;
-  width: 170px;
-  height: 45px;
-  margin-top: 10px;
-}
+
 input[type='file'] {
   display: none;
-}
-
-.circle {
-  background-color: gray;
-  border-radius: 50%;
-  width: 340px;
-  height: 340px;
 }
 
 img {

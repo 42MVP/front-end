@@ -3,8 +3,7 @@
 :root {
   /* Colors */
   --brown: #463f3a;
-  --semi-brown: linear-gradient(to left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    linear-gradient(to left, #8a817c, #8a817c);
+  --semi-brown: #8a817c;
   --base-gray: #bcb8b1;
   --base-ivory: #f4f3ee;
   --base-pink: #e0afa0;

@@ -49,17 +49,14 @@ const props = defineProps({
 }
 
 .modal-header {
-  color: #463f3a;
-  font-size: 40px;
-  font-family: Inter;
-  font-weight: 800;
-  line-height: 56px;
-  letter-spacing: -0.88px;
+  color: var(--brown, #463f3a);
+  font: var(--large);
+  font-weight: 700;
 }
-
 .modal-body {
   margin: 20px 0;
-  color: #463f3a;
+  white-space: pre-wrap;
+  color: var(--brown, #463f3a);
 }
 
 .modal-footer {
