@@ -5,15 +5,15 @@
   </div>
   <div v-else class="p-container">
     <div class="top">
-      <AvatarItem class="p-info" :username="profileUser.name" :avartarUrl="profileUser.avatarURL">
+      <AvatarItem class="avatar-item" :username="profileUser.name" :avartarUrl="profileUser.avatarURL">
         <ProfileButton
           :isLoginUser="username === getLoginName"
           :isFollow="profileUser.isFollow"
           :isBlock="profileUser.isBlock"
         />
       </AvatarItem>
-      <div class="g-info">
-        <GBox :rate="profileUser.rate" />
+      <div class="g-info-div">
+        <GBox class="g-box" :rate="profileUser.rate" />
         <Achieve class="achieve"></Achieve>
       </div>
     </div>
@@ -53,43 +53,38 @@ const getLoginName = computed(() => {
 <style scoped>
 .p-container,
 .p-container * {
-  box-sizing: border-box;
   display: flex;
-  align-self: stretch;
   position: relative;
   align-items: center;
 }
 .p-container {
-  padding: 15px 0px;
-  gap: 10px;
   flex-direction: column;
+  min-width: max-content;
 }
 
 .top {
-  justify-content: space-evenly;
+  justify-content: center;
   position: relative;
+  align-self: stretch;
+  gap: 100px;
+  max-height: max-content;
 }
 
-.p-info {
+.avatar-item {
   color: var(--brown);
   font: 600 40px 'Inter', sans-serif;
   flex-direction: column;
-
-  .button-slot {
-    margin: 10px 10px;
-    justify-content: center;
-  }
 }
 
-.two-buttons {
-  justify-content: space-around;
-  width: 100%;
-}
-
-.g-info {
+.g-info-div {
   flex-direction: column;
   gap: 5px;
 }
+
+.g-box {
+  align-self: stretch;
+}
+
 .achieve {
   background: var(--base-ivory);
   border-radius: 10px;
@@ -106,7 +101,7 @@ const getLoginName = computed(() => {
   font: var(--medium);
 
   min-height: 100px;
-  max-height: 30vh;
+  max-height: 60vh;
 
   background: var(--base-gray);
   opacity: 0.7;
