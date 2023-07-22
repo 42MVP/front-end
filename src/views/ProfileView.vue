@@ -6,14 +6,11 @@
   <div v-else class="p-container">
     <div class="top">
       <AvatarItem class="p-info" :username="profileUser.name" :avartarUrl="profileUser.avatarURL">
-        <div class="button-slot">
-          <BasicButton v-if="profileUser.isBlock" class="unblock-button" text="unblock" @click="unBlockButton()" />
-          <div class="two-buttons" v-else>
-            <BasicButton v-if="!profileUser.isFollow" class="follow-button" text="Follow" @click="followButton()" />
-            <BasicButton v-else class="follow-button" text="Unfollow" @click="unFollowButton()" />
-            <BasicButton class="block-button" text="block" @click="blockButton()" />
-          </div>
-        </div>
+        <ProfileButton
+          :isLoginUser="username === getLoginName"
+          :isFollow="profileUser.isFollow"
+          :isBlock="profileUser.isBlock"
+        />
       </AvatarItem>
       <div class="g-info">
         <GBox :rate="profileUser.rate" />
@@ -27,14 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
-import BasicButton from '@/components/BasicButton.vue';
+import ProfileButton from '@/components/profileview-components/ProfileButton.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import GameHistory from '@/components/profileview-components/GameHistory.vue';
 import type { UserInfo } from '@/interfaces/UserInfo.interface';
 import * as mock from '@/contexts/fetchProfile';
+import { useLoginStore } from '@/stores/login.store';
 
 const props = defineProps({
   username: { type: String, default: undefined },
@@ -46,32 +44,10 @@ onMounted(() => {
   profileUser.value = mock.getUserInfo();
 });
 
-const followButton = () => {
-  if (profileUser.value) {
-    profileUser.value.isFollow = true;
-  }
-  console.log(profileUser.value);
-};
-
-const unFollowButton = () => {
-  if (profileUser.value) {
-    profileUser.value.isFollow = false;
-  }
-  console.log(profileUser.value);
-};
-
-const blockButton = () => {
-  if (profileUser.value) {
-    profileUser.value.isBlock = true;
-    profileUser.value.isFollow = false;
-  }
-};
-
-const unBlockButton = () => {
-  if (profileUser.value) {
-    profileUser.value.isBlock = false;
-  }
-};
+const getLoginName = computed(() => {
+  console.log(props.username);
+  return useLoginStore().name;
+});
 </script>
 
 <style scoped>
