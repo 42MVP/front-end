@@ -5,16 +5,16 @@
   </div>
   <div v-else class="p-container">
     <div class="top">
-      <Card class="p-info" :user_id="profileUser.name" img="1.png">
+      <AvatarItem class="p-info" :username="profileUser.name" :avartarUrl="profileUser.avatarURL">
         <div class="button-slot">
-          <DButton v-if="profileUser.isBlock" class="unblock-button" label="unblock" @click="unBlockButton()" />
+          <BasicButton v-if="profileUser.isBlock" class="unblock-button" text="unblock" @click="unBlockButton()" />
           <div class="two-buttons" v-else>
-            <DButton v-if="!profileUser.isFollow" class="follow-button" label="Follow" @click="followButton()" />
-            <DButton v-else class="follow-button" label="Unfollow" @click="unFollowButton()" />
-            <DButton class="block-button" label="block" @click="blockButton()" />
+            <BasicButton v-if="!profileUser.isFollow" class="follow-button" text="Follow" @click="followButton()" />
+            <BasicButton v-else class="follow-button" text="Unfollow" @click="unFollowButton()" />
+            <BasicButton class="block-button" text="block" @click="blockButton()" />
           </div>
         </div>
-      </Card>
+      </AvatarItem>
       <div class="g-info">
         <GBox :rate="profileUser.rate" />
         <Achieve class="achieve"></Achieve>
@@ -27,10 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
-import DButton from '@/components/tmp/DefaultButton.vue';
-import Card from '@/components/profileview-components/ProfileCard.vue';
+import BasicButton from '@/components/BasicButton.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import GameHistory from '@/components/profileview-components/GameHistory.vue';
 import type { UserInfo } from '@/interfaces/UserInfo.interface';
