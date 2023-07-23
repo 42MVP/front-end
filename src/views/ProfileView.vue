@@ -35,13 +35,13 @@ import * as mock from '@/contexts/fetchProfile';
 import { useLoginStore } from '@/stores/login.store';
 
 const props = defineProps({
-  username: { type: String, default: undefined },
+  username: { type: String, default: '' },
 });
 
 const profileUser = ref<UserInfo>();
 
 onMounted(() => {
-  profileUser.value = mock.getUserInfo();
+  profileUser.value = mock.getUserInfo(props.username);
 });
 
 const getLoginName = computed(() => {

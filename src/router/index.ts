@@ -56,11 +56,11 @@ const router = createRouter({
       component: () => import('@/views/MyProfileView.vue'),
     },
     {
-      path: '/users/:id',
+      path: '/users/:username',
       name: 'profile',
 
       component: () => import('@/views/ProfileView.vue'),
-      props: route => ({ user_id: route.params.id }),
+      props: route => ({ username: route.params.username }),
     },
     {
       path: '/chats',

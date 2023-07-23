@@ -29,17 +29,17 @@ export const getGameHistory: Function = (): GameHistory[] => {
       loserScore: 2,
       winner: 'kanghyki',
       loser: 'chaejkim',
-      winnerAvatarUrl: 'https://ca.slack-edge.com/T039P7U66-U02LNN8QWJV-4c936417baf6-512',
+      winnerAvatarUrl: 'https://ca.slack-edge.com/T039P7U66-U02L3CLQ6S2-gadbfaa25482-512',
       loserAvatarUrl: 'https://ca.slack-edge.com/T039P7U66-U02LNN8QWJV-4c936417baf6-512',
       createAt: '2023.6.24. 15:10:04',
     },
   ];
 };
 
-export const getUserInfo: Function = (): UserInfo => {
+export const getUserInfo = (username: string): UserInfo => {
   return {
     id: 1,
-    name: 'chaejkim',
+    name: username,
     avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LNN8QWJV-4c936417baf6-512',
     isFollow: false,
     isBlock: false,
