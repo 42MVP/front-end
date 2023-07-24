@@ -1,17 +1,19 @@
 <template>
   <main>
-    <FriendList :selectedUser="selectedUser" @updateSelection="updateSelection" />
+    <FriendListTmp :selectedUser="selectedUser" @updateSelection="updateSelection" />
+    <!-- <FriendList :selectedUser="selectedUser" @updateSelection="updateSelection" /> -->
     <FriendInfo :user="getSelectedUser(selectedUser)" />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import FriendListTmp from '@/components/friendslist-component/FriendListTmp.vue';
 import FriendList from '@/components/friendslist-component/FriendList.vue';
 import FriendInfo from '@/components/friendslist-component/FriendInfo.vue';
-import { type FriendType } from '@/components/FriendsData';
+import { type FriendInfoType } from '@/interfaces/FriendsInfo.interface';
 
-var users = ref<FriendType[]>([
+var users = ref<FriendInfoType[]>([
   { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
   { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
   { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },

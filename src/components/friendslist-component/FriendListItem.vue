@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="profileContent">
-      <a class="profileImage"></a>
+        <img :src="friend.img" style="width: 50px;border-radius:100%" />
       <div class="profileText">
         <h3>{{ friend.name }}</h3>
         <p>[{{ friend.Level }}] {{ friend.Achievement }}</p>
@@ -13,11 +13,11 @@
 
 <script setup lang="ts">
 import BasicButton from '@/components/BasicButton.vue';
-import type { FriendType } from '@/components/FriendsData';
+import type { FriendInfoType } from '@/interfaces/FriendsInfo.interface';
 
 const props = defineProps<{
   listType: string;
-  friend: FriendType;
+  friend: FriendInfoType;
   selectedUser: string;
 }>();
 
@@ -55,14 +55,14 @@ const getButtonTitle = () => {
   align-items: center;
   margin: 30px 0px 3px 3px;
 }
-.profileImage {
+/* .profileImage {
   height: 70px;
   width: 70px;
   background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
   position: relative;
-}
+} */
 
 .profileImage::after {
   display: block;
@@ -79,6 +79,11 @@ const getButtonTitle = () => {
   color: #000;
   line-height: 1.5;
   margin-left: 10px;
+}
+
+image {
+  width: 50px;
+  height: 50px;
 }
 
 h3 {
