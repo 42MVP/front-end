@@ -4,8 +4,8 @@ import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
-import type { IUser } from '@/interfaces/User.interface';
-import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { User } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
 
 const userTabIcon = [
   { emoji: '😷', event: 'abong' },
@@ -18,8 +18,8 @@ const tempIsSearch = ref(false);
 
 const emits = defineEmits(['close']);
 const props = defineProps<{
-  friends: IUser[];
-  chatInfo: IChatInfo;
+  friends: User[];
+  chatInfo: ChatInfo;
   isShow: boolean;
 }>();
 </script>

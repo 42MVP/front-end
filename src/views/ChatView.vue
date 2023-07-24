@@ -15,11 +15,11 @@ import { ref, onMounted, watch } from 'vue';
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
 import * as mock from '@/contexts/fecthChat';
-import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { IUser } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { User } from '@/interfaces/User.interface';
 
-const chatInfos = ref<IChatInfo[]>([]);
-const friends = ref<IUser[]>([]);
+const chatInfos = ref<ChatInfo[]>([]);
+const friends = ref<User[]>([]);
 const index = ref<number>(-1);
 const isSelect = ref<boolean>(false);
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IIconButton } from '@/interfaces/IconButton.interface';
+import type { IconButton } from '@/interfaces/IconButton.interface';
 
 const props = defineProps({
   id: { type: Number, default: 0 },
@@ -10,7 +10,7 @@ const props = defineProps({
     default: '',
   },
   name: { type: String, default: '' },
-  iconButtons: { type: Array<IIconButton>, default: [] as IIconButton[] },
+  iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
 
 const emits = defineEmits(['response']);

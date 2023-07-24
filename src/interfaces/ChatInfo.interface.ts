@@ -1,14 +1,14 @@
-import type { IChat } from './Chat.interface';
-import type { IUser } from './User.interface';
+import type { Chat } from './Chat.interface';
+import type { User } from './User.interface';
 
-export interface IChatInfo {
+export interface ChatInfo {
   id: number;
   isChannel: boolean;
   hasPassword: boolean;
   name: string;
   alertCount: number;
   avatarURL: string;
-  users: IUser[];
-  banUsers: IUser[];
-  chats: IChat[];
+  users: User[];
+  banUsers: User[];
+  chats: Chat[];
 }
