@@ -5,7 +5,7 @@ import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
 const isUserDropdownMenu = ref<boolean>(false);
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const loginStore = useLoginStore();
@@ -50,17 +50,21 @@ const links = [
         <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
       </nav>
     </div>
-    <div class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
-      <img :src="userStore?.user?.avatarURL" class="profileImage" />
+    <div v-if="!loginStore.isLogin" class="userInfo">
+      <p>비로그인</p>
+    </div>
+    <div v-else class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
+      <img :src="loginStore?.avatarURL" class="profileImage" />
       <p>
-        {{ userStore?.user?.name }}
+        {{ loginStore?.name }}
         <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
           <template #dropdown-item>
             <DropdownMenuItem
               text="내 정보"
               @click="
                 () => {
-                  router.push(`/users/${userStore?.user?.name}`);
+                  router.push(`/users/${loginStore?.name}`);
+                  isUserDropdownMenu = false;
                 }
               "
             />
@@ -68,7 +72,9 @@ const links = [
               text="로그아웃"
               @click="
                 () => {
-                  // TODO: logout
+                  loginStore.resetAll();
+                  isUserDropdownMenu = false;
+                  router.push(`/`);
                 }
               "
             />
