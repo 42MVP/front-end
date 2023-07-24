@@ -45,11 +45,51 @@ const props = defineProps<{
 }>();
 
 var users = ref<FriendInfoType[]>([
-  { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
-  { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
-  { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
-  { _id: 4, name: 'hyeonki', img: '4.png', isFollow: false, isBlock: false, Level: 52, Achievement: 'Achievement1' },
-  { _id: 5, name: 'hyeonkkim', img: '5.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
+  {
+    _id: 1,
+    name: 'chaejkim',
+    img: 'https://ca.slack-edge.com/T039P7U66-U02LNN8QWJV-4c936417baf6-512',
+    isFollow: false,
+    isBlock: false,
+    Level: 42,
+    Achievement: 'Achievement1',
+  },
+  {
+    _id: 2,
+    name: 'kanghyki',
+    img: 'https://ca.slack-edge.com/T039P7U66-U035MTQ4U4T-9333cd362cf2-512',
+    isFollow: false,
+    isBlock: false,
+    Level: 42,
+    Achievement: 'Achievement1',
+  },
+  {
+    _id: 3,
+    name: 'hejang',
+    img: 'https://ca.slack-edge.com/T039P7U66-U02LA4V3351-b8f6020a843c-512',
+    isFollow: false,
+    isBlock: false,
+    Level: 42,
+    Achievement: 'Achievement1',
+  },
+  {
+    _id: 4,
+    name: 'hyeonki',
+    img: 'https://ca.slack-edge.com/T039P7U66-U02L3CLQ6S2-gadbfaa25482-512',
+    isFollow: false,
+    isBlock: false,
+    Level: 52,
+    Achievement: 'Achievement1',
+  },
+  {
+    _id: 5,
+    name: 'hyeonkkim',
+    img: 'https://ca.slack-edge.com/T039P7U66-U02LA445WF4-bee783ffc454-512',
+    isFollow: false,
+    isBlock: false,
+    Level: 42,
+    Achievement: 'Achievement1',
+  },
 ]);
 
 const removeFromList = (name: string) => {
