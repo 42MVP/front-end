@@ -50,17 +50,21 @@ const links = [
         <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
       </nav>
     </div>
-    <div class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
-      <img v-if="loginStore.isLogin" :src="loginStore?.avatarURL" class="profileImage" />
+    <div v-if="!loginStore.isLogin" class="userInfo">
+      <p>비로그인</p>
+    </div>
+    <div v-else class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
+      <img :src="loginStore?.avatarURL" class="profileImage" />
       <p>
-        {{ loginStore.isLogin ? loginStore?.name : '로그인 필요' }}
-        <DropdownMenu v-if="isUserDropdownMenu && loginStore.isLogin" style="width: 100%">
+        {{ loginStore?.name }}
+        <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
           <template #dropdown-item>
             <DropdownMenuItem
               text="내 정보"
               @click="
                 () => {
                   router.push(`/users/${loginStore?.name}`);
+                  isUserDropdownMenu = false;
                 }
               "
             />
@@ -69,6 +73,8 @@ const links = [
               @click="
                 () => {
                   loginStore.resetAll();
+                  isUserDropdownMenu = false;
+                  router.push(`/`);
                 }
               "
             />
