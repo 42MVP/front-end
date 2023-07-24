@@ -26,10 +26,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { userStore } from '@/stores/user';
+import { useLoginStore } from '@/stores/login.store';
 import type { IChat } from '@/interfaces/Chat.interface';
 
-const login_username = ref(userStore?.user?.name);
+const login_username = ref(useLoginStore.name);
 
 const props = defineProps<{ chat: IChat }>();
 

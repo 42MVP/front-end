@@ -5,7 +5,7 @@ import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
 const isUserDropdownMenu = ref<boolean>(false);
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const loginStore = useLoginStore();
@@ -39,6 +39,14 @@ const links = [
     text: 'Game',
   },
 ];
+
+const navigateToUserProfile = () => {
+  router.push(`/users/${loginStore.name}`);
+};
+
+const logout = () => {
+  loginStore.resetAll();
+};
 </script>
 
 <template>
@@ -50,28 +58,15 @@ const links = [
         <RouterLink v-for="(link, idx) in links" :key="idx" class="navItem" :to="link.to">{{ link.text }}</RouterLink>
       </nav>
     </div>
-    <div class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
-      <img :src="userStore?.user?.avatarURL" class="profileImage" />
+    <div v-if="!loginStore.isLogin" class="userInfo"><p>로그인 필요</p></div>
+    <div v-else class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
+      <img :src="loginStore.avatarURL" class="profileImage" />
       <p>
-        {{ userStore?.user?.name }}
-        <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
+        {{ loginStore.name }}
+        <DropdownMenu v-show="isUserDropdownMenu" style="width: 100%">
           <template #dropdown-item>
-            <DropdownMenuItem
-              text="내 정보"
-              @click="
-                () => {
-                  router.push(`/users/${userStore?.user?.name}`);
-                }
-              "
-            />
-            <DropdownMenuItem
-              text="로그아웃"
-              @click="
-                () => {
-                  // TODO: logout
-                }
-              "
-            />
+            <DropdownMenuItem text="내 정보" @click="navigateToUserProfile" />
+            <DropdownMenuItem text="로그아웃" @click="logout" />
           </template>
         </DropdownMenu>
       </p>
