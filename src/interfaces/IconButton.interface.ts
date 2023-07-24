@@ -1,4 +1,4 @@
-export interface IIconButton {
+export interface IconButton {
   emoji: string;
   event: string;
 }

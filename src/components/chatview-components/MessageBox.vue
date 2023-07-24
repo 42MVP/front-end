@@ -27,12 +27,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useLoginStore } from '@/stores/login.store';
-import type { IChat } from '@/interfaces/Chat.interface';
+import type { Chat } from '@/interfaces/Chat.interface';
 
 const loginStore = useLoginStore();
 const loginUsername = ref(loginStore?.name);
 
-const props = defineProps<{ chat: IChat }>();
+const props = defineProps<{ chat: Chat }>();
 
 const isMyMessage = computed(() => {
   return props.chat.username === loginUsername.value;

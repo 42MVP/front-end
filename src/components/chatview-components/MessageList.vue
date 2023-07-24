@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { onMounted, watch, nextTick, ref } from 'vue';
 import MessageBox from './MessageBox.vue';
-import type { IChat } from '@/interfaces/Chat.interface';
+import type { Chat } from '@/interfaces/Chat.interface';
 
 let chatref = ref(null);
 
@@ -15,7 +15,7 @@ onMounted(() => {
   chatref.value.scrollTop = chatref.value.scrollHeight;
 });
 
-const props = defineProps<{ chats: IChat[] }>();
+const props = defineProps<{ chats: Chat[] }>();
 
 watch(
   () => props.chats,

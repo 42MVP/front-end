@@ -1,7 +1,7 @@
-import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { IUser } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { User } from '@/interfaces/User.interface';
 
-export const getChatInfos: Function = (): IChatInfo[] => {
+export const getChatInfos: Function = (): ChatInfo[] => {
   return [
     {
       id: 1,
@@ -91,7 +91,7 @@ export const getChatInfos: Function = (): IChatInfo[] => {
   ];
 };
 
-export const getFriend: Function = (): IUser[] => {
+export const getFriend: Function = (): User[] => {
   return [
     {
       id: 1,

@@ -83,14 +83,14 @@ import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 // import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 // import BasicListItem from '@/components/BasicListItem.vue';
-import type { IChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { IUser } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { User } from '@/interfaces/User.interface';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
 
-const props = defineProps<{ chatInfo: IChatInfo; friends: IUser[] }>();
+const props = defineProps<{ chatInfo: ChatInfo; friends: User[] }>();
 
 watch(
   () => props.chatInfo,
