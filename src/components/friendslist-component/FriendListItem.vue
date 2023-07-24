@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="profileContent">
-      <img :src="require(`@/assets/images/${friend.img}`)" />
+        <img :src="friend.img" style="width: 50px;border-radius:100%" />
       <div class="profileText">
         <h3>{{ friend.name }}</h3>
         <p>[{{ friend.Level }}] {{ friend.Achievement }}</p>
