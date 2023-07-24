@@ -14,9 +14,11 @@ const emits = defineEmits(['response']);
 const isTextOver = ref(false);
 
 watch(text, () => {
-  if (text.value.length > props.maxLength) {
+  if (text.value.length >= props.maxLength) {
     text.value = text.value.slice(0, props.maxLength);
     isTextOver.value = true;
+  } else {
+    isTextOver.value = false;
   }
 });
 </script>
