@@ -1,33 +1,37 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fecthUserInfo } from '@/contexts/oauth';
+import { Login } from '@/contexts/fetchLogin';
 import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
 
 const route = useRoute();
 const router = useRouter();
 const loginStore = useLoginStore();
+const modalStore = useModalStore();
 
-onMounted(() => {
-  const OauthCode = route.query.code;
-  fecthUserInfo(OauthCode)
-    .then(res => {
-      console.log(res);
-      console.log(loginStore.username);
-      loginStore.name = res.name;
-      loginStore.avatarURL = res.avatarURL;
-      loginStore.refreshToken = res.refreshToken;
-      loginStore.accessToken = res.accessToken;
-      loginStore.isLogin = true;
-      if (res.isFirstLogin === true) {
-        router.push('/signUp/setProfile');
-      } else {
-        router.push('/');
-      }
-    })
-    .catch(e => {
-      console.log(e);
+onMounted(async () => {
+  const code = route.query.code;
+  try {
+    const res = await Login.fecthUserInfo(code);
+    loginStore.name = res.name;
+    loginStore.avatarURL = res.avatarURL;
+    loginStore.refreshToken = res.refreshToken;
+    loginStore.accessToken = res.accessToken;
+    loginStore.isLogin = true;
+    if (res.isFirstLogin === true) {
+      router.push('/signUp/setProfile');
+    } else {
+      router.push('/');
+    }
+  } catch (e) {
+    modalStore.on({
+      title: '알림',
+      text: e,
+      buttonText: '닫기',
+      buttonFunc: () => {},
     });
+  }
 });
 </script>
 
