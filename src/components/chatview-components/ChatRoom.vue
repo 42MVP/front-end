@@ -127,7 +127,7 @@ const addChat: Function = (newMessage: string) => {
   display: flex;
   flex-direction: column;
   width: 900px;
-  height: 90%;
+  height: 80vh;
 }
 
 .chat-box-list-name {
