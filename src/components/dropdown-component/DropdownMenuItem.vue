@@ -1,10 +1,10 @@
-<script setup lang="ts">
-const props = defineProps<{ text: string }>();
-</script>
-
 <template>
   <li class="drop-down-menu-item">{{ props.text }}</li>
 </template>
+
+<script setup lang="ts">
+const props = defineProps<{ text: string }>();
+</script>
 
 <style scoped>
 .drop-down-menu-item {

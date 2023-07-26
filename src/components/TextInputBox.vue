@@ -1,3 +1,18 @@
+<template>
+  <div class="text-input-box-container">
+    <input
+      :type="props.type"
+      v-model="text"
+      class="text-input-box"
+      :placeholder="placeholderText"
+      @input="emits('response', text)"
+    />
+    <p :class="{ 'text-input-box-counter': !isTextOver, 'text-input-box-counter-false': isTextOver }">
+      {{ text.length }}/{{ props.maxLength }}
+    </p>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { watch, ref } from 'vue';
 
@@ -22,21 +37,6 @@ watch(text, () => {
   }
 });
 </script>
-
-<template>
-  <div class="text-input-box-container">
-    <input
-      :type="props.type"
-      v-model="text"
-      class="text-input-box"
-      :placeholder="placeholderText"
-      @input="emits('response', text)"
-    />
-    <p :class="{ 'text-input-box-counter': !isTextOver, 'text-input-box-counter-false': isTextOver }">
-      {{ text.length }}/{{ props.maxLength }}
-    </p>
-  </div>
-</template>
 
 <style>
 .text-input-box-container {

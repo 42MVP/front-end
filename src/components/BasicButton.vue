@@ -1,3 +1,9 @@
+<template>
+  <div :style="{ backgroundColor: type ? '#463f3a' : '#f4f3ee' }" class="basic-button-container" @click="onClick">
+    <p :style="{ color: props.type ? '#f4f3ee' : '#463f3a' }">{{ props.text }}</p>
+  </div>
+</template>
+
 <script setup lang="ts">
 const props = defineProps({
   text: { type: String, default: '' },
@@ -13,12 +19,6 @@ const onClick = () => {
   emits('response', { text: props.text, type: props.type });
 };
 </script>
-
-<template>
-  <div :style="{ backgroundColor: type ? '#463f3a' : '#f4f3ee' }" class="basic-button-container" @click="onClick">
-    <p :style="{ color: props.type ? '#f4f3ee' : '#463f3a' }">{{ props.text }}</p>
-  </div>
-</template>
 
 <style scoped>
 .basic-button-container {

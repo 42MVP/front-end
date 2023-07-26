@@ -1,3 +1,9 @@
+<template>
+  <div class="oauth-wrap">
+    <div id="spinner"></div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -33,12 +39,6 @@ onMounted(async () => {
   }
 });
 </script>
-
-<template>
-  <div class="oauth-wrap">
-    <div id="spinner"></div>
-  </div>
-</template>
 
 <style>
 .oauth-wrap {

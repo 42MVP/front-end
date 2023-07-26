@@ -1,14 +1,3 @@
-<script setup lang="ts">
-// TODO : mv Modal.vue BasicModal.vue
-const props = defineProps({
-  title: { type: String, default: '' },
-  show: {
-    type: Boolean,
-    default: true,
-  },
-});
-</script>
-
 <template>
   <Transition name="modal">
     <div v-if="props.show" class="modal-mask">
@@ -24,6 +13,17 @@ const props = defineProps({
     </div>
   </Transition>
 </template>
+
+<script setup lang="ts">
+// TODO : mv Modal.vue BasicModal.vue
+const props = defineProps({
+  title: { type: String, default: '' },
+  show: {
+    type: Boolean,
+    default: true,
+  },
+});
+</script>
 
 <style>
 .modal-mask {

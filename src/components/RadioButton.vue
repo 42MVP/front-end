@@ -1,3 +1,10 @@
+<template>
+  <div class="radio-button-container">
+    <div @click="emits('click', props.value || props.text)" :class="className" />
+    <p>{{ text }}</p>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { computed } from 'vue';
 
@@ -13,13 +20,6 @@ const emits = defineEmits(['click']);
 
 const className = computed(() => [{ 'radio-button': !props.isActive }, { 'radio-button-click': props.isActive }]);
 </script>
-
-<template>
-  <div class="radio-button-container">
-    <div @click="emits('click', props.value || props.text)" :class="className" />
-    <p>{{ text }}</p>
-  </div>
-</template>
 
 <style>
 .radio-button-container {

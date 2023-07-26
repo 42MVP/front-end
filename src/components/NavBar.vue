@@ -1,31 +1,3 @@
-<script setup lang="ts">
-import DropdownMenu from './dropdown-component/DropdownMenu.vue';
-import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
-
-const isUserDropdownMenu = ref<boolean>(false);
-import { useLoginStore } from '@/stores/login.store';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const loginStore = useLoginStore();
-const router = useRouter();
-
-const links = [
-  {
-    to: '/chats',
-    text: 'Chats',
-  },
-  {
-    to: '/friends',
-    text: 'Friends',
-  },
-  {
-    to: '/game',
-    text: 'Game',
-  },
-];
-</script>
-
 <template>
   <div class="header">
     <div class="header-left">
@@ -69,6 +41,34 @@ const links = [
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import DropdownMenu from './dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
+
+const isUserDropdownMenu = ref<boolean>(false);
+import { useLoginStore } from '@/stores/login.store';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const loginStore = useLoginStore();
+const router = useRouter();
+
+const links = [
+  {
+    to: '/chats',
+    text: 'Chats',
+  },
+  {
+    to: '/friends',
+    text: 'Friends',
+  },
+  {
+    to: '/game',
+    text: 'Game',
+  },
+];
+</script>
 
 <style scoped>
 .header {

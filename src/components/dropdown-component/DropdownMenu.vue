@@ -1,10 +1,10 @@
-<script setup lang="ts"></script>
-
 <template>
   <ul class="drop-down-menu-container">
     <slot name="dropdown-item"></slot>
   </ul>
 </template>
+
+<script setup lang="ts"></script>
 
 <style>
 .drop-down-menu-container {
@@ -17,7 +17,7 @@
   align-items: center;
   margin: 0;
   padding: 0;
-  border: 1px solid #8A817C;
+  border: 1px solid #8a817c;
   background-color: var(--base-ivory, #f4f3ee);
   max-height: 500px;
   overflow: auto;

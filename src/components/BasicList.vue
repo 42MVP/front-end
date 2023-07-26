@@ -1,8 +1,3 @@
-<script setup lang="ts">
-// NOTE : unused-vars
-const emits = defineEmits(['response']);
-</script>
-
 <template>
   <div class="user-main-container">
     <div class="user-top-container">
@@ -23,6 +18,11 @@ const emits = defineEmits(['response']);
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+// NOTE : unused-vars
+const emits = defineEmits(['response']);
+</script>
 
 <style scoped>
 .user-main-container {

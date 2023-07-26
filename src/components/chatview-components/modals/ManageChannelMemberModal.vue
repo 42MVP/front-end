@@ -1,29 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import Modal from '@/components/Modal.vue';
-import SearchBar from '@/components/SearchBar.vue';
-import BasicListItem from '@/components/BasicListItem.vue';
-import BasicButton from '@/components/BasicButton.vue';
-import type { User } from '@/interfaces/User.interface';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
-
-const userTabIcon = [
-  { emoji: '😷', event: 'abong' },
-  { emoji: '🏁', event: 'flag' },
-  { emoji: '❌', event: 'quit' },
-];
-const banTabIcon = [{ emoji: '⊖', event: 'unban' }];
-const isUserTab = ref(true);
-const tempIsSearch = ref(false);
-
-const emits = defineEmits(['close']);
-const props = defineProps<{
-  friends: User[];
-  chatInfo: ChatInfo;
-  isShow: boolean;
-}>();
-</script>
-
 <template>
   <Modal title="멤버 관리" :show="isShow">
     <template #body>
@@ -121,6 +95,32 @@ const props = defineProps<{
     </template>
   </Modal>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import Modal from '@/components/Modal.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import BasicListItem from '@/components/BasicListItem.vue';
+import BasicButton from '@/components/BasicButton.vue';
+import type { User } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+
+const userTabIcon = [
+  { emoji: '😷', event: 'abong' },
+  { emoji: '🏁', event: 'flag' },
+  { emoji: '❌', event: 'quit' },
+];
+const banTabIcon = [{ emoji: '⊖', event: 'unban' }];
+const isUserTab = ref(true);
+const tempIsSearch = ref(false);
+
+const emits = defineEmits(['close']);
+const props = defineProps<{
+  friends: User[];
+  chatInfo: ChatInfo;
+  isShow: boolean;
+}>();
+</script>
 
 <style scoped>
 .choice-block-container {

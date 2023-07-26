@@ -1,24 +1,3 @@
-<script setup lang="ts">
-import type { IconButton } from '@/interfaces/IconButton.interface';
-
-const props = defineProps({
-  id: { type: Number, default: 0 },
-  alertCount: { type: Number, default: 0 },
-  clickEvent: { default: '' },
-  avatarURL: {
-    type: String,
-    default: '',
-  },
-  name: { type: String, default: '' },
-  iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
-});
-
-const emits = defineEmits(['response']);
-const onClick = (id: number, iconEvent: string) => {
-  emits('response', `${id}:${iconEvent}`);
-};
-</script>
-
 <template>
   <li class="list-element-container">
     <div
@@ -39,6 +18,27 @@ const onClick = (id: number, iconEvent: string) => {
     </div>
   </li>
 </template>
+
+<script setup lang="ts">
+import type { IconButton } from '@/interfaces/IconButton.interface';
+
+const props = defineProps({
+  id: { type: Number, default: 0 },
+  alertCount: { type: Number, default: 0 },
+  clickEvent: { default: '' },
+  avatarURL: {
+    type: String,
+    default: '',
+  },
+  name: { type: String, default: '' },
+  iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
+});
+
+const emits = defineEmits(['response']);
+const onClick = (id: number, iconEvent: string) => {
+  emits('response', `${id}:${iconEvent}`);
+};
+</script>
 
 <style scoped>
 .list-element-container {

@@ -1,18 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
-
-const props = defineProps({
-  placeholderText: { type: String, default: '' },
-  isMenu: { default: false },
-  icon: { default: '' },
-});
-
-const emits = defineEmits(['response']); // REVIEW : update:search_text
-
-const search_text = ref('');
-</script>
-
 <template>
   <div class="search-bar-relative">
     <div class="search-bar-main-container">
@@ -31,6 +16,21 @@ const search_text = ref('');
     </DropdownMenu>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
+
+const props = defineProps({
+  placeholderText: { type: String, default: '' },
+  isMenu: { default: false },
+  icon: { default: '' },
+});
+
+const emits = defineEmits(['response']); // REVIEW : update:search_text
+
+const search_text = ref('');
+</script>
 
 <style>
 .search-bar-relative {
