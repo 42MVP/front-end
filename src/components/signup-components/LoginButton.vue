@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import BasicButton from '@/components/BasicButton.vue';
-import { fetchLoginURL } from '@/contexts/oauth';
+import { Login } from '@/contexts/fetchLogin';
+import { useModalStore } from '@/stores/modal.store';
+
+const modalStore = useModalStore();
 
 const login = async () => {
-  const ret = await fetchLoginURL();
-  window.location.href = ret.loginURL;
+  try {
+    const ret = await Login.fetchLoginURL();
+    window.location.href = ret.loginURL;
+  } catch (e) {
+    modalStore.on({
+      title: '알림',
+      text: e,
+      buttonText: '닫기',
+      buttonFunc: () => {},
+    });
+  }
 };
 </script>
 

@@ -14,18 +14,35 @@
 import { ref, onMounted, watch } from 'vue';
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
-import * as mock from '@/contexts/fecthChat';
+import { ChatFetcher } from '@/contexts/fecthChat';
 import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
 import type { User } from '@/interfaces/User.interface';
+import { useModalStore } from '@/stores/modal.store';
+import { useLoginStore } from '@/stores/login.store';
 
 const chatInfos = ref<ChatInfo[]>([]);
 const friends = ref<User[]>([]);
 const index = ref<number>(-1);
 const isSelect = ref<boolean>(false);
+const modalStore = useModalStore();
+const loginStore = useLoginStore();
 
-onMounted(() => {
-  chatInfos.value = mock.getChatInfos();
-  friends.value = mock.getFriend();
+onMounted(async () => {
+  if (!loginStore.isLogin) {
+    return;
+  }
+  try {
+    chatInfos.value = await ChatFetcher.getChatInfos();
+    friends.value = await ChatFetcher.getFriend();
+  } catch (e) {
+    console.log(e);
+    modalStore.on({
+      title: '알림',
+      text: e,
+      buttonText: '닫기',
+      buttonFunc: () => {},
+    });
+  }
 });
 
 watch(index, () => {
