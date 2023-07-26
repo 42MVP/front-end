@@ -83,7 +83,6 @@ watch(index, () => {
   flex: 2;
   width: 100%;
   height: 100%;
-
   background-color: inherit;
 }
 

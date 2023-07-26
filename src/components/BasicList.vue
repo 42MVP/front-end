@@ -29,7 +29,7 @@ const emits = defineEmits(['response']);
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 90vh;
+  height: 80vh;
 }
 
 .user-top-container {
