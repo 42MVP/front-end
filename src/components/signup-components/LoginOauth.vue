@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Login } from '@/contexts/fetchLogin';
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
+import { getUserID } from '@/contexts/decorators';
+import axios from 'axios';
+import { Login } from '@/contexts/fetchLogin';
 
 const route = useRoute();
 const router = useRouter();
@@ -11,19 +13,16 @@ const loginStore = useLoginStore();
 const modalStore = useModalStore();
 
 onMounted(async () => {
-  const code = route.query.code;
+  const token = $cookies.get('access-token');
+  const userID = getUserID(token);
   try {
-    const res = await Login.fecthUserInfo(code);
-    loginStore.name = res.name;
-    loginStore.avatarURL = res.avatarURL;
-    loginStore.refreshToken = res.refreshToken;
-    loginStore.accessToken = res.accessToken;
+    const ret = await Login.fetchUserInfo(userID, token);
+    const data = ret.data;
+    console.log(data);
+    loginStore.name = data.userName;
+    loginStore.id = data.id;
     loginStore.isLogin = true;
-    if (res.isFirstLogin === true) {
-      router.push('/signUp/setProfile');
-    } else {
-      router.push('/');
-    }
+    router.push('/');
   } catch (e) {
     modalStore.on({
       title: '알림',

@@ -6,8 +6,6 @@ export const useLoginStore = defineStore('login', {
     id: -1,
     name: '',
     avatarURL: '',
-    refreshToken: '',
-    accessToken: '',
   }),
   getters: {},
   actions: {
@@ -16,8 +14,6 @@ export const useLoginStore = defineStore('login', {
       this.id = -1;
       this.name = '';
       this.avatarURL = '';
-      this.refreshToken = '';
-      this.accessToken = '';
     },
   },
   persist: true,

@@ -90,3 +90,10 @@ const isExpiredToken = (token: string) => {
     return true;
   }
 };
+
+export const getUserID = (token: string) => {
+  try {
+    const tokenPayload: { exp: number } = jwtDecode(token);
+    return tokenPayload.sub;
+  } catch (e) {}
+};
