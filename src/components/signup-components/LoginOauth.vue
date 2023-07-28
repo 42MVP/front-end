@@ -6,23 +6,18 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
-import { getUserID } from '@/contexts/decorators';
-import axios from 'axios';
-import { Login } from '@/contexts/fetchLogin';
+import { LoginService } from '@/services/login.service';
 
-const route = useRoute();
 const router = useRouter();
 const loginStore = useLoginStore();
 const modalStore = useModalStore();
 
 onMounted(async () => {
-  const token = $cookies.get('access-token');
-  const userID = getUserID(token);
   try {
-    const ret = await Login.fetchUserInfo(userID, token);
+    const ret = await LoginService.getUserInfo();
     const data = ret.data;
     console.log(data);
     loginStore.name = data.userName;

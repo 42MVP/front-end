@@ -14,7 +14,7 @@
 import { ref, onMounted, watch } from 'vue';
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
-import { ChatFetcher } from '@/contexts/fecthChat';
+import { ChatService } from '@/services/chat.service';
 import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
 import type { User } from '@/interfaces/User.interface';
 import { useModalStore } from '@/stores/modal.store';
@@ -32,10 +32,9 @@ onMounted(async () => {
     return;
   }
   try {
-    chatInfos.value = await ChatFetcher.getChatInfos();
-    friends.value = await ChatFetcher.getFriend();
+    chatInfos.value = await ChatService.getChatInfos();
+    friends.value = await ChatService.getFriend();
   } catch (e) {
-    console.log(e);
     modalStore.on({
       title: '알림',
       text: e,

@@ -1,20 +1,8 @@
 import { loginStore } from '@/main';
 import jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie';
+import { axiosAPI } from './axiosInstance.utils';
 
-/*
- *
- * class {
- *    @RequestWithoutToken()
- *    function () {
- *      try {
- *        axios request
- *      } catch (e) {
- *        do something
- *      }
- *    }
- * }
- *
- */
 export function API() {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const fn = descriptor.value;
@@ -28,53 +16,51 @@ export function API() {
   };
 }
 
-/*
- *
- * class {
- *    @RequestWithToken()
- *    function () {
- *      try {
- *        axios request
- *      } catch (e) {
- *        do something
- *      }
- *    }
- * }
- *
- */
 export function APIWithToken() {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const fn = descriptor.value;
     descriptor.value = async function (...args: any) {
-      if (!loginStore.isLogin) {
-        throw '로그인이 필요한 요청입니다.';
-      }
-      if (isExpiredToken(loginStore.accessToken)) {
-        const res = await requestAccessToken();
-        loginStore.accessToken = res.accessToken;
+      const accessToken = Cookies.get('access-token');
+      if (!accessToken) {
+        return;
+      } else if (isExpiredToken(accessToken)) {
+        await getNewAccessToken();
       }
       try {
-        return fn.apply(target, args);
+        return await fn.apply(target, args);
       } catch (e) {
+        if (e.response.request.status === 401) await getNewAccessToken();
         throw `요청 에러: ${e}`;
       }
     };
   };
 }
 
-const requestAccessToken = () => {
-  if (isExpiredToken(loginStore.refreshToken)) {
+const getNewAccessToken = async (): Promise<void> => {
+  const refreshToken = Cookies.get('refresh-token');
+  if (isExpiredToken(refreshToken)) {
+    Cookies.remove('access-token');
+    Cookies.remove('refresh-token');
     loginStore.resetAll();
     throw '토큰이 만료되었습니다. 다시 로그인해주세요.';
   }
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        accessToken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lX3Rva2VuIiwicm9sZSI6IjMwZGF5IiwiaWF0IjoxNjkwMjQ1MTExLCJleHAiOjE2OTI4MzcxMTF9.9YvAdge0M4GTPX0zlCNLarF6_-_y71xYwTepnvTjwp0',
-      });
-    }, 3000);
-  });
+  try {
+    await axiosAPI.noAuth().post(
+      '/auth/reissue',
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + Cookies.get('refresh-token'),
+        },
+        withCredentials: true,
+      },
+    );
+  } catch (e) {
+    Cookies.remove('access-token');
+    Cookies.remove('refresh-token');
+    loginStore.resetAll();
+    throw `요청 에러: ${e}`;
+  }
 };
 
 const isExpiredToken = (token: string) => {
@@ -91,9 +77,10 @@ const isExpiredToken = (token: string) => {
   }
 };
 
-export const getUserID = (token: string) => {
+export const getUserID = () => {
+  const accessToken = Cookies.get('access-token');
   try {
-    const tokenPayload: { exp: number } = jwtDecode(token);
+    const tokenPayload: { exp: number } = jwtDecode(accessToken);
     return tokenPayload.sub;
   } catch (e) {}
 };
