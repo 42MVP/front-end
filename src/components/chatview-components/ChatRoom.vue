@@ -30,7 +30,7 @@
           <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
           </div>
-          <!-- 
+          <!--
           <DropdownMenu v-if="isActiveDropdown" style="width: 400px">
             <template #dropdown-item>
               <BasicListItem
@@ -66,13 +66,14 @@
     <div v-else class="chat-box-list-name">
       <div class="chat-box-list-name-left-word">{{ props.chatInfo.name }}님과의 대화</div>
     </div>
-    <MessageList :chats="props.chatInfo.chats" />
+    <MessageList :chats="getChats" />
     <ChatInputBox @response="newMessage => addChat(newMessage)" :maxLength="150" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, ref } from 'vue';
+import { watch, ref, computed } from 'vue';
+
 // import JoinChannelPasswordModal from '@/components/chatview-components/modals/JoinChannelPasswordModal.vue';
 import ManageChannelMemberModal from '@/components/chatview-components/modals/ManageChannelMemberModal.vue';
 import ChangeChannelPasswordModal from '@/components/chatview-components/modals/ChangeChannelPasswordModal.vue';
@@ -85,12 +86,16 @@ import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 // import BasicListItem from '@/components/BasicListItem.vue';
 import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
 import type { User } from '@/interfaces/User.interface';
+import { useChatStore } from '@/stores/chat.store';
+import { loginStore } from '@/main';
+import type { Chat } from '@/interfaces/Chat.interface';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
 
 const props = defineProps<{ chatInfo: ChatInfo; friends: User[] }>();
+const chatStore = useChatStore();
 
 watch(
   () => props.chatInfo,
@@ -103,19 +108,20 @@ const setModal: Function = (name: string) => {
   modalName.value = name;
 };
 
-const addChat: Function = (newMessage: string) => {
-  props.chatInfo.chats = [
-    ...props.chatInfo.chats,
-    {
-      id: 1,
-      username: 'kanghyki',
-      avatarURL: '',
-      message: newMessage,
-      date: new Date(),
-    },
-  ];
-  props.chatInfo.chats = props.chatInfo.chats;
+const addChat = (newMessage: string) : void => {
+  const newChat: Chat = {
+    id: loginStore.id,
+    username: loginStore.name,
+    avatarURL: loginStore.avatarURL,
+    message: newMessage,
+    date: new Date(),
+  };
+  chatStore.addChat(props.chatInfo.id, newChat);
 };
+
+const getChats = computed((): Chat[] => {
+  return chatStore.getChatById(props.chatInfo.id);
+});
 </script>
 
 <style scoped>
