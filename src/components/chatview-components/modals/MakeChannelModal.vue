@@ -1,29 +1,30 @@
 <template>
   <Modal title="채널 생성" :show="props.isShow">
     <template #body>
-      <TextInputBox placeholderText="채팅방 이름 입력" :maxLength="15" @response="e => console.log(e)" />
+      <TextInputBox placeholderText="채팅방 이름 입력" :maxLength="15" @response="e => (roomName = e)" />
       <div class="radio-button-out-div">
         <RadioButton :value="1" text="public" @click="selectButton" :isActive="setActive(1)" />
         <RadioButton :value="2" text="protected" @click="selectButton" :isActive="setActive(2)" />
         <RadioButton :value="3" text="private" @click="selectButton" :isActive="setActive(3)" />
       </div>
-      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => console.log(e)" />
+      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
       <TextInputBox
         type="password"
         placeholderText="비밀번호 입력 확인"
         :maxLength="15"
-        @response="e => console.log(e)"
+        @response="e => (password2th = e)"
       />
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" />
+      <BasicButton text="확인" @click="createRoom()" />
     </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { ChatService } from '@/services/chat.service';
 
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
@@ -33,6 +34,9 @@ import TextInputBox from '@/components/TextInputBox.vue';
 const emits = defineEmits(['close']);
 const props = defineProps<{ isShow: boolean }>();
 
+// 1: public
+// 2: protected
+// 3: private
 const selectedMode = ref<number>(1);
 
 const selectButton = (index: number) => {
@@ -41,6 +45,14 @@ const selectButton = (index: number) => {
 
 const setActive = (index: number) => {
   return selectedMode.value === index;
+};
+
+const roomName = ref<string>('');
+const password = ref<string>('');
+const password2th = ref<string>('');
+
+const createRoom = () => {
+  ChatService.create();
 };
 </script>
 

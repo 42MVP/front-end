@@ -31,7 +31,7 @@ import AvatarItem from '@/components/common/AvatarItem.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import GameHistory from '@/components/profileview-components/GameHistory.vue';
 import type { UserInfo } from '@/interfaces/UserInfo.interface';
-import * as mock from '@/contexts/fetchProfile';
+import * as mock from '@/services/profile.service';
 import { useLoginStore } from '@/stores/login.store';
 
 const props = defineProps({
@@ -108,4 +108,3 @@ const getLoginName = computed(() => {
   overflow: auto;
 }
 </style>
-@/contexts/fetchProfile

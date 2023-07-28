@@ -1,10 +1,23 @@
-import { APIWithToken } from '@/contexts/decorators';
+import { APIWithToken } from '@/services/utils/apiDecorator.utils';
+import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
 import type { User } from '@/interfaces/User.interface';
 
-export class ChatFetcher {
+export class ChatService {
   @APIWithToken()
-  static getChatInfos(): Promise<ChatInfo[]> {
+  static async createRoom() {
+    console.log(
+      await axiosAPI.auth().post('/chat/create-room', {
+        userId: 1,
+        roomName: '첫 채팅방이에유',
+        roomMode: 'PUBLIC',
+      }),
+    );
+  }
+
+  @APIWithToken()
+  static async getChatInfos(): Promise<ChatInfo[]> {
+    console.log(await axiosAPI.auth().get('/chat/kanghyki', {}));
     return new Promise((resolve, reject) => {
       setTimeout(
         () =>

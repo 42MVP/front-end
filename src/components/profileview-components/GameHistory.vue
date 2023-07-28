@@ -102,4 +102,3 @@ processedHistories.value = processGameHistory(props.histories, props.username);
   position: relative;
 }
 </style>
-@/contexts/fetchProfile
