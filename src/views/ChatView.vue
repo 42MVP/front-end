@@ -4,7 +4,7 @@
       <ChatList :chatInfos="chatInfos" @selectchat="e => (index = e)" @reset="index = 0" />
     </div>
     <div class="chat-right">
-      <ChatRoom v-if="isSelect" :friends="friends" :chatInfo="chatInfos[index]" />
+      <ChatRoom v-if="isSelect" :friends="friends" :chatInfo="chatInfos[index]" @response="updateRoomMode" />
       <div v-else class="chat-box-unchoose">☺️</div>
     </div>
   </div>
@@ -34,6 +34,8 @@ onMounted(async () => {
   try {
     chatInfos.value = await ChatService.getChatInfos();
     friends.value = await ChatService.getFriend();
+    console.log(chatInfos.value);
+    console.log(friends.value);
   } catch (e) {
     modalStore.on({
       title: '알림',
@@ -51,6 +53,13 @@ watch(index, () => {
     isSelect.value = false;
   }
 });
+
+const updateRoomMode = (eventResponse: { id: number; roomMode: string }) => {
+  const room = chatInfos.value.find(element => element.id === eventResponse.id);
+  if (room) {
+    room.roomMode = eventResponse.roomMode;
+  }
+};
 </script>
 
 <style scoped>

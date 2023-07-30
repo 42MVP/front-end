@@ -10,7 +10,7 @@
     :isShow="modalName === '비밀번호 설정'"
     @close="modalName = ''"
     @submit="
-      props.chatInfo.roomMode = 'PROTECTED';
+      emits('response', { id: props.chatInfo.id, roomMode: 'PROTECTED' });
       modalName = '';
     "
   />
@@ -18,7 +18,8 @@
     :isShow="modalName === '비밀번호 해제'"
     @close="modalName = ''"
     @submit="
-      chatInfo.roomMode = 'PUBLIC';
+      emits('response', { id: props.chatInfo.id, roomMode: 'PUBLIC' });
+      console.log('비밀 번호 해제');
       modalName = '';
     "
   />
@@ -50,9 +51,11 @@
       <div class="chat-box-list-name-right">
         <div class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div v-if="props.chatInfo.roomMode" class="chat-box-icon" @click="setModal('비밀번호 변경')">🔐</div>
+          <div v-if="props.chatInfo.roomMode === 'PROTECTED'" class="chat-box-icon" @click="setModal('비밀번호 변경')">
+            🔐
+          </div>
           <div
-            v-if="props.chatInfo.roomMode"
+            v-if="props.chatInfo.roomMode === 'PROTECTED'"
             class="chat-box-icon"
             @click="setModal('비밀번호 해제')"
             style="border: 0px"
@@ -122,6 +125,8 @@ const addChat = (newMessage: string): void => {
 const getChats = computed((): Chat[] => {
   return chatStore.getChatById(props.chatInfo.id);
 });
+
+const emits = defineEmits(['response']);
 </script>
 
 <style scoped>
