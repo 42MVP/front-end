@@ -4,7 +4,7 @@ import type { User } from '@/interfaces/user/User.interface';
 export interface ChatInfo {
   id: number;
   isChannel: boolean;
-  hasPassword: boolean;
+  roomMode: string;
   name: string;
   alertCount: number;
   avatarURL: string;

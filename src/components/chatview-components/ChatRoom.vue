@@ -10,7 +10,7 @@
     :isShow="modalName === '비밀번호 설정'"
     @close="modalName = ''"
     @submit="
-      props.chatInfo.hasPassword = true;
+      props.chatInfo.roomMode = 'PROTECTED';
       modalName = '';
     "
   />
@@ -18,7 +18,7 @@
     :isShow="modalName === '비밀번호 해제'"
     @close="modalName = ''"
     @submit="
-      chatInfo.hasPassword = false;
+      chatInfo.roomMode = 'PUBLIC';
       modalName = '';
     "
   />
@@ -50,9 +50,9 @@
       <div class="chat-box-list-name-right">
         <div class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div v-if="props.chatInfo.hasPassword" class="chat-box-icon" @click="setModal('비밀번호 변경')">🔐</div>
+          <div v-if="props.chatInfo.roomMode" class="chat-box-icon" @click="setModal('비밀번호 변경')">🔐</div>
           <div
-            v-if="props.chatInfo.hasPassword"
+            v-if="props.chatInfo.roomMode"
             class="chat-box-icon"
             @click="setModal('비밀번호 해제')"
             style="border: 0px"

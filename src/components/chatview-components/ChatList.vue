@@ -71,7 +71,7 @@ watch(eventResponse, () => {
   const chatInfo = props.chatInfos[index];
   if (eventName === 'click') {
     console.log('click');
-    if (chatInfo.hasPassword) {
+    if (chatInfo.roomMode === 'PROTECTED') {
       setModal('채널 비밀번호 입력');
     } else {
       emits('selectchat', index);

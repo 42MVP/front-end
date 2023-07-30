@@ -27,7 +27,7 @@ export class ChatService {
               isChannel: true,
               name: '42mvp',
               alertCount: 42,
-              hasPassword: true,
+              roomMode: 'PROTECTED',
               avatarURL: '',
               users: [
                 {
@@ -75,7 +75,7 @@ export class ChatService {
               isChannel: false,
               name: 'kanghyki',
               avatarURL: '',
-              hasPassword: false,
+              roomMode: 'PUBLIC',
               alertCount: 12,
               users: [
                 {
