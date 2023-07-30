@@ -84,11 +84,11 @@ import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 // import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 // import BasicListItem from '@/components/BasicListItem.vue';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { User } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { User } from '@/interfaces/user/User.interface';
 import { useChatStore } from '@/stores/chat.store';
 import { loginStore } from '@/main';
-import type { Chat } from '@/interfaces/Chat.interface';
+import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
@@ -108,7 +108,7 @@ const setModal: Function = (name: string) => {
   modalName.value = name;
 };
 
-const addChat = (newMessage: string) : void => {
+const addChat = (newMessage: string): void => {
   const newChat: Chat = {
     id: loginStore.id,
     username: loginStore.name,

@@ -1,7 +1,7 @@
 import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { User } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { User } from '@/interfaces/user/User.interface';
 
 export class ChatService {
   @APIWithToken()

@@ -30,7 +30,7 @@ import ProfileButton from '@/components/profileview-components/ProfileButton.vue
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import GameHistory from '@/components/profileview-components/GameHistory.vue';
-import type { UserInfo } from '@/interfaces/UserInfo.interface';
+import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import * as mock from '@/services/profile.service';
 import { useLoginStore } from '@/stores/login.store';
 

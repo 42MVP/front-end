@@ -46,7 +46,7 @@ import SearchChannelModal from '@/components/chatview-components/modals/SearchCh
 import MakeDmModal from '@/components/chatview-components/modals/MakeDmModal.vue';
 import MakeChannelModal from '@/components/chatview-components/modals/MakeChannelModal.vue';
 import JoinChannelPasswordModal from '@/components/chatview-components/modals/JoinChannelPasswordModal.vue';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 const emits = defineEmits(['selectchat', 'reset']);
 const props = defineProps<{

@@ -15,8 +15,8 @@ import { ref, onMounted, watch } from 'vue';
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
 import { ChatService } from '@/services/chat.service';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { User } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { User } from '@/interfaces/user/User.interface';
 import { useModalStore } from '@/stores/modal.store';
 import { useLoginStore } from '@/stores/login.store';
 

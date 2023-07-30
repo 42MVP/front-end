@@ -102,8 +102,8 @@ import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
-import type { User } from '@/interfaces/User.interface';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { User } from '@/interfaces/user/User.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 const userTabIcon = [
   { emoji: '😷', event: 'abong' },

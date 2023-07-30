@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { onMounted, watch, nextTick, ref } from 'vue';
 import MessageBox from './MessageBox.vue';
-import type { Chat } from '@/interfaces/Chat.interface';
+import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 let chatref = ref(null);
 

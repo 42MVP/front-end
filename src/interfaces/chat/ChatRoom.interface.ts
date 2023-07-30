@@ -1,7 +1,7 @@
 export interface ChatRoom {
   id: number;
   name: string;
-  hasPassword: boolean;
+  roomMode: string;
 }
 
 export interface ChatRoomCreate {
