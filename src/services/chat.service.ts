@@ -75,7 +75,7 @@ export class ChatService {
               isChannel: false,
               name: 'kanghyki',
               avatarURL: '',
-              roomMode: 'PUBLIC',
+              roomMode: 'DIRECT',
               alertCount: 12,
               users: [
                 {
