@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useLoginStore } from '@/stores/login.store';
-import type { Chat } from '@/interfaces/Chat.interface';
+import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 const loginStore = useLoginStore();
 const loginUsername = ref(loginStore?.name);

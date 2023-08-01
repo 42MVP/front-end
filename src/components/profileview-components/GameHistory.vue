@@ -23,7 +23,7 @@ import { ref } from 'vue';
 import DBox from '@/components/common/BasicBox.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import type { GameHistory } from '@/interfaces/GameHistory.interface';
-import type { UserGameHistory } from '@/interfaces/UserGameHistory.interface';
+import type { UserGameHistory } from '@/interfaces/user/UserGameHistory.interface';
 
 const props = defineProps({
   username: { type: String, default: '' },

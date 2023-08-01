@@ -1,5 +1,5 @@
 import type { GameHistory } from '@/interfaces/GameHistory.interface';
-import type { UserInfo } from '@/interfaces/UserInfo.interface';
+import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 
 export const getGameHistory: Function = (): GameHistory[] => {
   return [

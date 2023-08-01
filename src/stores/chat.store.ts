@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { Chat } from '@/interfaces/Chat.interface';
+import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 interface ChatState {
   chatRooms: { [id: number]: Chat[] };
@@ -24,8 +24,7 @@ export const useChatStore = defineStore('chat', {
       const chatRoom = this.chatRooms[id];
       if (chatRoom) {
         chatRoom.push(newChat);
-      }
-      else {
+      } else {
         this.addChatRoom(id, newChat);
       }
     },

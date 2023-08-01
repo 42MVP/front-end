@@ -46,7 +46,7 @@ import SearchChannelModal from '@/components/chatview-components/modals/SearchCh
 import MakeDmModal from '@/components/chatview-components/modals/MakeDmModal.vue';
 import MakeChannelModal from '@/components/chatview-components/modals/MakeChannelModal.vue';
 import JoinChannelPasswordModal from '@/components/chatview-components/modals/JoinChannelPasswordModal.vue';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 const emits = defineEmits(['selectchat', 'reset']);
 const props = defineProps<{
@@ -69,13 +69,16 @@ watch(eventResponse, () => {
   const index = parseInt(sp[0]);
   const eventName = sp[1];
   const chatInfo = props.chatInfos[index];
+  // if (eventName === 'click') {
+  //   console.log('click');
+  //   if (chatInfo.roomMode === 'PROTECTED') {
+  //     setModal('채널 비밀번호 입력');
+  //   } else {
+  //     emits('selectchat', index);
+  //   }
+  // }
   if (eventName === 'click') {
-    console.log('click');
-    if (chatInfo.hasPassword) {
-      setModal('채널 비밀번호 입력');
-    } else {
-      emits('selectchat', index);
-    }
+    emits('selectchat', index);
   }
 });
 

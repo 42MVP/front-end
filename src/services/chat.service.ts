@@ -1,7 +1,7 @@
 import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
-import type { ChatInfo } from '@/interfaces/ChatInfo.interface';
-import type { User } from '@/interfaces/User.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { User } from '@/interfaces/user/User.interface';
 
 export class ChatService {
   @APIWithToken()
@@ -27,7 +27,7 @@ export class ChatService {
               isChannel: true,
               name: '42mvp',
               alertCount: 42,
-              hasPassword: true,
+              roomMode: 'PROTECTED',
               avatarURL: '',
               users: [
                 {
@@ -75,7 +75,7 @@ export class ChatService {
               isChannel: false,
               name: 'kanghyki',
               avatarURL: '',
-              hasPassword: false,
+              roomMode: 'DIRECT',
               alertCount: 12,
               users: [
                 {
