@@ -5,10 +5,15 @@ export interface ChatRoom {
 }
 
 export interface ChatRoomCreate {
-  userId: number | null;
-  roomName: string | null;
+  roomName?: string;
   roomMode: string;
-  password: string | null;
+  password?: string;
+  dmId?: number;
+}
+
+export interface ChatRoomEnter {
+  roomId: number;
+  password?: string;
 }
 
 export interface ChatRoomMode {

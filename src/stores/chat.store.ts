@@ -1,47 +1,61 @@
 import { defineStore } from 'pinia';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
-
-interface ChatState {
-  chatRooms: { [id: number]: Chat[] };
-}
+import { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 export const useChatStore = defineStore('chat', {
-  state: (): ChatState => ({
-    chatRooms: {},
+  state: () => ({
+    rooms: [],
+    selectionIndex: -1,
   }),
   getters: {
-    getChatById:
-      state =>
-      (id: number): Chat[] => {
-        return state.chatRooms[id] || ([] as Chat[]);
-      },
+    //    getChatById:
+    //      state =>
+    //      (id: number): Chat[] => {
+    //        return state.rooms[id] || ([] as Chat[]);
+    //      },
+    getDmUserName(): string {
+      return '디엠유저';
+    },
+    isSelected(): boolean {
+      if (this.selectionIndex === -1) return false;
+      return true;
+    },
+    getSelectionChatInfo(): ChatInfo {
+      return this.rooms[this.selectionIndex];
+    },
+    getSelectionChat(): Chat[] {
+      return this.rooms[this.selectionIndex].chats;
+    },
   },
   actions: {
-    addChatRoom(id: number, newChat: Chat) {
-      this.chatRooms[id] = [newChat];
+    setSelectionIndex(index: number) {
+      this.selectionIndex = index;
     },
-    addChat(id: number, newChat: Chat) {
-      const chatRoom = this.chatRooms[id];
-      if (chatRoom) {
-        chatRoom.push(newChat);
-      } else {
-        this.addChatRoom(id, newChat);
-      }
+    addChatRoom(newChat: ChatInfo) {
+      this.rooms.push(newChat);
     },
     deleteChatRoom(id: number) {
-      delete this.chatRooms[id];
+      this.rooms = this.rooms.filter((e, i) => i !== id);
     },
-    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
-      const { id, newChat } = event.detail;
-      this.addChatRoom(id, newChat);
+    addChat(newChat: Chat) {
+      // FIXME: 임시
+      if (this.getSelectionChat) this.rooms[this.selectionIndex].chats.push(newChat);
+      else {
+        this.rooms[this.selectionIndex].chats = [];
+        this.rooms[this.selectionIndex].chats.push(newChat);
+      }
     },
-    handleMessageEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
-      const { id, newChat } = event.detail;
-      this.addChat(id, newChat);
-    },
-    handleLeaveEvent(event: CustomEvent<{ id: number }>) {
-      const { id } = event.detail;
-      this.deleteChatRoom(id);
-    },
+    //    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
+    //      const { id, newChat } = event.detail;
+    //      this.addChatRoom(id, newChat);
+    //    },
+    //    handleMessageEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
+    //      const { id, newChat } = event.detail;
+    //      this.addChat(id, newChat);
+    //    },
+    //    handleLeaveEvent(event: CustomEvent<{ id: number }>) {
+    //      const { id } = event.detail;
+    //      this.deleteChatRoom(id);
+    //    },
   },
 });

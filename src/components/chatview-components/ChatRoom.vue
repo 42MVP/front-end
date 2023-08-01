@@ -1,7 +1,7 @@
 <template>
   <ManageChannelMemberModal
     :friends="friends"
-    :chatInfo="props.chatInfo"
+    :chatInfo="chatStore.getSelectionChatInfo"
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
   />
@@ -10,7 +10,7 @@
     :isShow="modalName === '비밀번호 설정'"
     @close="modalName = ''"
     @submit="
-      emits('response', { id: props.chatInfo.id, roomMode: 'PROTECTED' });
+      emits('response', { id: chatStore.getSelectionChatInfo.id, roomMode: 'PROTECTED' });
       modalName = '';
     "
   />
@@ -18,44 +18,33 @@
     :isShow="modalName === '비밀번호 해제'"
     @close="modalName = ''"
     @submit="
-      emits('response', { id: props.chatInfo.id, roomMode: 'PUBLIC' });
+      emits('response', { id: chatStore.getSelectionChatInfo.id, roomMode: 'PUBLIC' });
       console.log('비밀 번호 해제');
       modalName = '';
     "
   />
   <div class="chat-list-container">
-    <div v-if="props.chatInfo.isChannel" class="chat-box-list-name">
+    <div v-if="chatStore.getSelectionChatInfo.roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
-        <div class="chat-box-list-name-left-word">{{ props.chatInfo.name }}</div>
+        <div class="chat-box-list-name-left-word">{{ chatStore.getSelectionChatInfo.name }}</div>
         <div class="chat-box-list-name-left-icon-container">
           <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
           </div>
-          <!--
-          <DropdownMenu v-if="isActiveDropdown" style="width: 400px">
-            <template #dropdown-item>
-              <BasicListItem
-                v-for="e in friends"
-                :key="e.id"
-                :id="e.id"
-                :name="e.name"
-                :avatarURL="e.avatarURL"
-                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
-                @response="e => console.log(e)"
-              />
-            </template>
-          </DropdownMenu>
-            -->
         </div>
       </div>
       <div class="chat-box-list-name-right">
         <div class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div v-if="props.chatInfo.roomMode === 'PROTECTED'" class="chat-box-icon" @click="setModal('비밀번호 변경')">
+          <div
+            v-if="chatStore.getSelectionChatInfo.roomMode === 'PROTECTED'"
+            class="chat-box-icon"
+            @click="setModal('비밀번호 변경')"
+          >
             🔐
           </div>
           <div
-            v-if="props.chatInfo.roomMode === 'PROTECTED'"
+            v-if="chatStore.getSelectionChatInfo.roomMode === 'PROTECTED'"
             class="chat-box-icon"
             @click="setModal('비밀번호 해제')"
             style="border: 0px"
@@ -67,17 +56,16 @@
       </div>
     </div>
     <div v-else class="chat-box-list-name">
-      <div class="chat-box-list-name-left-word">{{ props.chatInfo.name }}님과의 대화</div>
+      <div class="chat-box-list-name-left-word">{{ chatStore.getDmUserName }}님과의 대화</div>
     </div>
-    <MessageList :chats="getChats" />
+    <MessageList :chats="chatStore.getSelectionChat" />
     <ChatInputBox @response="newMessage => addChat(newMessage)" :maxLength="150" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, ref, computed } from 'vue';
+import { watch, ref } from 'vue';
 
-// import JoinChannelPasswordModal from '@/components/chatview-components/modals/JoinChannelPasswordModal.vue';
 import ManageChannelMemberModal from '@/components/chatview-components/modals/ManageChannelMemberModal.vue';
 import ChangeChannelPasswordModal from '@/components/chatview-components/modals/ChangeChannelPasswordModal.vue';
 import DeleteChannelPasswordModal from '@/components/chatview-components/modals/DeleteChannelPasswordModal.vue';
@@ -85,23 +73,19 @@ import SetChannelPasswordModal from '@/components/chatview-components/modals/Set
 
 import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
-// import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
-// import BasicListItem from '@/components/BasicListItem.vue';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
-import type { User } from '@/interfaces/user/User.interface';
 import { useChatStore } from '@/stores/chat.store';
 import { loginStore } from '@/main';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
+import { RoomMode } from '@/services/chat.service';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
 
-const props = defineProps<{ chatInfo: ChatInfo; friends: User[] }>();
 const chatStore = useChatStore();
 
 watch(
-  () => props.chatInfo,
+  () => chatStore.getSelectionChatInfo,
   () => {
     isSelect.value = true;
   },
@@ -119,12 +103,8 @@ const addChat = (newMessage: string): void => {
     message: newMessage,
     date: new Date(),
   };
-  chatStore.addChat(props.chatInfo.id, newChat);
+  chatStore.addChat(newChat);
 };
-
-const getChats = computed((): Chat[] => {
-  return chatStore.getChatById(props.chatInfo.id);
-});
 
 const emits = defineEmits(['response']);
 </script>

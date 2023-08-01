@@ -20,6 +20,7 @@ const props = defineProps<{ chats: Chat[] }>();
 watch(
   () => props.chats,
   () => {
+    console.log('event?');
     scrollToLatestMsg();
   },
 );

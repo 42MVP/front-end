@@ -1,8 +1,7 @@
 <template>
-  <SearchChannelModal :isShow="modalName === '채널 탐색'" @close="modalName = ''" />
+  <SearchChannelModal v-if="modalName === '채널 탐색'" @close="modalName = ''" />
   <MakeDmModal :isShow="modalName === 'DM 생성'" @close="modalName = ''" />
   <MakeChannelModal :isShow="modalName === '채널 생성'" @close="modalName = ''" />
-  <JoinChannelPasswordModal :isShow="modalName === '채널 비밀번호 입력'" @close="modalName = ''" />
   <BasicList>
     <template #title> 채팅 </template>
     <template #title-icon>
@@ -21,7 +20,7 @@
     </template>
     <template #user-element>
       <BasicListItem
-        v-for="(element, index) in chatInfos"
+        v-for="(element, index) in chatStore.rooms"
         :key="element.id"
         :id="index"
         :name="element.name"
@@ -37,53 +36,58 @@
 
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue';
+// component
 import BasicList from '@/components/BasicList.vue';
 import BasicListItem from '@/components/BasicListItem.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
-
 import SearchChannelModal from '@/components/chatview-components/modals/SearchChannelModal.vue';
 import MakeDmModal from '@/components/chatview-components/modals/MakeDmModal.vue';
 import MakeChannelModal from '@/components/chatview-components/modals/MakeChannelModal.vue';
-import JoinChannelPasswordModal from '@/components/chatview-components/modals/JoinChannelPasswordModal.vue';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+
+// store
+import { useChatStore } from '@/stores/chat.store';
+import { useModalStore } from '@/stores/modal.store';
+
+// service
+import { ChatService } from '@/services/chat.service';
+
+const chatStore = useChatStore();
+const modalStore = useModalStore();
 
 const emits = defineEmits(['selectchat', 'reset']);
-const props = defineProps<{
-  chatInfos: ChatInfo[];
-}>();
 
-const iconButtons = [
-  { emoji: '✉️', event: 'email' },
-  { emoji: '🏁', event: 'flag' },
-  { emoji: '❌', event: 'quit' },
-];
+const iconButtons = [{ emoji: '❌', event: 'quit' }];
 
 const modalName = ref('');
 const isMenu = ref(false);
 const eventResponse = ref('');
 
-watch(eventResponse, () => {
+watch(eventResponse, async () => {
+  console.log(eventResponse);
   if (!eventResponse.value) return;
   const sp = eventResponse.value.split(':');
   const index = parseInt(sp[0]);
   const eventName = sp[1];
-  const chatInfo = props.chatInfos[index];
-  // if (eventName === 'click') {
-  //   console.log('click');
-  //   if (chatInfo.roomMode === 'PROTECTED') {
-  //     setModal('채널 비밀번호 입력');
-  //   } else {
-  //     emits('selectchat', index);
-  //   }
-  // }
   if (eventName === 'click') {
     emits('selectchat', index);
+  } else if (eventName === 'quit') {
+    try {
+      await ChatService.exitRoom(chatStore.rooms[index].id);
+      chatStore.deleteChatRoom(index);
+    } catch (e) {
+      modalStore.on({
+        title: '알림',
+        text: e,
+        buttonText: '닫기',
+        buttonFunc: () => {},
+      });
+    }
   }
 });
 
 watch(
-  () => props.chatInfos,
+  () => chatStore.rooms,
   () => {
     nextTick(() => {
       let userList = document.querySelector('.user-list-container');

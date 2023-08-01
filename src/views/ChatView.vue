@@ -1,41 +1,41 @@
 <template>
   <div class="container">
     <div class="chat-left">
-      <ChatList :chatInfos="chatInfos" @selectchat="e => (index = e)" @reset="index = 0" />
+      <ChatList @selectchat="e => chatStore.setSelectionIndex(e)" @reset="index = 0" />
     </div>
     <div class="chat-right">
-      <ChatRoom v-if="isSelect" :friends="friends" :chatInfo="chatInfos[index]" @response="updateRoomMode" />
+      <ChatRoom v-if="chatStore.isSelected" :chatInfo="chatStore.getSelectionChatInfo" @response="updateRoomMode" />
       <div v-else class="chat-box-unchoose">☺️</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+// vue
+import { onMounted } from 'vue';
+// component
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
+// service
 import { ChatService } from '@/services/chat.service';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
-import type { User } from '@/interfaces/user/User.interface';
+// store
 import { useModalStore } from '@/stores/modal.store';
 import { useLoginStore } from '@/stores/login.store';
+import { useChatStore } from '@/stores/chat.store';
 
-const chatInfos = ref<ChatInfo[]>([]);
-const friends = ref<User[]>([]);
-const index = ref<number>(-1);
-const isSelect = ref<boolean>(false);
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
+const chatStore = useChatStore();
 
 onMounted(async () => {
-  if (!loginStore.isLogin) {
-    return;
-  }
   try {
-    chatInfos.value = await ChatService.getChatInfos();
-    friends.value = await ChatService.getFriend();
-    console.log(chatInfos.value);
-    console.log(friends.value);
+    chatStore.rooms = await ChatService.getChatList(loginStore.name);
+    console.log('chatStore.rooms:', chatStore.rooms);
+    //    const ret = await ChatService.createRoom({
+    //      roomName: 'wowowowow',
+    //      roomMode: RoomMode.DIRECT,
+    //      dmId: 123,
+    //    });
   } catch (e) {
     modalStore.on({
       title: '알림',
@@ -46,20 +46,12 @@ onMounted(async () => {
   }
 });
 
-watch(index, () => {
-  if (index.value !== -1) {
-    isSelect.value = true;
-  } else {
-    isSelect.value = false;
-  }
-});
-
-const updateRoomMode = (eventResponse: { id: number; roomMode: string }) => {
-  const room = chatInfos.value.find(element => element.id === eventResponse.id);
-  if (room) {
-    room.roomMode = eventResponse.roomMode;
-  }
-};
+//const updateRoomMode = (eventResponse: { id: number; roomMode: string }) => {
+//  const room = chatInfos.value.find(element => element.id === eventResponse.id);
+//  if (room) {
+//    room.roomMode = eventResponse.roomMode;
+//  }
+//};
 </script>
 
 <style scoped>
