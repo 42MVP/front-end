@@ -20,7 +20,6 @@
     </template>
     <template #user-element>
       <BasicListItem
-        v-if="isLoaded"
         v-for="room in Object.values(chatStore.rooms)"
         :key="room.id"
         :id="room.id"
@@ -31,7 +30,6 @@
         clickEvent="click"
         @response="e => (eventResponse = e)"
       />
-      <div v-else>로딩중...</div>
     </template>
   </BasicList>
 </template>
@@ -62,10 +60,9 @@ const loginStore = useLoginStore();
 
 const iconButtons = [{ emoji: '❌', event: 'quit' }];
 
-const modalName = ref('');
-const isMenu = ref(false);
+const modalName = ref<string>('');
+const isMenu = ref<boolean>(false);
 const eventResponse = ref<IconEmitResponse>({ id: -1, eventName: '' });
-const isLoaded = ref<boolean>(false);
 
 onMounted(async () => {
   try {
@@ -73,7 +70,6 @@ onMounted(async () => {
     ret.forEach(e => {
       chatStore.addChatRoom(e.id, e);
     });
-    isLoaded.value = true;
     //    const ret = await ChatService.createRoom({
     //      roomName: 'wowowowow',
     //      roomMode: RoomMode.DIRECT,
