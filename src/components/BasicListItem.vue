@@ -35,10 +35,12 @@ const props = defineProps({
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
 
-const emits = defineEmits(['response']);
+const emits = defineEmits<{
+  (e: 'response', data: IconEmitResponse): void;
+}>();
 
 const onClick = (id: number, iconEvent: string) => {
-  emits('response', { id: id, eventName: iconEvent } as IconEmitResponse);
+  emits('response', { id: id, eventName: iconEvent });
 };
 </script>
 
