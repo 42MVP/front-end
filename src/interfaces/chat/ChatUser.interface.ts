@@ -1,8 +1,8 @@
 export interface ChatUserState {
-    userId: number;
-    roomId: number;
-    state: string;
-    muteTime: string;
+  userId: number;
+  roomId: number;
+  state: string;
+  muteTime?: string;
 }
 
 export interface ChatUserRole {
