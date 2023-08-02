@@ -3,5 +3,5 @@ export interface User {
   name: string;
   avatarURL: string;
   role?: string;
-  abongTime?: Date | null;
+  abongTime?: Date;
 }
