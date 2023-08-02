@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="chat-left">
-      <ChatList @selectchat="e => chatStore.setSelectionIndex(e)" @reset="index = 0" />
+      <ChatList />
     </div>
     <div class="chat-right">
       <ChatRoom v-if="chatStore.isSelected" :chatInfo="chatStore.getSelectionChatInfo" @response="updateRoomMode" />

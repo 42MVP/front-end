@@ -51,30 +51,26 @@ import { useModalStore } from '@/stores/modal.store';
 
 // service
 import { ChatService } from '@/services/chat.service';
+import { EmitResponse } from '@/interfaces/EmitResponse.interface';
 
 const chatStore = useChatStore();
 const modalStore = useModalStore();
-
-const emits = defineEmits(['selectchat', 'reset']);
 
 const iconButtons = [{ emoji: '❌', event: 'quit' }];
 
 const modalName = ref('');
 const isMenu = ref(false);
-const eventResponse = ref('');
+const eventResponse = ref<EmitResponse>({ id: -1, eventName: '' });
 
 watch(eventResponse, async () => {
-  console.log(eventResponse);
-  if (!eventResponse.value) return;
-  const sp = eventResponse.value.split(':');
-  const index = parseInt(sp[0]);
-  const eventName = sp[1];
+  const eventName = eventResponse.value.eventName;
+  const id = eventResponse.value.id;
   if (eventName === 'click') {
-    emits('selectchat', index);
+    chatStore.setSelectionIndex(id);
   } else if (eventName === 'quit') {
     try {
-      await ChatService.exitRoom(chatStore.rooms[index].id);
-      chatStore.deleteChatRoom(index);
+      await ChatService.exitRoom(chatStore.rooms[id].id);
+      chatStore.deleteChatRoom(id);
     } catch (e) {
       modalStore.on({
         title: '알림',
