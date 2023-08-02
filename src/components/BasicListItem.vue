@@ -4,10 +4,14 @@
       <div v-if="'avatarURL' in props.item" class="list-element-avatar profileText">
         <img :src="props.item.avatarURL !== '' ? props.item.avatarURL : ''" />
       </div>
-      <span> {{ props.item?.name }}</span>
+      <div>
+        <span>{{ props.item?.name }}</span>
+        <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
+      </div>
       <!-- NOTE : back 에서 name 이 아니라 username을 줌.. -->
-      <span v-if="'username' in props.item"> {{ props.item?.username }}</span>
-      <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
+      <span v-if="'username' in props.item">
+        {{ props.item?.username }}
+      </span>
     </div>
     <div class="list-element-icon-container">
       <button v-for="(iconButton, index) in iconButtons" :key="index" @click="onClick(props.item.id, iconButton.event)">
@@ -48,21 +52,15 @@ const onClick = (id: number, iconEvent: string) => {
   display: flex;
   flex: none;
   justify-content: space-between;
-  justify-content: center;
-  width: 100%;
+  align-self: stretch;
   height: 80px;
-}
-
-.list-element-container:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transition: 0.1s ease-out;
+  flex: 1;
 }
 
 .list-element-info-container {
   cursor: pointer;
   display: flex;
   align-items: center;
-  flex: 1;
 }
 
 .list-element-info-container span {

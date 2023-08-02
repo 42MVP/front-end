@@ -1,6 +1,6 @@
 <template>
   <ul class="list-container">
-    <li v-for="(item, index) in props.items" :key="index">
+    <li class="list-item-container" v-for="(item, index) in props.items" :key="index">
       <BasicListItem
         :item="item"
         :style="{ cursor: clickEvent && 'pointer' }"
@@ -8,6 +8,7 @@
         @click="clickEvent && emits('chooseItem', item?.id)"
         @clickIconButton="data => emits('clickIconButton', data)"
       />
+      <slot />
     </li>
   </ul>
 </template>
@@ -39,5 +40,25 @@ const emits = defineEmits<{
 ul {
   list-style: none;
   padding-left: 0px;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.list-item-container {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: space-around;
+  min-width: max-content;
+  min-height: max-content;
+}
+
+.list-item-container:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: 0.1s ease-out;
 }
 </style>
