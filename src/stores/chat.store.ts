@@ -1,47 +1,50 @@
 import { defineStore } from 'pinia';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 interface ChatState {
-  chatRooms: { [id: number]: Chat[] };
+  rooms: { [id: number]: ChatInfo[] };
+  chats: { [id: number]: Chat[] };
+  selectedID: number;
 }
 
 export const useChatStore = defineStore('chat', {
   state: (): ChatState => ({
-    chatRooms: {},
+    rooms: [],
+    chats: [],
+    selectedID: -1,
   }),
   getters: {
-    getChatById:
-      state =>
-      (id: number): Chat[] => {
-        return state.chatRooms[id] || ([] as Chat[]);
-      },
+    isSelected(): boolean {
+      if (this.selectedID === -1) return false;
+      return true;
+    },
   },
   actions: {
-    addChatRoom(id: number, newChat: Chat) {
-      this.chatRooms[id] = [newChat];
-    },
-    addChat(id: number, newChat: Chat) {
-      const chatRoom = this.chatRooms[id];
-      if (chatRoom) {
-        chatRoom.push(newChat);
-      } else {
-        this.addChatRoom(id, newChat);
-      }
+    addChatRoom(id: number, room: ChatInfo) {
+      this.rooms[id] = room;
+      this.chats[id] = [];
     },
     deleteChatRoom(id: number) {
-      delete this.chatRooms[id];
+      delete this.rooms[id];
     },
-    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
-      const { id, newChat } = event.detail;
-      this.addChatRoom(id, newChat);
+    addChat(id: number, newChat: Chat) {
+      const chats = this.chats[id];
+      if (chats) {
+        chats.push(newChat);
+      }
     },
-    handleMessageEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
-      const { id, newChat } = event.detail;
-      this.addChat(id, newChat);
-    },
-    handleLeaveEvent(event: CustomEvent<{ id: number }>) {
-      const { id } = event.detail;
-      this.deleteChatRoom(id);
-    },
+    //    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
+    //      const { id, newChat } = event.detail;
+    //      this.addChatRoom(id, newChat);
+    //    },
+    //    handleMessageEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
+    //      const { id, newChat } = event.detail;
+    //      this.addChat(id, newChat);
+    //    },
+    //    handleLeaveEvent(event: CustomEvent<{ id: number }>) {
+    //      const { id } = event.detail;
+    //      this.deleteChatRoom(id);
+    //    },
   },
 });

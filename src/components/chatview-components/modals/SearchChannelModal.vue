@@ -1,73 +1,135 @@
 <template>
-  <Modal title="채널 탐색" :show="props.isShow">
+  <Modal title="채널 탐색">
     <template #body>
       <SearchBar
         placeholderText="채널명을 입력하세요"
         icon="🔍"
-        :isMenu="chat_list_elements.length > 0"
-        @response="
-          e => {
-            if (e === '') {
-              chat_list_elements = [];
-              return;
-            }
-            chat_list_elements = [
-              {
-                id: 1,
-                name: '42my',
-                avatarURL: '',
-              },
-              {
-                id: 2,
-                name: '42party',
-                avatarURL: '',
-              },
-              {
-                id: 3,
-                name: '42mario',
-                avatarURL: '',
-              },
-            ];
-          }
-        "
+        :isMenu="searchChatList.length > 0"
+        @response="e => searchRoom(e)"
       >
         <template #search-bar-item>
           <BasicListItem
-            @click="chat_list_elements = []"
-            v-for="element in chat_list_elements"
+            v-for="element in searchChatList"
             :key="element.id"
             :id="element.id"
             :name="element.name"
-            :avatarURL="element.avatarURL"
-            clickEvent="good~"
-            @response="e => console.log(e)"
+            @click="chooseRoom(element.roomMode, element.id)"
           />
         </template>
       </SearchBar>
+      <div v-if="enterStatus === EnterStatus.PASSWORD">비밀방입니다.</div>
+      <TextInputBox
+        v-if="enterStatus === EnterStatus.PASSWORD"
+        type="password"
+        placeholderText="비밀번호 입력"
+        :maxLength="15"
+        @response="
+          e => {
+            if (e === '') password = undefined;
+            password = e;
+          }
+        "
+      />
+      <div v-else-if="enterStatus === EnterStatus.CONFIRM">공개방입니다. 바로 입장하시겠습니까?</div>
     </template>
     <template #footer>
-      <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton :type="true" text="확인" />
+      <BasicButton v-if="enterStatus === EnterStatus.CHOICE" :type="false" text="닫기" @click="emits('close')" />
+      <BasicButton
+        v-if="enterStatus !== EnterStatus.CHOICE"
+        :type="false"
+        text="취소"
+        @click="enterStatus = EnterStatus.CHOICE"
+        style="margin-right: 5px"
+      />
+      <BasicButton
+        v-if="enterStatus !== EnterStatus.CHOICE"
+        :type="true"
+        text="확인"
+        @click="
+          enterRoom(selectionRoomId, password);
+          emits('close');
+        "
+      />
     </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+// components
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
+import TextInputBox from '@/components/TextInputBox.vue';
+// service
+import { ChatService, RoomMode } from '@/services/chat.service';
+// store
+import { useChatStore } from '@/stores/chat.store';
+import { useModalStore } from '@/stores/modal.store';
+// interface
+import type { ChatRoom } from '@/interfaces/chat/ChatRoom.interface';
 
-const chat_list_elements = ref<
-  {
-    id: number;
-    name: string;
-    avatarURL: string;
-  }[]
->([]);
+const EnterStatus = {
+  CHOICE: 1,
+  CONFIRM: 2,
+  PASSWORD: 3,
+};
+
+const enterStatus = ref<number>(EnterStatus.CHOICE);
+const password = ref<string | undefined>(undefined);
+const selectionRoomId = ref<number>(-1);
+
+const chatStore = useChatStore();
+const modalStore = useModalStore();
+
+const chatList = ref<ChatRoom[]>([]);
+const searchChatList = ref<ChatRoom[]>([]);
+
+onMounted(async () => {
+  try {
+    const ret = await ChatService.searchChatList();
+    chatList.value = ret;
+  } catch (e) {
+    modalStore.on({
+      title: '알림',
+      text: e,
+      buttonText: '닫기',
+      buttonFunc: () => {},
+    });
+  }
+});
+
 const emits = defineEmits(['close', 'submit']);
-const props = defineProps<{ isShow: boolean }>();
+
+const searchRoom = (roomName: string) => {
+  if (roomName === '') searchChatList.value = [];
+  else searchChatList.value = chatList.value.filter(chat => chat.name.includes(roomName));
+};
+
+const chooseRoom = (roomMode: RoomMode, roomId: number) => {
+  if (roomMode === RoomMode.PROTECTED) {
+    enterStatus.value = EnterStatus.PASSWORD;
+  } else {
+    enterStatus.value = EnterStatus.CONFIRM;
+  }
+  selectionRoomId.value = roomId;
+  searchChatList.value = [];
+};
+
+const enterRoom = async (roomId: number, password: string | undefined) => {
+  try {
+    const enter = await ChatService.enterRoom({ roomId: roomId, password: password });
+    chatStore.addChatRoom(roomId, enter);
+  } catch (e) {
+    modalStore.on({
+      title: '알림',
+      text: e,
+      buttonText: '닫기',
+      buttonFunc: () => {},
+    });
+  }
+};
 </script>
 
 <style scoped></style>

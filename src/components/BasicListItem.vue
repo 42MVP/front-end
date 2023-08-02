@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import type { IconButton } from '@/interfaces/IconButton.interface';
+import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 
 const props = defineProps({
   id: { type: Number, default: 0 },
@@ -34,9 +35,12 @@ const props = defineProps({
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
 
-const emits = defineEmits(['response']);
+const emits = defineEmits<{
+  (e: 'response', data: IconEmitResponse): void;
+}>();
+
 const onClick = (id: number, iconEvent: string) => {
-  emits('response', `${id}:${iconEvent}`);
+  emits('response', { id: id, eventName: iconEvent });
 };
 </script>
 
