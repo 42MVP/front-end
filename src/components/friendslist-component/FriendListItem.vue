@@ -13,11 +13,11 @@
 
 <script setup lang="ts">
 import BasicButton from '@/components/BasicButton.vue';
-import type { FriendInfoType } from '@/interfaces/FriendsInfo.interface';
+import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
 
 const props = defineProps<{
   listType: string;
-  friend: FriendInfoType;
+  friend: FriendInfo;
   selectedUser: string;
 }>();
 

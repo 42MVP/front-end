@@ -1,158 +1,113 @@
 <template>
-  <div class="wrap">
-    <div class="head">
-      <div class="dropdown">
-        <h2 class="dropbtn">
-          {{ ListType }}
-          <div class="triangle-down"></div>
-        </h2>
-        <ul class="dropdown-content">
-          <li @click="ListType = 'Blocks'">Blocks</li>
-          <li @click="ListType = 'Friends'">Friends</li>
-        </ul>
+  <BasicListFrame>
+    <template #title>{{ listType }}</template>
+    <template #title-icon>
+      <div class="title-icon-relative" @click="isMenu = !isMenu">
+        {{ !isMenu ? '⊕' : '⊖' }}
       </div>
-    </div>
-    <ul class="listBox">
-      <li v-for="(friend, idx) in users" :key="idx">
-        <FriendListItem
-          @click="$emit('updateSelection', friend.name)"
-          @removeFromList="removeFromList"
-          :listType="ListType"
-          :friend="friend"
-          :selectedUser="props.selectedUser"
-        />
-      </li>
-    </ul>
-  </div>
+    </template>
+    <template #title-icon-menu>
+      <DropdownMenu v-if="isMenu">
+        <template #dropdown-item>
+          <DropdownMenuItem text="Blocks" @click="listType = 'Blocks'" />
+          <DropdownMenuItem text="Friends" @click="listType = 'Friends'" />
+        </template>
+      </DropdownMenu>
+    </template>
+    <template #user-element>
+      <BasicList
+        :items="users"
+        @chooseItem="(id : number) => $emit('updateSelection', id)"
+        @removeFromList="removeFromList"
+      >
+        <BasicButton :text="getButtonTitle()" @click="(name : string) => $emit('removeFromList', name)" />
+      </BasicList>
+    </template>
+  </BasicListFrame>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import FriendListItem from '@/components/friendslist-component/FriendListItem.vue';
-import { type FriendInfoType } from '@/interfaces/FriendsInfo.interface';
-import FriendListTmp from './FriendListTmp.vue';
+import { ref, watch } from 'vue';
+import { type FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import BasicListFrame from '@/components/BasicListFrame.vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
+import BasicList from '@/components/BasicList.vue';
+import BasicButton from '@/components/BasicButton.vue';
 
-const props = defineProps<{
-  selectedUser: string;
-}>();
+const isMenu = ref(false);
 
-var users = ref<FriendInfoType[]>([
-  { _id: 1, name: 'chaejkim', img: '1.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
-  { _id: 2, name: 'kanghyki', img: '2.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
-  { _id: 3, name: 'hejang', img: '3.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
-  { _id: 4, name: 'hyeonki', img: '4.png', isFollow: false, isBlock: false, Level: 52, Achievement: 'Achievement1' },
-  { _id: 5, name: 'hyeonkkim', img: '5.png', isFollow: false, isBlock: false, Level: 42, Achievement: 'Achievement1' },
+var users = ref<FriendInfo[]>([
+  {
+    id: 1,
+    name: 'chaejkim',
+    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LNN8QWJV-4c936417baf6-512',
+    isFollow: false,
+    isBlock: false,
+    level: 42,
+    achievement: 'Achievement1',
+  },
+  {
+    id: 2,
+    name: 'kanghyki',
+    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U035MTQ4U4T-9333cd362cf2-512',
+    isFollow: false,
+    isBlock: false,
+    level: 42,
+    achievement: 'Achievement1',
+  },
+  {
+    id: 3,
+    name: 'hejang',
+    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LA4V3351-b8f6020a843c-512',
+    isFollow: false,
+    isBlock: false,
+    level: 42,
+    achievement: 'Achievement1',
+  },
+  {
+    id: 4,
+    name: 'hyeonki',
+    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02L3CLQ6S2-gadbfaa25482-512',
+    isFollow: false,
+    isBlock: false,
+    level: 52,
+    achievement: 'Achievement1',
+  },
+  {
+    id: 5,
+    name: 'hyeonkkim',
+    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LA445WF4-bee783ffc454-512',
+    isFollow: false,
+    isBlock: false,
+    level: 42,
+    achievement: 'Achievement1',
+  },
 ]);
 
-const ListType = ref<string>('Friends');
-
 const removeFromList = (name: string) => {
-  users.value.filter(friend => friend.name !== name);
   users.value.forEach((item, index) => {
     if (item.name === name) {
       users.value.splice(index, 1);
     }
   });
+  // users.value.forEach
+};
+
+const listType = ref<string>('Friends');
+
+const getButtonTitle = () => {
+  return listType.value === 'Friends'? 'unfollow' : 'unblock';
 };
 </script>
 
 <style scoped>
-.wrap {
-  width: 30%;
-  height: 80vh;
-  background-color: #f4f3ee;
-  border-radius: 20px;
-  user-select: none;
-  position: relative;
-  overflow-x: hidden;
-  min-width: 380px;
-}
-
-.head {
-  height: 50px;
-  width: 100%;
-  background-color: #8a817c;
-  /* border-top-left-radius: 20px;
-  border-top-right-radius: 20px; */
-  padding: 0 20px;
-  position: absolute;
-}
-
-.title {
-  color: #fff;
-}
-.day-forecast {
-  margin: 0.5rem;
-  font-size: 1.2rem;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  z-index: 1;
-  font-weight: 400;
-  background-color: #f9f9f9;
-  min-width: 200px;
-  margin: 0;
-  padding: 0;
-}
-
-.dropdown-content li {
-  display: block;
-  text-decoration: none;
-  color: rgb(37, 37, 37);
-  font-size: 20px;
-  font-weight: 700;
-  padding: 12px 20px;
-  cursor: pointer;
-}
-
-.dropdown-content li:hover {
-  color: rosybrown;
-  transition: all 0.3s;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-  background-color: #ececec;
-}
-
-.dropbtn {
-  height: 50px;
-  background-color: #8a817c;
-  color: #fff;
-  font-weight: 700;
-  font-size: 32px;
-  cursor: pointer;
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-}
-
-.dropbtn span {
-  font-size: 20px;
-  font-weight: 600;
-  color: #d38976;
-}
-
 .listBox {
   margin: 0;
-  margin-top: 20px;
-  padding: 20px;
+  padding: 0px 20px 20px 10px;
 }
-
-.triangle-down {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 15px solid #fff;
-  margin-left: 10px;
+.title-icon-relative {
+  position: relative;
 }
 
 ul {

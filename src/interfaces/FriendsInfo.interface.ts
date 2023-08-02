@@ -1,7 +1,7 @@
 export interface FriendInfo {
   id: number;
   name: string;
-  img: string;
+  avatarURL: string;
   isFollow: boolean;
   isBlock: boolean;
   level: number;
