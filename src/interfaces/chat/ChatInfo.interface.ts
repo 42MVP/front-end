@@ -1,4 +1,3 @@
-import type { Chat } from '@/interfaces/chat/Chat.interface';
 import type { User } from '@/interfaces/user/User.interface';
 
 export interface ChatInfo {
@@ -6,9 +5,8 @@ export interface ChatInfo {
   isChannel: boolean;
   roomMode: string;
   name: string;
-  alertCount: number;
-  avatarURL: string;
+  role: string;
+  abongTime: Date | null;
   users: User[];
   banUsers: User[];
-  chats: Chat[];
 }
