@@ -1,5 +1,5 @@
 <template>
-  <Modal title="멤버 관리" :show="isShow">
+  <Modal title="멤버 관리" :show="props.isShow">
     <template #body>
       <div class="choice-block-container">
         <div :class="{ 'choice-block': isUserTab, 'choice-block-unchoose': !isUserTab }" @click="isUserTab = true">
@@ -21,72 +21,35 @@
         "
       >
         <template v-if="isUserTab" #search-bar-item>
-          <BasicListItem
-            @click="
-              tempIsSearch = false;
-              isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
-            "
-            v-for="friend in props.friends"
-            :key="friend.id"
-            :id="friend.id"
-            :name="friend.name"
-            :avatarURL="friend.avatarURL"
+          <BasicList
+            :items="friends"
             :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
-            clickEvent="good~"
-            @response="e => console.log(e)"
+            @clickIconButton="e => console.log(e)"
           />
         </template>
         <template v-else #search-bar-item>
-          <BasicListItem
-            @click="
-              tempIsSearch = false;
-              isUserTab ? props.chatInfo.users.push(element) : props.chatInfo.banUsers.push(element);
-            "
-            v-for="element in props.friends"
-            :key="element.id"
-            :id="element.id"
-            :name="element.name"
-            :avatarURL="element.avatarURL"
+          <BasicList
+            :items="friends"
             :iconButtons="[{ emoji: '⚠️', event: 'ban' }]"
-            clickEvent="good~"
-            @response="e => console.log(e)"
+            @clickIconButton="e => console.log(e)"
           />
         </template>
       </SearchBar>
       <div v-if="isUserTab" class="modal-user-list-container">
-        <BasicListItem
-          v-for="element in chatInfo.users"
-          :key="element.id"
-          :id="element.id"
-          :name="element.name"
-          :avatarURL="element.avatarURL"
+        <BasicList
+          :items="props.chatInfo.users"
           :iconButtons="userTabIcon"
           style="position: relative"
-          @response=""
+          @clickIconButton="e => console.log(e)"
         >
-          <!--
-          <DropdownMenu v-if="isAbong" style="position: fixed; width: 150px">
-            <template #dropdown-item>
-              <DropdownMenuItem text="1분" @click="isAbong = false" />
-              <DropdownMenuItem text="5분" @click="isAbong = false" />
-              <DropdownMenuItem text="10분" @click="isAbong = false" />
-              <DropdownMenuItem text="30분" @click="isAbong = false" />
-              <DropdownMenuItem text="1시간" @click="isAbong = false" />
-              <DropdownMenuItem text="취소" @click="isAbong = false" />
-            </template>
-          </DropdownMenu>
-          -->
-        </BasicListItem>
+        </BasicList>
       </div>
       <div v-else class="modal-user-list-container">
-        <BasicListItem
-          v-for="element in chatInfo.banUsers"
-          :key="element.id"
-          :id="element.id"
-          :name="element.name"
-          :avatarURL="element.avatarURL"
-          :iconButtons="banTabIcon"
-          @response="e => console.log(e)"
+        <BasicList
+          :items="props.chatInfo.banUsers"
+          :iconButtons="userTabIcon"
+          style="position: relative"
+          @="e => console.log(e)"
         />
       </div>
     </template>
@@ -100,7 +63,8 @@
 import { ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
-import BasicListItem from '@/components/BasicListItem.vue';
+import BasicList from '@/components/BasicList.vue';
+// import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import type { User } from '@/interfaces/user/User.interface';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';

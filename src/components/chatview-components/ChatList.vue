@@ -19,16 +19,19 @@
       </DropdownMenu>
     </template>
     <template #user-element>
-      <BasicListItem item: props.chatInfos clickEvent="click" @response="e => (eventResponse = e)" />
+      <BasicList
+        :items="Object.values(chatStore.rooms).flat()"
+        @chooseItem="chooseChatRoom"
+        @clickIconButton="actionChatRoom"
+      />
     </template>
   </BasicListFrame>
 </template>
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue';
-// components
 import BasicListFrame from '@/components/BasicListFrame.vue';
-import BasicListItem from '@/components/BasicListItem.vue';
+import BasicList from '@/components/BasicList.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 import SearchChannelModal from '@/components/chatview-components/modals/SearchChannelModal.vue';
@@ -108,6 +111,15 @@ watch(
 const setModal: Function = (name: string) => {
   modalName.value = name;
 };
+
+const chooseChatRoom = (roomId: number) => {
+  eventResponse.value = { id: roomId, eventName: 'click' };
+};
+
+const actionChatRoom = (iconEmitResponse: IconEmitResponse) => {
+  eventResponse.value = iconEmitResponse;
+};
+
 </script>
 
 <style scoped>
