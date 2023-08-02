@@ -1,48 +1,37 @@
 import { defineStore } from 'pinia';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
-import { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+
+interface ChatState {
+  rooms: { [id: number]: ChatInfo[] };
+  chats: { [id: number]: Chat[] };
+  selectedID: number;
+}
 
 export const useChatStore = defineStore('chat', {
-  state: () => ({
+  state: (): ChatState => ({
     rooms: [],
-    selectionIndex: -1,
+    chats: [],
+    selectedID: -1,
   }),
   getters: {
-    //    getChatById:
-    //      state =>
-    //      (id: number): Chat[] => {
-    //        return state.rooms[id] || ([] as Chat[]);
-    //      },
-    getDmUserName(): string {
-      return '디엠유저';
-    },
     isSelected(): boolean {
-      if (this.selectionIndex === -1) return false;
+      if (this.selectedID === -1) return false;
       return true;
-    },
-    getSelectionChatInfo(): ChatInfo {
-      return this.rooms[this.selectionIndex];
-    },
-    getSelectionChat(): Chat[] {
-      return this.rooms[this.selectionIndex].chats;
     },
   },
   actions: {
-    setSelectionIndex(index: number) {
-      this.selectionIndex = index;
-    },
-    addChatRoom(newChat: ChatInfo) {
-      this.rooms.push(newChat);
+    addChatRoom(id: number, room: ChatInfo) {
+      this.rooms[id] = room;
+      this.chats[id] = [];
     },
     deleteChatRoom(id: number) {
-      this.rooms = this.rooms.filter((e, i) => i !== id);
+      delete this.rooms[id];
     },
-    addChat(newChat: Chat) {
-      // FIXME: 임시
-      if (this.getSelectionChat) this.rooms[this.selectionIndex].chats.push(newChat);
-      else {
-        this.rooms[this.selectionIndex].chats = [];
-        this.rooms[this.selectionIndex].chats.push(newChat);
+    addChat(id: number, newChat: Chat) {
+      const chats = this.chats[id];
+      if (chats) {
+        chats.push(newChat);
       }
     },
     //    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {

@@ -1,4 +1,4 @@
-export interface EmitResponse {
+export interface IconEmitResponse {
   id: number;
   eventName: string;
 }

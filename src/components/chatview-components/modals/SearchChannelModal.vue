@@ -118,11 +118,9 @@ const chooseRoom = (roomMode: RoomMode, roomId: number) => {
 };
 
 const enterRoom = async (roomId: number, password: string | undefined) => {
-  console.log('roomId:', roomId);
   try {
     const enter = await ChatService.enterRoom({ roomId: roomId, password: password });
-    chatStore.addChatRoom(enter);
-    console.log('enter:', enter);
+    chatStore.addChatRoom(roomId, enter);
   } catch (e) {
     modalStore.on({
       title: '알림',

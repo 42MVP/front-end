@@ -4,54 +4,20 @@
       <ChatList />
     </div>
     <div class="chat-right">
-      <ChatRoom v-if="chatStore.isSelected" :chatInfo="chatStore.getSelectionChatInfo" @response="updateRoomMode" />
+      <ChatRoom v-if="chatStore.isSelected" />
       <div v-else class="chat-box-unchoose">☺️</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// vue
-import { onMounted } from 'vue';
 // component
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
-// service
-import { ChatService } from '@/services/chat.service';
 // store
-import { useModalStore } from '@/stores/modal.store';
-import { useLoginStore } from '@/stores/login.store';
 import { useChatStore } from '@/stores/chat.store';
 
-const modalStore = useModalStore();
-const loginStore = useLoginStore();
 const chatStore = useChatStore();
-
-onMounted(async () => {
-  try {
-    chatStore.rooms = await ChatService.getChatList(loginStore.name);
-    console.log('chatStore.rooms:', chatStore.rooms);
-    //    const ret = await ChatService.createRoom({
-    //      roomName: 'wowowowow',
-    //      roomMode: RoomMode.DIRECT,
-    //      dmId: 123,
-    //    });
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
-});
-
-//const updateRoomMode = (eventResponse: { id: number; roomMode: string }) => {
-//  const room = chatInfos.value.find(element => element.id === eventResponse.id);
-//  if (room) {
-//    room.roomMode = eventResponse.roomMode;
-//  }
-//};
 </script>
 
 <style scoped>
