@@ -1,4 +1,4 @@
-export interface FriendInfoType {
+export interface FriendInfo {
   _id: number;
   name: string;
   img: string;
@@ -6,4 +6,4 @@ export interface FriendInfoType {
   isBlock: boolean;
   Level: number;
   Achievement: string;
-};
+}

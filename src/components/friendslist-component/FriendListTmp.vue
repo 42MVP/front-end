@@ -1,5 +1,5 @@
 <template>
-  <BasicList>
+  <BasicListFrame>
     <template #title>{{ ListType }}</template>
     <template #title-icon>
       <div class="title-icon-relative" @click="isMenu = !isMenu">
@@ -27,16 +27,16 @@
         </li>
       </ul>
     </template>
-  </BasicList>
+  </BasicListFrame>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { type FriendInfoType } from '@/interfaces/FriendsInfo.interface';
-import BasicList from '@/components/BasicList.vue';
+import { type FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import BasicListFrame from '@/components/BasicListFrame.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
-import FriendListItem from '@/components/friendslist-component/FriendListItem.vue';
+import FriendListItem from '@/components/FriendListItem.vue';
 
 const isMenu = ref(false);
 

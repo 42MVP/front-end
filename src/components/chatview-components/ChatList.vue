@@ -2,7 +2,7 @@
   <SearchChannelModal v-if="modalName === '채널 탐색'" @close="modalName = ''" />
   <MakeDmModal :isShow="modalName === 'DM 생성'" @close="modalName = ''" />
   <MakeChannelModal :isShow="modalName === '채널 생성'" @close="modalName = ''" />
-  <BasicList>
+  <BasicListFrame>
     <template #title> 채팅 </template>
     <template #title-icon>
       <div class="title-icon-relative" @click="isMenu = !isMenu">
@@ -19,25 +19,15 @@
       </DropdownMenu>
     </template>
     <template #user-element>
-      <BasicListItem
-        v-for="room in Object.values(chatStore.rooms)"
-        :key="room.id"
-        :id="room.id"
-        :name="room.name"
-        :avatarURL="room.avatarURL"
-        :alertCount="room.alertCount"
-        :iconButtons="iconButtons"
-        clickEvent="click"
-        @response="e => (eventResponse = e)"
-      />
+      <BasicListItem item: props.chatInfos clickEvent="click" @response="e => (eventResponse = e)" />
     </template>
-  </BasicList>
+  </BasicListFrame>
 </template>
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue';
 // components
-import BasicList from '@/components/BasicList.vue';
+import BasicListFrame from '@/components/BasicListFrame.vue';
 import BasicListItem from '@/components/BasicListItem.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
