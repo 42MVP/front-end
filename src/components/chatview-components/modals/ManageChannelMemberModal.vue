@@ -15,16 +15,22 @@
         <template #search-bar-item>
           <BasicList
             :items="searchedUsers"
-            :iconButtons="[isUserTab ? inviteIcon : banIcon]"
+            :iconButtons="isUserTab ? inviteIcon : banIcon"
             @clickIconButton="handleUserNotInChannel"
           />
         </template>
       </SearchBar>
       <div v-if="isUserTab" class="modal-user-list-container">
-        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="[onwerIcon]" style="position: relative" />
+        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="onwerIcon" style="position: relative" />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role !== 'OWNER')"
-          :iconButtons="userTabIcon"
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'ADMIN')"
+          :iconButtons="onwer.id === loginStore.id ? [...adminIcon, ...userTabIcon] : userTabIcon"
+          @clickIconButton="e => console.log(e)"
+          style="position: relative"
+        />
+        <BasicList
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'USER')"
+          :iconButtons="onwer.id === loginStore.id ? [...userIcon, ...userTabIcon] : userTabIcon"
           @clickIconButton="e => console.log(e)"
           style="position: relative"
         />
@@ -82,16 +88,17 @@ const getOwner = (currentId: number = chatStore.selectedID) => {
     : chatInfo?.users?.find(user => user.role == 'OWNER') || ({} as User);
 };
 
-const onwerIcon = { emoji: '👑', event: 'onwer' };
-const inviteIcon = { emoji: '✉️', event: 'invite' };
-const banIcon = { emoji: '⚠️', event: 'ban' };
+const onwerIcon = [{ emoji: '👑', event: 'onwer' }];
+const inviteIcon = [{ emoji: '✉️', event: 'INVITE' }];
+const banIcon = [{ emoji: '⚠️', event: 'BAN' }];
 
 const userTabIcon = [
-  { emoji: '🚩', event: 'admin' },
-  { emoji: '🔇', event: 'abong' },
-  { emoji: '🗙', event: 'kick' },
+  { emoji: '🔇', event: 'MUTE' },
+  { emoji: '🗙', event: 'KICK' },
 ];
-const banTabIcon = [{ emoji: '⊖', event: 'unban' }];
+const banTabIcon = [{ emoji: '⊖', event: 'NONE' }];
+const adminIcon = [{ emoji: '🚩', event: 'USER' }];
+const userIcon = [{ emoji: '⚐', event: 'ADMIN' }];
 
 const isUserTab = ref(true);
 
