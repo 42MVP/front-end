@@ -1,9 +1,9 @@
-export interface FriendInfoType {
-  _id: number;
+export interface FriendInfo {
+  id: number;
   name: string;
-  img: string;
+  avatarURL: string;
   isFollow: boolean;
   isBlock: boolean;
-  Level: number;
-  Achievement: string;
-};
+  level: number;
+  achievement: string;
+}

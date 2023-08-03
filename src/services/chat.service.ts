@@ -1,7 +1,7 @@
 import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
-import { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
-import { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 
 export enum RoomMode {
   PUBLIC = 'PUBLIC',
@@ -13,12 +13,7 @@ export enum RoomMode {
 export class ChatService {
   @APIWithToken()
   static async createRoom(body: ChatRoomCreate): Promise<ChatRoom> {
-    const ret = await axiosAPI.auth().post('/chat/create-room', {
-      roomName: body.roomName,
-      roomMode: body.roomMode,
-      password: body.password,
-      dmId: body.dmId,
-    });
+    const ret = await axiosAPI.auth().post('/chat/create-room', body);
 
     return ret.data;
   }

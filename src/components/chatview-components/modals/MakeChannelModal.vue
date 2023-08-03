@@ -7,13 +7,15 @@
         <RadioButton :value="2" text="protected" @click="selectButton" :isActive="setActive(2)" />
         <RadioButton :value="3" text="private" @click="selectButton" :isActive="setActive(3)" />
       </div>
-      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
-      <TextInputBox
-        type="password"
-        placeholderText="비밀번호 입력 확인"
-        :maxLength="15"
-        @response="e => (password2th = e)"
-      />
+      <div v-if="setActive(2)">
+        <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
+        <TextInputBox
+          type="password"
+          placeholderText="비밀번호 입력 확인"
+          :maxLength="15"
+          @response="e => (password2th = e)"
+        />
+      </div>
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
@@ -31,12 +33,16 @@ import BasicButton from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
+import type { ChatRoomCreateChannel } from '@/interfaces/chat/ChatRoom.interface';
+
 const emits = defineEmits(['close']);
 const props = defineProps<{ isShow: boolean }>();
 
-// 1: public
-// 2: protected
-// 3: private
+const mode: Record<number, string> = {
+  1: 'PUBLIC',
+  2: 'PROTECTED',
+  3: 'PRIVATE',
+};
 const selectedMode = ref<number>(1);
 
 const selectButton = (index: number) => {
@@ -52,7 +58,17 @@ const password = ref<string>('');
 const password2th = ref<string>('');
 
 const createRoom = () => {
-  ChatService.create();
+  if (mode[selectedMode.value] === 'PROTECTED') {
+    // TODO : password 처리
+    if (!password.value) return;
+    if (password.value !== password2th.value) return;
+  }
+  const chatRoom: ChatRoomCreateChannel = {
+    roomName: roomName.value,
+    roomMode: mode[selectedMode.value],
+    password: password.value,
+  };
+  ChatService.createRoom(chatRoom);
 };
 </script>
 

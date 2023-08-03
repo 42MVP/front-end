@@ -1,12 +1,12 @@
 <template>
   <div class="wrap">
-    <div v-if="!user">
+    <div v-if="!props.user">
       <!-- {{ selectedUser.name }} -->
       not found
     </div>
     <div v-else class="p-container">
       <div class="top">
-        <Card class="p-info" :user_id="user.name" :img="user.img"> </Card>
+        <AvatarItem class="p-info" :username="props.user.name" :avartarUrl="props.user.avatarURL"/>
         <div class="g-info">
           <GBox :rate="1000" />
           <Achieve class="achieve"></Achieve>
@@ -18,13 +18,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
-import Card from '@/components/profileview-components/ProfileCard.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
-import type { FriendInfoType } from '@/interfaces/FriendsInfo.interface';
+import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
 
 const props = defineProps<{
-  user: FriendInfoType | undefined;
+  user: FriendInfo | undefined;
 }>();
 </script>
 

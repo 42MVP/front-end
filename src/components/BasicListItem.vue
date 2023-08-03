@@ -1,18 +1,20 @@
 <template>
   <li class="list-element-container">
-    <div
-      class="list-element-info-container"
-      :style="{ cursor: clickEvent && 'pointer' }"
-      @click="clickEvent && onClick(props.id, clickEvent)"
-    >
-      <div class="list-element-avatar">
-        <p v-if="alertCount > 0">{{ alertCount > 99 ? '99+' : alertCount }}</p>
-        <img :src="avatarURL !== '' ? avatarURL : ''" />
+    <div class="list-element-info-container">
+      <div v-if="'avatarURL' in props.item" class="list-element-avatar profileText">
+        <img :src="props.item.avatarURL !== '' ? props.item.avatarURL : ''" />
       </div>
-      <span :style="{ fontWeight: alertCount > 0 ? '700' : undefined }">{{ name }}</span>
+      <div>
+        <span>{{ props.item?.name }}</span>
+        <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
+      </div>
+      <!-- NOTE : back 에서 name 이 아니라 username을 줌.. -->
+      <span v-if="'username' in props.item">
+        {{ props.item?.username }}
+      </span>
     </div>
     <div class="list-element-icon-container">
-      <button v-for="(iconButton, index) in iconButtons" :key="index" @click="onClick(props.id, iconButton.event)">
+      <button v-for="(iconButton, index) in iconButtons" :key="index" @click="onClick(props.item.id, iconButton.event)">
         {{ iconButton.emoji }}
       </button>
     </div>
@@ -22,25 +24,26 @@
 <script setup lang="ts">
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
+import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import type { User } from '@/interfaces/user/User.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { ChatRoom } from '@/interfaces/chat/ChatRoom.interface';
+
+type ItemInfo = User | ChatInfo | FriendInfo | ChatRoom;
 
 const props = defineProps({
-  id: { type: Number, default: 0 },
-  alertCount: { type: Number, default: 0 },
-  clickEvent: { default: '' },
-  avatarURL: {
-    type: String,
-    default: '',
-  },
-  name: { type: String, default: '' },
+  itemKey: { type: Number, default: -1 },
+  item: { type: Object as () => ItemInfo, default: {} as User },
+  clickEvent: { type: String, default: '' },
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
 
 const emits = defineEmits<{
-  (e: 'response', data: IconEmitResponse): void;
+  (e: 'clickIconButton', data: IconEmitResponse): void;
 }>();
 
 const onClick = (id: number, iconEvent: string) => {
-  emits('response', { id: id, eventName: iconEvent });
+  emits('clickIconButton', { id: id, eventName: iconEvent });
 };
 </script>
 
@@ -49,21 +52,15 @@ const onClick = (id: number, iconEvent: string) => {
   display: flex;
   flex: none;
   justify-content: space-between;
-  justify-content: center;
-  width: 100%;
+  align-self: stretch;
   height: 80px;
-}
-
-.list-element-container:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transition: 0.1s ease-out;
+  flex: 1;
 }
 
 .list-element-info-container {
   cursor: pointer;
   display: flex;
   align-items: center;
-  flex: 1;
 }
 
 .list-element-info-container span {

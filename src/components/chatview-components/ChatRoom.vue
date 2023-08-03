@@ -31,6 +31,15 @@
           <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
           </div>
+          <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
+            <template #dropdown-item>
+              <BasicList
+                :items="chatStore.rooms[chatStore.selectedID].users"
+                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
+                @clickIconButton="inviteGame"
+              />
+            </template>
+          </DropdownMenu>
         </div>
       </div>
       <div class="chat-box-list-name-right">
@@ -72,11 +81,14 @@ import DeleteChannelPasswordModal from '@/components/chatview-components/modals/
 import SetChannelPasswordModal from '@/components/chatview-components/modals/SetChannelPasswordModal.vue';
 import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
+import BasicList from '@/components/BasicList.vue';
 // stores
 import { useLoginStore } from '@/stores/login.store';
 import { useChatStore } from '@/stores/chat.store';
 // interfaces
 import { RoomMode } from '@/services/chat.service';
+import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // services
 import type { Chat } from '@/interfaces/chat/Chat.interface';
 
@@ -110,6 +122,10 @@ const addChat = (newMessage: string): void => {
 };
 
 const emits = defineEmits(['response']);
+
+const inviteGame = (iconEmitResponse: IconEmitResponse) => {
+  console.log(iconEmitResponse.id, iconEmitResponse.eventName);
+};
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@ import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 interface ChatState {
-  rooms: { [id: number]: ChatInfo[] };
+  rooms: { [id: number]: ChatInfo };
   chats: { [id: number]: Chat[] };
   selectedID: number;
 }
