@@ -16,7 +16,7 @@
           <BasicList
             :items="searchedUsers"
             :iconButtons="[isUserTab ? inviteIcon : banIcon]"
-            @clickIconButton="e => console.log(e)"
+            @clickIconButton="handleUserNotInChannel"
           />
         </template>
       </SearchBar>
@@ -34,7 +34,7 @@
           :items="chatStore.rooms[chatStore.selectedID].banUsers"
           :iconButtons="banTabIcon"
           style="position: relative"
-          @="e => console.log(e)"
+          @clickIconButton="e => console.log(e)"
         />
       </div>
     </template>
@@ -56,8 +56,11 @@ import { useChatStore } from '@/stores/chat.store';
 import { useLoginStore } from '@/stores/login.store';
 // services
 import { UserService } from '@/services/user.service';
+import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
+import type { ChatUser, ChatUserState } from '@/interfaces/chat/ChatUser.interface';
+import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -113,6 +116,16 @@ const searchUser = (name: string) => {
   } else if (name === ' ') {
     searchedUsers.value = usersNotInChannel.value;
   } else searchedUsers.value = usersNotInChannel.value.filter(user => user.name.startsWith(name));
+};
+
+const handleUserNotInChannel = async (iconEmitResponse: IconEmitResponse) => {
+  const service = isUserTab.value ? ChatService.inviteUser : ChatService.banUser;
+  try {
+    const chatUser: ChatUser = { userId: iconEmitResponse.id, roomId: chatStore.selectedID };
+    const ret = await service(chatUser);
+  } catch (e) {
+    console.warn('invite-warn', e);
+  }
 };
 
 const emits = defineEmits<{

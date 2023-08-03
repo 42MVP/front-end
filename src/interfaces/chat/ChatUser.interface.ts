@@ -1,7 +1,12 @@
+export interface ChatUser {
+  userId: number;
+  roomId: number;
+}
+
 export interface ChatUserState {
   userId: number;
   roomId: number;
-  state: string;
+  status: string;
   muteTime?: string;
 }
 

@@ -2,6 +2,7 @@ import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
+import type { ChatUser, ChatUserState } from '@/interfaces/chat/ChatUser.interface';
 
 export enum RoomMode {
   PUBLIC = 'PUBLIC',
@@ -45,6 +46,18 @@ export class ChatService {
   static async searchChatList(): Promise<ChatRoom[]> {
     const ret = await axiosAPI.auth().get('/chat/search');
 
+    return ret.data;
+  }
+
+  @APIWithToken()
+  static async inviteUser(body: ChatUser): Promise<void> {
+    const ret = await axiosAPI.auth().post('/chat/invite', body);
+    return ret.data;
+  }
+
+  @APIWithToken()
+  static async banUser(body: ChatUser): Promise<void> {
+    const ret = await axiosAPI.auth().post('/chat/ban', body);
     return ret.data;
   }
 }

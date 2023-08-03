@@ -7,8 +7,8 @@ export class UserService {
   static mockUser = (): User[] => {
     return [
       {
-        id: 14,
-        name: 'haha0',
+        id: 3,
+        name: 'kanghyki',
         avatarURL: '',
       },
       {
