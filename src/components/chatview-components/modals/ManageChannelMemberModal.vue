@@ -8,35 +8,25 @@
       <SearchBar
         placeholderText="유저명을 입력하세요"
         icon="👩‍🌾"
-        :isMenu="tempIsSearch"
-        @response="
-          e => {
-            if (e === '') tempIsSearch = false;
-            else tempIsSearch = true;
-          }
-        "
+        :isMenu="searchedUsers.length > 0"
+        @activateSearch="getUsers"
+        @response="searchUser"
       >
-        <template v-if="isUserTab" #search-bar-item>
+        <template #search-bar-item>
           <BasicList
-            :items="friends"
-            :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
-            @clickIconButton="e => console.log(e)"
-          />
-        </template>
-        <template v-else #search-bar-item>
-          <BasicList
-            :items="friends"
-            :iconButtons="[{ emoji: '⚠️', event: 'ban' }]"
+            :items="searchedUsers"
+            :iconButtons="[isUserTab ? inviteIcon : banIcon]"
             @clickIconButton="e => console.log(e)"
           />
         </template>
       </SearchBar>
       <div v-if="isUserTab" class="modal-user-list-container">
+        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="[onwerIcon]" style="position: relative" />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users"
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role !== 'OWNER')"
           :iconButtons="userTabIcon"
-          style="position: relative"
           @clickIconButton="e => console.log(e)"
+          style="position: relative"
         />
       </div>
       <div v-else class="modal-user-list-container">
@@ -63,12 +53,35 @@ import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
 // store
 import { useChatStore } from '@/stores/chat.store';
+import { useLoginStore } from '@/stores/login.store';
+// services
+import { UserService } from '@/services/user.service';
+// interfaces
+import type { User } from '@/interfaces/user/User.interface';
 
 const chatStore = useChatStore();
+const loginStore = useLoginStore();
 
 const props = defineProps<{
   isShow: boolean;
 }>();
+
+const onwer = ref<User>({} as User);
+
+onMounted(() => {
+  onwer.value = getOwner();
+});
+
+const getOwner = (currentId: number = chatStore.selectedID) => {
+  const chatInfo = chatStore.rooms[currentId];
+  return chatInfo.role === 'ONWER'
+    ? loginStore.$state
+    : chatInfo?.users?.find(user => user.role == 'OWNER') || ({} as User);
+};
+
+const onwerIcon = { emoji: '👑', event: 'onwer' };
+const inviteIcon = { emoji: '✉️', event: 'invite' };
+const banIcon = { emoji: '⚠️', event: 'ban' };
 
 const userTabIcon = [
   { emoji: '🚩', event: 'admin' },
@@ -79,11 +92,39 @@ const banTabIcon = [{ emoji: '⊖', event: 'unban' }];
 
 const isUserTab = ref(true);
 
-const tempIsSearch = ref(false);
+const usersNotInChannel = ref<User[]>([] as User[]);
+const searchedUsers = ref<User[]>([] as User[]);
+
+const getUsers = async () => {
+  try {
+    const ret = await UserService.mockUser();
+    // const ret = await UserService.getAllUser();
+    const allUsers: User[] = ret;
+    const channelUserIds = new Set(chatStore.rooms[chatStore.selectedID].users.map(user => user.id));
+    usersNotInChannel.value = allUsers.filter(user => !channelUserIds.has(user.id));
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+const searchUser = (name: string) => {
+  if (name === '') {
+    searchedUsers.value = [];
+  } else if (name === ' ') {
+    searchedUsers.value = usersNotInChannel.value;
+  } else searchedUsers.value = usersNotInChannel.value.filter(user => user.name.startsWith(name));
+};
 
 const emits = defineEmits<{
   (e: 'close'): void;
 }>();
+
+watch(
+  () => chatStore.selectedID,
+  (currentId: number) => {
+    onwer.value = getOwner(currentId);
+  },
+);
 </script>
 
 <style scoped>

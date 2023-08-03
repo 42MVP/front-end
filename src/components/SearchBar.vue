@@ -7,9 +7,10 @@
         :placeholder="props.placeholderText"
         class="search-bar-input"
         @input="emits('response', search_text)"
+        @focus="activateSearch"
       />
     </div>
-    <DropdownMenu v-if="props.isMenu" style="width: 100%; max-height: 300px">
+    <DropdownMenu v-if="isMenu" style="width: 100%; max-height: 300px">
       <template #dropdown-item>
         <slot name="search-bar-item" />
       </template>
@@ -27,7 +28,14 @@ const props = defineProps({
   icon: { default: '' },
 });
 
-const emits = defineEmits(['response']); // REVIEW : update:search_text
+const emits = defineEmits<{
+  (e: 'response', text: string): void;
+  (e: 'activateSearch'): void;
+}>();
+
+const activateSearch = () => {
+  emits('activateSearch');
+};
 
 const search_text = ref('');
 </script>
