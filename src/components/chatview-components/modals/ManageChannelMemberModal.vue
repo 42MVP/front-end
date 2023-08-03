@@ -2,12 +2,8 @@
   <Modal title="멤버 관리" :show="props.isShow">
     <template #body>
       <div class="choice-block-container">
-        <div :class="{ 'choice-block': isUserTab, 'choice-block-unchoose': !isUserTab }" @click="isUserTab = true">
-          채널 유저
-        </div>
-        <div :class="{ 'choice-block': !isUserTab, 'choice-block-unchoose': isUserTab }" @click="isUserTab = false">
-          차단 유저
-        </div>
+        <div :class="isUserTab ? 'choice-block' : 'choice-block-unchoose'" @click="isUserTab = true">채널 유저</div>
+        <div :class="!isUserTab ? 'choice-block' : 'choice-block-unchoose'" @click="isUserTab = false">차단 유저</div>
       </div>
       <SearchBar
         placeholderText="유저명을 입력하세요"
@@ -37,17 +33,16 @@
       </SearchBar>
       <div v-if="isUserTab" class="modal-user-list-container">
         <BasicList
-          :items="props.chatInfo.users"
+          :items="chatStore.rooms[chatStore.selectedID].users"
           :iconButtons="userTabIcon"
           style="position: relative"
           @clickIconButton="e => console.log(e)"
-        >
-        </BasicList>
+        />
       </div>
       <div v-else class="modal-user-list-container">
         <BasicList
-          :items="props.chatInfo.banUsers"
-          :iconButtons="userTabIcon"
+          :items="chatStore.rooms[chatStore.selectedID].banUsers"
+          :iconButtons="banTabIcon"
           style="position: relative"
           @="e => console.log(e)"
         />
@@ -60,29 +55,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+// component
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicList from '@/components/BasicList.vue';
-// import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
-import type { User } from '@/interfaces/user/User.interface';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+// store
+import { useChatStore } from '@/stores/chat.store';
+
+const chatStore = useChatStore();
+
+const props = defineProps<{
+  isShow: boolean;
+}>();
 
 const userTabIcon = [
-  { emoji: '😷', event: 'abong' },
-  { emoji: '🏁', event: 'flag' },
-  { emoji: '❌', event: 'quit' },
+  { emoji: '🚩', event: 'admin' },
+  { emoji: '🔇', event: 'abong' },
+  { emoji: '🗙', event: 'kick' },
 ];
 const banTabIcon = [{ emoji: '⊖', event: 'unban' }];
+
 const isUserTab = ref(true);
+
 const tempIsSearch = ref(false);
 
-const emits = defineEmits(['close']);
-const props = defineProps<{
-  friends: User[];
-  chatInfo: ChatInfo;
-  isShow: boolean;
+const emits = defineEmits<{
+  (e: 'close'): void;
 }>();
 </script>
 
