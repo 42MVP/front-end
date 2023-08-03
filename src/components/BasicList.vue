@@ -52,9 +52,10 @@ ul {
   display: flex;
   align-self: stretch;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   min-width: max-content;
   min-height: max-content;
+  padding: 0 5px;
 }
 
 .list-item-container:hover {
