@@ -10,7 +10,6 @@ import { computed, ref } from 'vue';
 import FriendList from '@/components/friendslist-component/FriendList.vue';
 import FriendProfile from '@/components/friendslist-component/FriendProfile.vue';
 import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
-import type { User } from '@/interfaces/user/User.interface';
 
 var users = ref<FriendInfo[]>([
   {
@@ -60,25 +59,15 @@ var users = ref<FriendInfo[]>([
   },
 ]);
 
-var selectedUser = ref<User | undefined>();
+var selectedUser = ref<FriendInfo | undefined>();
 
 const updateSelection = (id: number) => {
   selectedUser.value = users.value.find(user => user.id == id);
-  console.log(id);
 };
 
 const getSelectedUser = computed(() => {
   return selectedUser.value;
 });
-
-const removeUserFromList = (name: string) => {
-  // friendsList.value.filter(friend => friend.name !== name);
-  users.value.forEach((item, index) => {
-    if (item.name === name) {
-      users.value.splice(index, 1);
-    }
-  });
-};
 </script>
 
 <style scoped>

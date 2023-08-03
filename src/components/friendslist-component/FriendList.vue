@@ -18,9 +18,10 @@
       <BasicList
         :items="users"
         @chooseItem="(id : number) => $emit('updateSelection', id)"
-        @removeFromList="removeFromList"
+        @clickItemSlot="removeFromList"
+        #default="{ clickButton }"
       >
-        <BasicButton :text="getButtonTitle()" @click="(name : string) => $emit('removeFromList', name)" />
+        <BasicButton :text="getButtonTitle()" @click="clickButton" />
       </BasicList>
     </template>
   </BasicListFrame>
@@ -85,19 +86,14 @@ var users = ref<FriendInfo[]>([
   },
 ]);
 
-const removeFromList = (name: string) => {
-  users.value.forEach((item, index) => {
-    if (item.name === name) {
-      users.value.splice(index, 1);
-    }
-  });
-  // users.value.forEach
+const removeFromList = (id: number) => {
+  users.value = users.value.filter(friend => friend.id !== id);
 };
 
 const listType = ref<string>('Friends');
 
 const getButtonTitle = () => {
-  return listType.value === 'Friends'? 'unfollow' : 'unblock';
+  return listType.value === 'Friends' ? 'unfollow' : 'unblock';
 };
 </script>
 

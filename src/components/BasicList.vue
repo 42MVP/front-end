@@ -8,7 +8,7 @@
         @click="clickEvent && emits('chooseItem', item?.id)"
         @clickIconButton="data => emits('clickIconButton', data)"
       />
-      <slot />
+      <slot :clickButton="() => emits('clickItemSlot', item?.id)" />
     </li>
   </ul>
 </template>
@@ -32,6 +32,7 @@ const props = defineProps({
 
 const emits = defineEmits<{
   (e: 'chooseItem', id: number): void;
+  (e: 'clickItemSlot', id: number): void;
   (e: 'clickIconButton', data: IconEmitResponse): void;
 }>();
 </script>
