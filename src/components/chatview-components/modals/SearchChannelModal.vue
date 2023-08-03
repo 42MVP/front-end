@@ -78,7 +78,7 @@ const selectionRoomId = ref<number>(-1);
 const chatStore = useChatStore();
 const modalStore = useModalStore();
 
-const chatList = ref<ChatRoom[]>([] as ChatRoom[]);
+const chatList = ref<ChatRoom[]>([]);
 const searchChatList = ref<ChatRoom[]>([]);
 
 onMounted(async () => {
