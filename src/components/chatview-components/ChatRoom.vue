@@ -14,30 +14,27 @@
     :isShow="modalName === '비밀번호 설정'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
-    @submit="
-      emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PROTECTED' });
-      modalName = '';
-    "
+    @submit="modalName = ''"
   />
   <DeleteChannelPasswordModal
     :isShow="modalName === '비밀번호 해제'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="
-      emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PUBLIC' });
       console.log('비밀 번호 해제');
       modalName = '';
     "
   />
-  <ChangeChannelPrivateModal
+  <SetChannelPrivateModal
     :isShow="modalName === '프라이빗 설정'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @submit="
-      emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PRIVATE' });
       console.log('프라이빗 설정');
       modalName = '';
     "
   />
+  <UndoChannelPrivateModal />
+
   <div class="chat-list-container">
     <div v-if="chatStore.rooms[chatStore.selectedID].roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
@@ -83,6 +80,7 @@
           >
             🙉
           </div>
+          <div v-else class="chat-box-icon" @click="setModal('프라이빗 해제')">🙈</div>
         </div>
       </div>
     </div>
@@ -101,7 +99,7 @@ import ManageChannelMemberModal from '@/components/chatview-components/modals/Ma
 import ChangeChannelPasswordModal from '@/components/chatview-components/modals/ChangeChannelPasswordModal.vue';
 import DeleteChannelPasswordModal from '@/components/chatview-components/modals/DeleteChannelPasswordModal.vue';
 import SetChannelPasswordModal from '@/components/chatview-components/modals/SetChannelPasswordModal.vue';
-import ChangeChannelPrivateModal from './modals/ChangeChannelPrivateModal.vue';
+import SetChannelPrivateModal from './modals/SetChannelPrivateModal.vue';
 import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
