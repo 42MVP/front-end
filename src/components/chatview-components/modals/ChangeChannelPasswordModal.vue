@@ -30,11 +30,16 @@ const props = defineProps<{
   chatInfo: ChatInfo;
   isShow: boolean;
 }>();
+const password: string = '';
 
 const changeRoomPassword = () => {
+  if (password === '') {
+    console.log('비밀번호 공백');
+  }
   const roomInfo: ChatRoomMode = {
     roomId: props.chatInfo.id,
     roomMode: 'PUBLIC',
+    password: password,
   };
   console.log(roomInfo);
   ChatService.changeRoomMode(roomInfo);
