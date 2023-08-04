@@ -48,6 +48,17 @@
     <template #footer>
       <BasicButton text="닫기" @click="emits('close')" />
     </template>
+    <template #top>
+      <DropdownMenu v-if="isMuteTimeVisible && muteId" style="width: 100px" class="dropdown-mute-container">
+        <template #dropdown-item>
+          <DropdownMenuItem text="1분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:00:60')" />
+          <DropdownMenuItem text="5분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:05:00')" />
+          <DropdownMenuItem text="30분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:30:00')" />
+          <DropdownMenuItem text="1시간" @click="serviceChatUserMute(muteId, chatStore.selectedID, '01:00:00')" />
+          <DropdownMenuItem text="1일" @click="serviceChatUserMute(muteId, chatStore.selectedID, '24:00:00')" />
+        </template>
+      </DropdownMenu>
+    </template>
   </Modal>
 </template>
 
@@ -68,9 +79,11 @@ import { UserService } from '@/services/user.service';
 import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
+import type { ChatUserState } from '@/interfaces/chat/ChatUser.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
 import { createChatUserByEvent } from '@/utils/chatuser.utils';
+import { ms } from '@/utils/time.utils';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -129,7 +142,15 @@ const searchUser = (name: string) => {
   } else searchedUsers.value = usersNotInChannel.value.filter(user => user.name.startsWith(name));
 };
 
+const muteId = ref<number | null>(null);
+const isMuteTimeVisible = ref<boolean>(false);
+
 const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
+  if (iconEmitResponse.eventName === 'MUTE') {
+    isMuteTimeVisible.value = true;
+    muteId.value = iconEmitResponse.id;
+    return;
+  }
   const service = ChatService.getServiceChatUser(iconEmitResponse.eventName);
   if (!service) return;
   try {
@@ -137,7 +158,17 @@ const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
     if (!chatUser) throw '채팅 유저 관리 모달 오류';
     const ret = await service(chatUser);
   } catch (e) {
-    console.warn('invite-warn', e);
+    console.warn('serviceChatUser', e);
+  }
+};
+
+const serviceChatUserMute = async (userId: number, roomId: number, time: string) => {
+  const muteTime = new Date(new Date().getTime() + ms(time));
+  const chatUserState: ChatUserState = { userId, roomId, status: 'MUTE', muteTime };
+  try {
+    const ret = await ChatService.updateUserState(chatUserState);
+  } catch (e) {
+    console.warn('serviceChatUserMute', e);
   }
 };
 

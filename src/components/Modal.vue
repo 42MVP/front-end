@@ -10,6 +10,9 @@
           <slot name="footer"></slot>
         </div>
       </div>
+      <div class="top-container">
+        <slot name="top"></slot>
+      </div>
     </div>
   </Transition>
 </template>
@@ -28,7 +31,7 @@ const props = defineProps({
 <style>
 .modal-mask {
   position: fixed;
-  z-index: 9998;
+  z-index: 9997;
   top: 0;
   left: 0;
   width: 100%;
@@ -64,6 +67,11 @@ const props = defineProps({
   align-items: center;
   justify-content: right;
   width: 100%;
+}
+
+.top-container {
+  z-index: 9998;
+
 }
 
 /*
