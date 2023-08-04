@@ -100,7 +100,7 @@ import ChangeChannelPasswordModal from '@/components/chatview-components/modals/
 import DeleteChannelPasswordModal from '@/components/chatview-components/modals/DeleteChannelPasswordModal.vue';
 import SetChannelPasswordModal from '@/components/chatview-components/modals/SetChannelPasswordModal.vue';
 import SetChannelPrivateModal from '@/components/chatview-components/modals/SetChannelPrivateModal.vue';
-import UndoChannelPrivateModal '@/components/chatview-components/modals/UndoChannelPrivateModal.vue';
+import UndoChannelPrivateModal from '@/components/chatview-components/modals/UndoChannelPrivateModal.vue';
 import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
