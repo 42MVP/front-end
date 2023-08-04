@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
@@ -30,16 +31,16 @@ const props = defineProps<{
   chatInfo: ChatInfo;
   isShow: boolean;
 }>();
-const password: string = '';
+const password = ref<string>('');
 
 const changeRoomPassword = () => {
-  if (password === '') {
+  if (password.value === '') {
     console.log('비밀번호 공백');
   }
   const roomInfo: ChatRoomMode = {
     roomId: props.chatInfo.id,
     roomMode: 'PUBLIC',
-    password: password,
+    password: password.value,
   };
   console.log(roomInfo);
   ChatService.changeRoomMode(roomInfo);
