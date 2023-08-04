@@ -45,7 +45,7 @@ export class ChatService {
 
   @APIWithToken()
   static async getChatList(username: string): Promise<ChatInfo[]> {
-    const ret = await axiosAPI.auth().get(`/chat/`);
+    const ret = await axiosAPI.auth().get(`/chat/${username}`);
 
     return ret.data;
   }
