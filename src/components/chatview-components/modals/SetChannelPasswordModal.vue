@@ -11,7 +11,7 @@
         type="password"
         placeholderText="비밀번호 입력 확인"
         :maxLength="15"
-        @response="pass => (password = pass)"
+        @response="pass => (passwordDup = pass)"
       />
     </template>
     <template #footer>
@@ -38,11 +38,15 @@ const props = defineProps<{
   isShow: boolean;
 }>();
 const password = ref<string>('');
+const passwordDup = ref<string>('');
 
 const changeRoomModeProtected = () => {
   if (password.value === '') {
     console.log('비밀번호 공백');
     return;
+  }
+  if (password.value !== passwordDup.value) {
+    console.log('비밀번호 확인 필요');
   }
   const roomMode: ChatRoomMode = {
     roomId: props.chatInfo.id,

@@ -65,14 +65,20 @@
         <div class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
           <div
-            v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
+            v-if="
+              chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED' &&
+              chatStore.rooms[chatStore.selectedID].roomMode !== 'PRIVATE'
+            "
             class="chat-box-icon"
             @click="setModal('비밀번호 변경')"
           >
             🔐
           </div>
           <div
-            v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
+            v-if="
+              chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED' &&
+              chatStore.rooms[chatStore.selectedID].roomMode !== 'PRIVATE'
+            "
             class="chat-box-icon"
             @click="setModal('비밀번호 해제')"
             style="border: 0px"
