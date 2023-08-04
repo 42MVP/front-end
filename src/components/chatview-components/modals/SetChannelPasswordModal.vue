@@ -22,11 +22,9 @@ import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
 import type { ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 import { ChatService, RoomMode } from '@/services/chat.service';
-
-import { useChatStore } from '@/stores/chat.store';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 const emits = defineEmits(['close', 'submit']);
 const props = defineProps<{

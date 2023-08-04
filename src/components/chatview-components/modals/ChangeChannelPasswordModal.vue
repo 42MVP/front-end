@@ -11,7 +11,7 @@
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="" />
+      <BasicButton text="확인" @click="changeRoomPassword()" />
     </template>
   </Modal>
 </template>
@@ -21,8 +21,24 @@ import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { ChatRoom, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
+import { ChatService, RoomMode } from '@/services/chat.service';
+
 const emits = defineEmits(['close', 'submit']);
-const props = defineProps<{ isShow: boolean }>();
+const props = defineProps<{
+  chatInfo: ChatInfo;
+  isShow: boolean;
+}>();
+
+const changeRoomPassword = () => {
+  const roomInfo: ChatRoomMode = {
+    roomId: props.chatInfo.id,
+    roomMode: 'PUBLIC',
+  };
+  console.log(roomInfo);
+  ChatService.changeRoomMode(roomInfo);
+};
 </script>
 
 <style scoped></style>
