@@ -33,7 +33,14 @@
       modalName = '';
     "
   />
-  <UndoChannelPrivateModal />
+  <UndoChannelPrivateModal
+    :isShow="modalName === '프라이빗 해제'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    @submit="
+      console.log('프라이빗 설정');
+      modalName = '';
+    "
+  />
 
   <div class="chat-list-container">
     <div v-if="chatStore.rooms[chatStore.selectedID].roomMode !== RoomMode.DIRECT" class="chat-box-list-name">

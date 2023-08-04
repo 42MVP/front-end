@@ -1,7 +1,7 @@
 <template>
   <Modal title="비밀번호 설정" :show="props.isShow">
     <template #body>
-      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => console.log(e)" />
+      <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
       <TextInputBox
         type="password"
         placeholderText="비밀번호 입력 확인"
