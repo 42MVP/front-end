@@ -2,7 +2,7 @@ import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
-import type { ChatUser, ChatUserState } from '@/interfaces/chat/ChatUser.interface';
+import type { ChatUser, ChatUserState, ChatUserRole } from '@/interfaces/chat/ChatUser.interface';
 
 export enum RoomMode {
   PUBLIC = 'PUBLIC',
@@ -11,7 +11,13 @@ export enum RoomMode {
   DIRECT = 'DIRECT',
 }
 
+type ServiceChatUser = (body: ChatUser | ChatUserState | ChatUserRole) => Promise<void> | null;
+
 export class ChatService {
+  static getServiceChatUser(eventName: string): ServiceChatUser {
+    return chatUserServiceFunctions[eventName];
+  }
+
   @APIWithToken()
   static async createRoom(body: ChatRoomCreate): Promise<ChatRoom> {
     const ret = await axiosAPI.auth().post('/chat/create-room', body);
@@ -60,4 +66,32 @@ export class ChatService {
     const ret = await axiosAPI.auth().post('/chat/ban', body);
     return ret.data;
   }
+
+  @APIWithToken()
+  static async kickUser(body: ChatUserState): Promise<void> {
+    const ret = await axiosAPI.auth().delete('/chat/kick', { data: body });
+    return ret.data;
+  }
+
+  @APIWithToken()
+  static async updateUserRole(body: ChatUserRole): Promise<void> {
+    const ret = await axiosAPI.auth().patch('/chat/change-role', body);
+    return ret.data;
+  }
+
+  @APIWithToken()
+  static async updateUserState(body: ChatUserState): Promise<void> {
+    const ret = await axiosAPI.auth().patch('/chat/change-status', body);
+    return ret.data;
+  }
 }
+
+const chatUserServiceFunctions: Record<string, ServiceChatUser> = {
+  KICK: ChatService.kickUser,
+  INVITE: ChatService.inviteUser,
+  BAN: ChatService.banUser,
+  ADMIN: ChatService.updateUserRole,
+  USER: ChatService.updateUserRole,
+  MUTE: ChatService.updateUserState,
+  NONE: ChatService.updateUserState,
+};

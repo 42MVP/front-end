@@ -9,29 +9,30 @@
         placeholderText="유저명을 입력하세요"
         icon="👩‍🌾"
         :isMenu="searchedUsers.length > 0"
-        @activateSearch="getUsers"
+        @activateSearch="serviceGetUser"
         @response="searchUser"
       >
         <template #search-bar-item>
           <BasicList
             :items="searchedUsers"
             :iconButtons="isUserTab ? inviteIcon : banIcon"
-            @clickIconButton="handleUserNotInChannel"
+            @clickIconButton="serviceChatUser"
           />
         </template>
       </SearchBar>
+
       <div v-if="isUserTab" class="modal-user-list-container">
         <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="onwerIcon" style="position: relative" />
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'ADMIN')"
           :iconButtons="onwer.id === loginStore.id ? [...adminIcon, ...userTabIcon] : userTabIcon"
-          @clickIconButton="e => console.log(e)"
+          @clickIconButton="serviceChatUser"
           style="position: relative"
         />
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'USER')"
           :iconButtons="onwer.id === loginStore.id ? [...userIcon, ...userTabIcon] : userTabIcon"
-          @clickIconButton="e => console.log(e)"
+          @clickIconButton="serviceChatUser"
           style="position: relative"
         />
       </div>
@@ -57,6 +58,8 @@ import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 // store
 import { useChatStore } from '@/stores/chat.store';
 import { useLoginStore } from '@/stores/login.store';
@@ -65,8 +68,9 @@ import { UserService } from '@/services/user.service';
 import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
-import type { ChatUser, ChatUserState } from '@/interfaces/chat/ChatUser.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
+// utiles
+import { createChatUserByEvent } from '@/utils/chatuser.utils';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -105,7 +109,7 @@ const isUserTab = ref(true);
 const usersNotInChannel = ref<User[]>([] as User[]);
 const searchedUsers = ref<User[]>([] as User[]);
 
-const getUsers = async () => {
+const serviceGetUser = async () => {
   try {
     const ret = await UserService.mockUser();
     // const ret = await UserService.getAllUser();
@@ -125,10 +129,12 @@ const searchUser = (name: string) => {
   } else searchedUsers.value = usersNotInChannel.value.filter(user => user.name.startsWith(name));
 };
 
-const handleUserNotInChannel = async (iconEmitResponse: IconEmitResponse) => {
-  const service = isUserTab.value ? ChatService.inviteUser : ChatService.banUser;
+const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
+  const service = ChatService.getServiceChatUser(iconEmitResponse.eventName);
+  if (!service) return;
   try {
-    const chatUser: ChatUser = { userId: iconEmitResponse.id, roomId: chatStore.selectedID };
+    const chatUser = createChatUserByEvent(iconEmitResponse.id, chatStore.selectedID, iconEmitResponse.eventName);
+    if (!chatUser) throw '채팅 유저 관리 모달 오류';
     const ret = await service(chatUser);
   } catch (e) {
     console.warn('invite-warn', e);
@@ -183,5 +189,11 @@ watch(
 .modal-user-list-container {
   overflow: auto;
   max-height: 300px;
+}
+
+.dropdown-mute-container {
+  position: absolute;
+  left: 370px;
+  top: 30px;
 }
 </style>
