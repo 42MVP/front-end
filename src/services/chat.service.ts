@@ -1,4 +1,4 @@
-import { APIWithToken } from '@/services/utils/apiDecorator.utils';
+import { API, APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
@@ -35,8 +35,17 @@ export class ChatService {
   }
 
   @APIWithToken()
+  static async changeRoomMode(roomInfo: ChatRoomMode): Promise<void> {
+    await axiosAPI.auth().patch('/chat/change-room-info', {
+      roomId: roomInfo.roomId,
+      roomMode: roomInfo.roomMode,
+      password: roomInfo.password,
+    });
+  }
+
+  @APIWithToken()
   static async getChatList(username: string): Promise<ChatInfo[]> {
-    const ret = await axiosAPI.auth().get(`/chat/${username}`);
+    const ret = await axiosAPI.auth().get(`/chat/`);
 
     return ret.data;
   }

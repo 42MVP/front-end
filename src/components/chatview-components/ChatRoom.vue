@@ -5,9 +5,14 @@
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
   />
-  <ChangeChannelPasswordModal :isShow="modalName === '비밀번호 변경'" @close="modalName = ''" />
+  <ChangeChannelPasswordModal
+    :isShow="modalName === '비밀번호 변경'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    @close="modalName = ''"
+  />
   <SetChannelPasswordModal
     :isShow="modalName === '비밀번호 설정'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="
       emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PROTECTED' });
@@ -16,6 +21,7 @@
   />
   <DeleteChannelPasswordModal
     :isShow="modalName === '비밀번호 해제'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="
       emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PUBLIC' });

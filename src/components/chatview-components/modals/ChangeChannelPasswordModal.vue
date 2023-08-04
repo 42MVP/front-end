@@ -11,7 +11,7 @@
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="emits('submit')" />
+      <BasicButton text="확인" @click="" />
     </template>
   </Modal>
 </template>

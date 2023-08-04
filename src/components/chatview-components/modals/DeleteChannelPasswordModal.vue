@@ -11,9 +11,17 @@
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
+import type { ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 
 const emits = defineEmits(['close', 'submit']);
-const props = defineProps<{ isShow: boolean }>();
+const props = defineProps<{
+  // chatInfo: ChatInfo;
+  isShow: boolean;
+}>();
+
+const changeRoomModePublic = () => {
+  // const roomMode: ChatRoomMode = {};
+};
 </script>
 
 <style scoped></style>
