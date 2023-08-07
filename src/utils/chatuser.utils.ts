@@ -1,4 +1,4 @@
-import type { ChatUser, ChatUserState, ChatUserRole } from '@/interfaces/chat/ChatUser.interface';
+import type { ChatUserInfo, ChatUser, ChatUserState, ChatUserRole } from '@/interfaces/chat/ChatUser.interface';
 
 export enum Role {
   OWNER = 'OWNER',
@@ -9,6 +9,7 @@ export enum Role {
 export enum Mode {
   INVITE = 'INVITE',
   KICK = 'KICK',
+  ONMUTE = 'ONMUTE',
   MUTE = 'MUTE',
   NONE = 'NONE',
   BAN = 'BAN',

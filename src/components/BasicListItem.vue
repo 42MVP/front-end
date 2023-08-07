@@ -44,7 +44,7 @@ const emits = defineEmits<{
 }>();
 
 const onClick = (event: MouseEvent, id: number, iconEvent: string) => {
-  if (iconEvent === 'MUTE') {
+  if (iconEvent === 'ONMUTE') {
     emits('onMousePosition', event);
   }
   emits('clickIconButton', { id: id, eventName: iconEvent });

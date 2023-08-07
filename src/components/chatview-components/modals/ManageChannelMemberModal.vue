@@ -37,13 +37,27 @@
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
+        <DropdownMenu
+          v-if="isMuteTimeVisible && muteId"
+          :style="{ top: buttonPosition.y + 1 + 'px', left: buttonPosition.x + 1 + 'px', width: '100px' }"
+          class="dropdown-mute-container"
+        >
+          <template #dropdown-item>
+            <DropdownMenuItem
+              v-for="(item, index) in getMuteTime()"
+              v-bind:key="index"
+              :text="item.text"
+              @click="serviceChatUserMute(muteId, chatStore.selectedID, item.time)"
+            />
+          </template>
+        </DropdownMenu>
       </div>
       <div v-else class="modal-user-list-container">
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].banUsers"
           :iconButtons="banTabIcon"
           style="position: relative"
-          @clickIconButton="e => console.log(e)"
+          @clickIconButton="serviceChatUser"
         />
       </div>
     </template>
@@ -51,19 +65,6 @@
       <BasicButton text="닫기" @click="closeModal" />
     </template>
   </Modal>
-  <DropdownMenu
-    v-if="isMuteTimeVisible && muteId"
-    :style="{ top: buttonPosition.y + 1 + 'px', left: buttonPosition.x + 1 + 'px', width: '100px' }"
-    class="dropdown-mute-container"
-  >
-    <template #dropdown-item>
-      <DropdownMenuItem text="1분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:00:60')" />
-      <DropdownMenuItem text="5분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:05:00')" />
-      <DropdownMenuItem text="30분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:30:00')" />
-      <DropdownMenuItem text="1시간" @click="serviceChatUserMute(muteId, chatStore.selectedID, '01:00:00')" />
-      <DropdownMenuItem text="1일" @click="serviceChatUserMute(muteId, chatStore.selectedID, '24:00:00')" />
-    </template>
-  </DropdownMenu>
 </template>
 
 <script setup lang="ts">
@@ -88,6 +89,7 @@ import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
 import { createChatUserByEvent, Role, Mode } from '@/utils/chatuser.utils';
 import { ms } from '@/utils/time.utils';
+import { type } from 'os';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -115,7 +117,7 @@ const inviteIcon = [{ emoji: '✉️', event: Mode.INVITE }];
 const banIcon = [{ emoji: '⚠️', event: Mode.BAN }];
 
 const userTabIcon = [
-  { emoji: '🔇', event: Mode.MUTE },
+  { emoji: '🔇', event: Mode.ONMUTE },
   { emoji: '🗙', event: Mode.KICK },
 ];
 const banTabIcon = [{ emoji: '⊖', event: Mode.NONE }];
@@ -150,14 +152,30 @@ const searchUser = (name: string) => {
 const muteId = ref<number | null>(null);
 const isMuteTimeVisible = ref<boolean>(false);
 
+const getMuteTime = (): { text: string; time: string }[] => {
+  const user = chatStore.rooms[chatStore.selectedID].users.find(user => user.id === muteId.value);
+  if (!user?.abongTime) return [];
+  return new Date(user?.abongTime) < new Date()
+    ? [
+        { text: '1분', time: '00:00:60' },
+        { text: '5분', time: '00:05:00' },
+        { text: '30분', time: '00:30:00' },
+        { text: '1시간', time: '01:00:00' },
+        { text: '1일', time: '24:00:00' },
+      ]
+    : [{ text: '해제', time: '00:00:00' }];
+};
+
 const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
   console.log('serviceChatUser', iconEmitResponse.eventName);
 
-  if (iconEmitResponse.eventName === 'MUTE') {
-    isMuteTimeVisible.value = !isMuteTimeVisible.value;
+  if (iconEmitResponse.eventName === Mode.ONMUTE) {
+    muteId.value !== iconEmitResponse.id
+      ? (isMuteTimeVisible.value = true)
+      : (isMuteTimeVisible.value = !isMuteTimeVisible.value);
     muteId.value = iconEmitResponse.id;
     return;
-  }
+  } else isMuteTimeVisible.value = false;
   const service = ChatService.getServiceChatUser(iconEmitResponse.eventName);
   if (!service) return;
   try {
@@ -170,8 +188,13 @@ const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
 };
 
 const serviceChatUserMute = async (userId: number, roomId: number, time: string) => {
+  isMuteTimeVisible.value = false;
   const muteTime = new Date(new Date().getTime() + ms(time));
-  const chatUserState: ChatUserState = { userId, roomId, status: 'MUTE', muteTime };
+  const chatUserState: ChatUserState = { userId, roomId, status: Mode.NONE };
+  if (ms(time)) {
+    chatUserState.status = Mode.MUTE;
+    chatUserState.muteTime = muteTime;
+  }
   try {
     const ret = await ChatService.updateUserState(chatUserState);
   } catch (e) {
