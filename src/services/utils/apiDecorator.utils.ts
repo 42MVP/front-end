@@ -22,6 +22,7 @@ export function APIWithToken() {
     descriptor.value = async function (...args: any) {
       const accessToken = Cookies.get('access-token');
       if (!accessToken) {
+        throw '로그인이 필요합니다.';
         return;
       } else if (isExpiredToken(accessToken)) {
         await getNewAccessToken();
