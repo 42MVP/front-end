@@ -1,28 +1,46 @@
 <template>
   <ManageChannelMemberModal
-    :friends="friends"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
   />
-  <ChangeChannelPasswordModal :isShow="modalName === '비밀번호 변경'" @close="modalName = ''" />
+  <ChangeChannelPasswordModal
+    :isShow="modalName === '비밀번호 변경'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    @close="modalName = ''"
+  />
   <SetChannelPasswordModal
     :isShow="modalName === '비밀번호 설정'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
-    @submit="
-      emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PROTECTED' });
-      modalName = '';
-    "
+    @submit="modalName = ''"
   />
   <DeleteChannelPasswordModal
     :isShow="modalName === '비밀번호 해제'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="
-      emits('response', { id: chatStore.rooms[chatStore.selectedID].id, roomMode: 'PUBLIC' });
       console.log('비밀 번호 해제');
       modalName = '';
     "
   />
+  <SetChannelPrivateModal
+    :isShow="modalName === '프라이빗 설정'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    @submit="
+      console.log('프라이빗 설정');
+      modalName = '';
+    "
+  />
+  <UndoChannelPrivateModal
+    :isShow="modalName === '프라이빗 해제'"
+    :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    @submit="
+      console.log('프라이빗 설정');
+      modalName = '';
+    "
+  />
+
   <div class="chat-list-container">
     <div v-if="chatStore.rooms[chatStore.selectedID].roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
@@ -61,6 +79,14 @@
             🔓
           </div>
           <div v-else class="chat-box-icon" @click="setModal('비밀번호 설정')" style="border: 0px">🔒</div>
+          <div
+            v-if="chatStore.rooms[chatStore.selectedID].roomMode !== 'PRIVATE'"
+            class="chat-box-icon"
+            @click="setModal('프라이빗 설정')"
+          >
+            🙈
+          </div>
+          <div v-else class="chat-box-icon" @click="setModal('프라이빗 해제')">🙉</div>
         </div>
       </div>
     </div>
@@ -79,6 +105,8 @@ import ManageChannelMemberModal from '@/components/chatview-components/modals/Ma
 import ChangeChannelPasswordModal from '@/components/chatview-components/modals/ChangeChannelPasswordModal.vue';
 import DeleteChannelPasswordModal from '@/components/chatview-components/modals/DeleteChannelPasswordModal.vue';
 import SetChannelPasswordModal from '@/components/chatview-components/modals/SetChannelPasswordModal.vue';
+import SetChannelPrivateModal from '@/components/chatview-components/modals/SetChannelPrivateModal.vue';
+import UndoChannelPrivateModal from '@/components/chatview-components/modals/UndoChannelPrivateModal.vue';
 import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
