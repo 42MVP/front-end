@@ -61,32 +61,34 @@
         </div>
       </div>
       <div class="chat-box-list-name-right">
-        <div class="chat-box-icon-list">
+        <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div
-            v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
-            class="chat-box-icon"
-            @click="setModal('비밀번호 변경')"
-          >
-            🔐
+          <div v-if="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'">
+            <div
+              v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
+              class="chat-box-icon"
+              @click="setModal('비밀번호 변경')"
+            >
+              🔐
+            </div>
+            <div
+              v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
+              class="chat-box-icon"
+              @click="setModal('비밀번호 해제')"
+              style="border: 0px"
+            >
+              🔓
+            </div>
+            <div v-else class="chat-box-icon" @click="setModal('비밀번호 설정')" style="border: 0px">🔒</div>
+            <div
+              v-if="chatStore.rooms[chatStore.selectedID].roomMode !== 'PRIVATE'"
+              class="chat-box-icon"
+              @click="setModal('프라이빗 설정')"
+            >
+              🙈
+            </div>
+            <div v-else class="chat-box-icon" @click="setModal('프라이빗 해제')">🙉</div>
           </div>
-          <div
-            v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
-            class="chat-box-icon"
-            @click="setModal('비밀번호 해제')"
-            style="border: 0px"
-          >
-            🔓
-          </div>
-          <div v-else class="chat-box-icon" @click="setModal('비밀번호 설정')" style="border: 0px">🔒</div>
-          <div
-            v-if="chatStore.rooms[chatStore.selectedID].roomMode !== 'PRIVATE'"
-            class="chat-box-icon"
-            @click="setModal('프라이빗 설정')"
-          >
-            🙈
-          </div>
-          <div v-else class="chat-box-icon" @click="setModal('프라이빗 해제')">🙉</div>
         </div>
       </div>
     </div>
@@ -147,6 +149,13 @@ const addChat = (newMessage: string): void => {
     date: new Date(),
   };
   chatStore.addChat(chatStore.selectedID, newChat);
+};
+
+const isOwner = (): boolean => {
+  if (chatStore.rooms[chatStore.selectedID].self.role === 'OWNER') {
+    return true;
+  }
+  return false;
 };
 
 const emits = defineEmits(['response']);
