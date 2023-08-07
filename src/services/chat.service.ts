@@ -1,4 +1,4 @@
-import { API, APIWithToken } from '@/services/utils/apiDecorator.utils';
+import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
@@ -21,8 +21,8 @@ export class ChatService {
   @APIWithToken()
   static async createRoom(body: ChatRoomCreate): Promise<ChatRoom> {
     const ret = await axiosAPI.auth().post('/chat/create-room', body);
-
-    return ret.data;
+    const chatRoom: ChatRoom = ret.data;
+    return chatRoom;
   }
 
   @APIWithToken()
@@ -31,8 +31,8 @@ export class ChatService {
       roomId: body.roomId,
       password: body.password,
     });
-
-    return ret.data;
+    const chatInfo: ChatInfo = ret.data;
+    return chatInfo;
   }
 
   @APIWithToken()
@@ -42,26 +42,24 @@ export class ChatService {
   }
 
   @APIWithToken()
-  static async changeRoomMode(roomInfo: ChatRoomMode): Promise<void> {
-    await axiosAPI.auth().patch('/chat/change-room-info', {
-      roomId: roomInfo.roomId,
-      roomMode: roomInfo.roomMode,
-      password: roomInfo.password,
-    });
+  static async changeRoomMode(body: ChatRoomMode): Promise<void> {
+    await axiosAPI.auth().patch('/chat/change-room-info', body);
   }
 
   @APIWithToken()
-  static async getChatList(username: string): Promise<ChatInfo[]> {
-    const ret = await axiosAPI.auth().get(`/chat/${username}`);
+  static async getChatList(): Promise<ChatInfo[]> {
+    const ret = await axiosAPI.auth().get(`/chat`);
+    const chatInfo: ChatInfo[] = ret.data;
 
-    return ret.data;
+    return chatInfo;
   }
 
   @APIWithToken()
   static async searchChatList(): Promise<ChatRoom[]> {
     const ret = await axiosAPI.auth().get('/chat/search');
+    const chatRoom: ChatRoom[] = ret.data;
 
-    return ret.data;
+    return chatRoom;
   }
 
   @APIWithToken()

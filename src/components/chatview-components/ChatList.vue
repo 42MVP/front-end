@@ -60,7 +60,7 @@ const eventResponse = ref<IconEmitResponse>({ id: -1, eventName: '' });
 
 onMounted(async () => {
   try {
-    const ret: ChatInfo[] = await ChatService.getChatList(loginStore.name);
+    const ret: ChatInfo[] = await ChatService.getChatList();
     ret.forEach(e => {
       chatStore.addChatRoom(e.id, e);
     });
@@ -120,7 +120,6 @@ const chooseChatRoom = (roomId: number) => {
 const actionChatRoom = (iconEmitResponse: IconEmitResponse) => {
   eventResponse.value = iconEmitResponse;
 };
-
 </script>
 
 <style scoped>
