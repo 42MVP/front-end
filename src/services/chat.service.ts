@@ -2,7 +2,7 @@ import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
-import type { ChatUser, ChatUserState, ChatUserRole } from '@/interfaces/chat/ChatUser.interface';
+import type { ChatUserInfo } from '@/interfaces/chat/ChatUser.interface';
 
 export enum RoomMode {
   PUBLIC = 'PUBLIC',
@@ -11,7 +11,7 @@ export enum RoomMode {
   DIRECT = 'DIRECT',
 }
 
-type ServiceChatUser = (body: ChatUser | ChatUserState | ChatUserRole) => Promise<void> | null;
+export type ServiceChatUser = (body: ChatUserInfo) => Promise<void> | null;
 
 export class ChatService {
   static getServiceChatUser(eventName: string): ServiceChatUser {
@@ -63,25 +63,25 @@ export class ChatService {
   }
 
   @APIWithToken()
-  static async inviteUser(body: ChatUser): Promise<void> {
+  static async inviteUser(body: ChatUserInfo): Promise<void> {
     const ret = await axiosAPI.auth().post('/chat/invite', body);
     return ret.data;
   }
 
   @APIWithToken()
-  static async kickUser(body: ChatUserState): Promise<void> {
+  static async kickUser(body: ChatUserInfo): Promise<void> {
     const ret = await axiosAPI.auth().delete('/chat/kick', { data: body });
     return ret.data;
   }
 
   @APIWithToken()
-  static async updateUserRole(body: ChatUserRole): Promise<void> {
+  static async updateUserRole(body: ChatUserInfo): Promise<void> {
     const ret = await axiosAPI.auth().patch('/chat/change-role', body);
     return ret.data;
   }
 
   @APIWithToken()
-  static async updateUserState(body: ChatUserState): Promise<void> {
+  static async updateUserState(body: ChatUserInfo): Promise<void> {
     const ret = await axiosAPI.auth().patch('/chat/change-status', body);
     return ret.data;
   }
