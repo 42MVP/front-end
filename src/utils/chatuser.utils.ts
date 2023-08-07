@@ -25,9 +25,7 @@ type ChatUserRoleFunction = (userId: number, roomId: number, role: string) => Ch
 type ChatUserStateFunction = (userId: number, roomId: number, status: string, muteTime?: Date) => ChatUserState;
 
 const createChatUserFunctions: Record<string, ChatUserFunction> = {
-  // KICK: createChatUser,
   INVITE: createChatUser,
-  BAN: createChatUser,
 };
 
 const createChatUserRoleFunctions: Record<string, ChatUserRoleFunction> = {
@@ -37,6 +35,7 @@ const createChatUserRoleFunctions: Record<string, ChatUserRoleFunction> = {
 
 const createChatUserStateFunctions: Record<string, ChatUserStateFunction> = {
   KICK: createChatUserState,
+  BAN: createChatUserState,
   MUTE: createChatUserState,
   NONE: createChatUserState,
 };

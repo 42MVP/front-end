@@ -69,12 +69,6 @@ export class ChatService {
   }
 
   @APIWithToken()
-  static async banUser(body: ChatUser): Promise<void> {
-    const ret = await axiosAPI.auth().post('/chat/ban', body);
-    return ret.data;
-  }
-
-  @APIWithToken()
   static async kickUser(body: ChatUserState): Promise<void> {
     const ret = await axiosAPI.auth().delete('/chat/kick', { data: body });
     return ret.data;
@@ -96,9 +90,9 @@ export class ChatService {
 const chatUserServiceFunctions: Record<string, ServiceChatUser> = {
   KICK: ChatService.kickUser,
   INVITE: ChatService.inviteUser,
-  BAN: ChatService.banUser,
   ADMIN: ChatService.updateUserRole,
   USER: ChatService.updateUserRole,
+  BAN: ChatService.updateUserState,
   MUTE: ChatService.updateUserState,
   NONE: ChatService.updateUserState,
 };
