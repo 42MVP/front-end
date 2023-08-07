@@ -1,5 +1,19 @@
 import type { ChatUser, ChatUserState, ChatUserRole } from '@/interfaces/chat/ChatUser.interface';
 
+export enum Role {
+  OWNER = 'OWNER',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export enum Mode {
+  INVITE = 'INVITE',
+  KICK = 'KICK',
+  MUTE = 'MUTE',
+  NONE = 'NONE',
+  BAN = 'BAN',
+}
+
 export function createChatUserByEvent(
   userId: number,
   roomId: number,

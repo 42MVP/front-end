@@ -24,14 +24,14 @@
       <div v-if="isUserTab" class="modal-user-list-container">
         <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="onwerIcon" style="position: relative" />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'ADMIN')"
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.ADMIN)"
           :iconButtons="onwer.id === loginStore.id ? [...adminIcon, ...userTabIcon] : userTabIcon"
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'USER')"
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.USER)"
           :iconButtons="onwer.id === loginStore.id ? [...userIcon, ...userTabIcon] : userTabIcon"
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
@@ -86,7 +86,7 @@ import type { User } from '@/interfaces/user/User.interface';
 import type { ChatUserState } from '@/interfaces/chat/ChatUser.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
-import { createChatUserByEvent } from '@/utils/chatuser.utils';
+import { createChatUserByEvent, Role, Mode } from '@/utils/chatuser.utils';
 import { ms } from '@/utils/time.utils';
 
 const chatStore = useChatStore();
@@ -102,24 +102,25 @@ onMounted(() => {
   onwer.value = getOwner();
 });
 
-const getOwner = (currentId: number = chatStore.selectedID) => {
+const getOwner = (currentId: number = chatStore.selectedID): User => {
   const chatInfo = chatStore.rooms[currentId];
-  return chatInfo.role === 'ONWER'
-    ? loginStore.$state
-    : chatInfo?.users?.find(user => user.role == 'OWNER') || ({} as User);
+  console.log(chatInfo.self);
+  return chatInfo.self.role === Role.OWNER
+    ? chatInfo?.self
+    : chatInfo?.users?.find(user => user.role == Role.OWNER) || ({} as User);
 };
 
-const onwerIcon = [{ emoji: '👑', event: 'onwer' }];
-const inviteIcon = [{ emoji: '✉️', event: 'INVITE' }];
-const banIcon = [{ emoji: '⚠️', event: 'BAN' }];
+const onwerIcon = [{ emoji: '👑', event: Role.OWNER }];
+const inviteIcon = [{ emoji: '✉️', event: Mode.INVITE }];
+const banIcon = [{ emoji: '⚠️', event: Mode.BAN }];
 
 const userTabIcon = [
-  { emoji: '🔇', event: 'MUTE' },
-  { emoji: '🗙', event: 'KICK' },
+  { emoji: '🔇', event: Mode.MUTE },
+  { emoji: '🗙', event: Mode.KICK },
 ];
-const banTabIcon = [{ emoji: '⊖', event: 'NONE' }];
-const adminIcon = [{ emoji: '🚩', event: 'USER' }];
-const userIcon = [{ emoji: '⚐', event: 'ADMIN' }];
+const banTabIcon = [{ emoji: '⊖', event: Mode.NONE }];
+const adminIcon = [{ emoji: '🚩', event: Role.USER }];
+const userIcon = [{ emoji: '⚐', event: Role.ADMIN }];
 
 const isUserTab = ref(true);
 
