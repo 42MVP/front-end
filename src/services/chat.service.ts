@@ -43,11 +43,7 @@ export class ChatService {
 
   @APIWithToken()
   static async changeRoomMode(roomInfo: ChatRoomMode): Promise<void> {
-    await axiosAPI.auth().patch('/chat/change-room-info', {
-      roomId: roomInfo.roomId,
-      roomMode: roomInfo.roomMode,
-      password: roomInfo.password,
-    });
+    await axiosAPI.auth().patch('/chat/change-room-info', roomInfo);
   }
 
   @APIWithToken()
