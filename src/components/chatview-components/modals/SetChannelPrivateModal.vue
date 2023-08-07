@@ -1,9 +1,9 @@
 <template>
-  <Modal title="비밀번호 해제" :show="props.isShow">
-    <template #body> 채팅방이 public으로 설정됩니다. </template>
+  <Modal title="Private 설정" :show="props.isShow">
+    <template #body> 채팅방이 private으로 설정되며 검색목록에 조회되지 않습니다. </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomModePublic()" />
+      <BasicButton text="확인" @click="changeRoomModePrivate()" />
     </template>
   </Modal>
 </template>
@@ -23,10 +23,10 @@ const props = defineProps<{
   isShow: boolean;
 }>();
 
-const changeRoomModePublic = () => {
+const changeRoomModePrivate = () => {
   const roomMode: ChatRoomMode = {
     roomId: props.chatInfo.id,
-    roomMode: 'PUBLIC',
+    roomMode: 'PRIVATE',
   };
   console.log(roomMode);
   ChatService.changeRoomMode(roomMode);

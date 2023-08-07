@@ -1,6 +1,6 @@
 <template>
-  <Modal title="비밀번호 해제" :show="props.isShow">
-    <template #body> 채팅방이 public으로 설정됩니다. </template>
+  <Modal title="Private 해제 설정" :show="props.isShow">
+    <template #body> 채팅방이 더이상 Private 상태가 아니며, 검색 결과에 포함됩니다 </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
       <BasicButton text="확인" @click="changeRoomModePublic()" />
