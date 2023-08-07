@@ -1,6 +1,5 @@
 <template>
   <ManageChannelMemberModal
-    :friends="friends"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
