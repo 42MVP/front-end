@@ -26,12 +26,14 @@
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'ADMIN')"
           :iconButtons="onwer.id === loginStore.id ? [...adminIcon, ...userTabIcon] : userTabIcon"
+          @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'USER')"
           :iconButtons="onwer.id === loginStore.id ? [...userIcon, ...userTabIcon] : userTabIcon"
+          @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
@@ -46,24 +48,26 @@
       </div>
     </template>
     <template #footer>
-      <BasicButton text="닫기" @click="emits('close')" />
-    </template>
-    <template #top>
-      <DropdownMenu v-if="isMuteTimeVisible && muteId" style="width: 100px" class="dropdown-mute-container">
-        <template #dropdown-item>
-          <DropdownMenuItem text="1분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:00:60')" />
-          <DropdownMenuItem text="5분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:05:00')" />
-          <DropdownMenuItem text="30분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:30:00')" />
-          <DropdownMenuItem text="1시간" @click="serviceChatUserMute(muteId, chatStore.selectedID, '01:00:00')" />
-          <DropdownMenuItem text="1일" @click="serviceChatUserMute(muteId, chatStore.selectedID, '24:00:00')" />
-        </template>
-      </DropdownMenu>
+      <BasicButton text="닫기" @click="closeModal" />
     </template>
   </Modal>
+  <DropdownMenu
+    v-if="isMuteTimeVisible && muteId"
+    :style="{ top: buttonPosition.y + 1 + 'px', left: buttonPosition.x + 1 + 'px', width: '100px' }"
+    class="dropdown-mute-container"
+  >
+    <template #dropdown-item>
+      <DropdownMenuItem text="1분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:00:60')" />
+      <DropdownMenuItem text="5분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:05:00')" />
+      <DropdownMenuItem text="30분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:30:00')" />
+      <DropdownMenuItem text="1시간" @click="serviceChatUserMute(muteId, chatStore.selectedID, '01:00:00')" />
+      <DropdownMenuItem text="1일" @click="serviceChatUserMute(muteId, chatStore.selectedID, '24:00:00')" />
+    </template>
+  </DropdownMenu>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, reactive } from 'vue';
 // component
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
@@ -146,8 +150,10 @@ const muteId = ref<number | null>(null);
 const isMuteTimeVisible = ref<boolean>(false);
 
 const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
+  console.log('serviceChatUser', iconEmitResponse.eventName);
+
   if (iconEmitResponse.eventName === 'MUTE') {
-    isMuteTimeVisible.value = true;
+    isMuteTimeVisible.value = !isMuteTimeVisible.value;
     muteId.value = iconEmitResponse.id;
     return;
   }
@@ -175,6 +181,18 @@ const serviceChatUserMute = async (userId: number, roomId: number, time: string)
 const emits = defineEmits<{
   (e: 'close'): void;
 }>();
+
+const buttonPosition = reactive({ x: 0, y: 0 });
+
+const updateMousePosition = (event: MouseEvent) => {
+  buttonPosition.x = event.clientX;
+  buttonPosition.y = event.clientY;
+};
+
+const closeModal = () => {
+  isMuteTimeVisible.value = false;
+  emits('close');
+};
 
 watch(
   () => chatStore.selectedID,
@@ -221,10 +239,7 @@ watch(
   overflow: auto;
   max-height: 300px;
 }
-
 .dropdown-mute-container {
-  position: absolute;
-  left: 370px;
-  top: 30px;
+  z-index: 9998;
 }
 </style>

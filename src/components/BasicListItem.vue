@@ -14,7 +14,11 @@
       </span>
     </div>
     <div class="list-element-icon-container">
-      <button v-for="(iconButton, index) in iconButtons" :key="index" @click="onClick(props.item.id, iconButton.event)">
+      <button
+        v-for="(iconButton, index) in iconButtons"
+        :key="index"
+        @click="e => onClick(e, props.item.id, iconButton.event)"
+      >
         {{ iconButton.emoji }}
       </button>
     </div>
@@ -39,10 +43,14 @@ const props = defineProps({
 });
 
 const emits = defineEmits<{
+  (e: 'onMousePosition', event: MouseEvent): void;
   (e: 'clickIconButton', data: IconEmitResponse): void;
 }>();
 
-const onClick = (id: number, iconEvent: string) => {
+const onClick = (event: MouseEvent, id: number, iconEvent: string) => {
+  if (iconEvent === 'MUTE') {
+    emits('onMousePosition', event);
+  }
   emits('clickIconButton', { id: id, eventName: iconEvent });
 };
 </script>

@@ -6,6 +6,7 @@
         :style="{ cursor: clickEvent && 'pointer' }"
         :iconButtons="iconButtons"
         @click="clickEvent && emits('chooseItem', item?.id)"
+        @onMousePosition="e => emits('onMousePosition', e)"
         @clickIconButton="data => emits('clickIconButton', data)"
       />
       <slot :clickButton="() => emits('clickItemSlot', item?.id)" />
@@ -32,8 +33,9 @@ const props = defineProps({
 
 const emits = defineEmits<{
   (e: 'chooseItem', id: number): void;
-  (e: 'clickItemSlot', id: number): void;
+  (e: 'onMousePosition', event: MouseEvent): void;
   (e: 'clickIconButton', data: IconEmitResponse): void;
+  (e: 'clickItemSlot', id: number): void;
 }>();
 </script>
 
