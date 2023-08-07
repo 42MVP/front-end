@@ -8,10 +8,6 @@
         <span>{{ props.item?.name }}</span>
         <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
       </div>
-      <!-- NOTE : back 에서 name 이 아니라 username을 줌.. -->
-      <span v-if="'username' in props.item">
-        {{ props.item?.username }}
-      </span>
     </div>
     <div class="list-element-icon-container">
       <button
