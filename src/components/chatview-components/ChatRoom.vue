@@ -60,8 +60,8 @@
           </DropdownMenu>
         </div>
       </div>
-      <div class="chat-box-list-name-right">
-        <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-icon-list">
+      <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
+        <div class="chat-box-icon-list">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
           <div v-if="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'">
             <div
