@@ -58,11 +58,12 @@ const isGameConnected = ref<boolean>(false);
   background-color: var(--base-ivory);
 
   .net-div {
-    border: 1px dashed;
+    border: 1px dashed var(--base-gray);
     width: 1px;
     height: 100%;
-    border-color: var(--base-gray);
+    min-height: inherit;
   }
+
   .stick-div {
     background-color: var(--brown);
     width: 10px;
