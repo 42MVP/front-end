@@ -15,55 +15,60 @@
         <template #search-bar-item>
           <BasicList
             :items="searchedUsers"
-            :iconButtons="isUserTab ? inviteIcon : banIcon"
+            :iconButtons="isUserTab ? icons[Mode.INVITE] : icons[Mode.BAN]"
             @clickIconButton="serviceChatUser"
           />
         </template>
       </SearchBar>
 
       <div v-if="isUserTab" class="modal-user-list-container">
-        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="onwerIcon" style="position: relative" />
+        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="icons[Role.OWNER]" style="position: relative" />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'ADMIN')"
-          :iconButtons="onwer.id === loginStore.id ? [...adminIcon, ...userTabIcon] : userTabIcon"
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.ADMIN)"
+          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.ADMIN], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
+          @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === 'USER')"
-          :iconButtons="onwer.id === loginStore.id ? [...userIcon, ...userTabIcon] : userTabIcon"
+          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.USER)"
+          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.USER], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
+          @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
+        <DropdownMenu
+          v-if="isMuteTimeVisible && muteId"
+          :style="{ top: buttonPosition.y + 1 + 'px', left: buttonPosition.x + 1 + 'px', width: '100px' }"
+          class="dropdown-mute-container"
+        >
+          <template #dropdown-item>
+            <DropdownMenuItem
+              v-for="(item, index) in getMuteTime()"
+              v-bind:key="index"
+              :text="item.text"
+              @click="serviceChatUserMute(muteId, chatStore.selectedID, item.time)"
+            />
+          </template>
+        </DropdownMenu>
       </div>
       <div v-else class="modal-user-list-container">
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].banUsers"
-          :iconButtons="banTabIcon"
+          :iconButtons="icons[Mode.NONE]"
           style="position: relative"
-          @clickIconButton="e => console.log(e)"
+          @clickIconButton="serviceChatUser"
         />
       </div>
     </template>
     <template #footer>
-      <BasicButton text="닫기" @click="emits('close')" />
-    </template>
-    <template #top>
-      <DropdownMenu v-if="isMuteTimeVisible && muteId" style="width: 100px" class="dropdown-mute-container">
-        <template #dropdown-item>
-          <DropdownMenuItem text="1분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:00:60')" />
-          <DropdownMenuItem text="5분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:05:00')" />
-          <DropdownMenuItem text="30분" @click="serviceChatUserMute(muteId, chatStore.selectedID, '00:30:00')" />
-          <DropdownMenuItem text="1시간" @click="serviceChatUserMute(muteId, chatStore.selectedID, '01:00:00')" />
-          <DropdownMenuItem text="1일" @click="serviceChatUserMute(muteId, chatStore.selectedID, '24:00:00')" />
-        </template>
-      </DropdownMenu>
+      <BasicButton text="닫기" @click="closeModal" />
     </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, reactive } from 'vue';
 // component
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
@@ -80,9 +85,10 @@ import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
 import type { ChatUserState } from '@/interfaces/chat/ChatUser.interface';
+import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
-import { createChatUserByEvent } from '@/utils/chatuser.utils';
+import { createChatUserByEvent, Role, Mode } from '@/utils/chatuser.utils';
 import { ms } from '@/utils/time.utils';
 
 const chatStore = useChatStore();
@@ -98,24 +104,25 @@ onMounted(() => {
   onwer.value = getOwner();
 });
 
-const getOwner = (currentId: number = chatStore.selectedID) => {
+const getOwner = (currentId: number = chatStore.selectedID): User => {
   const chatInfo = chatStore.rooms[currentId];
-  return chatInfo.role === 'ONWER'
-    ? loginStore.$state
-    : chatInfo?.users?.find(user => user.role == 'OWNER') || ({} as User);
+  return chatInfo.self.role === Role.OWNER
+    ? chatInfo?.self
+    : chatInfo?.users?.find(user => user.role == Role.OWNER) || ({} as User);
 };
 
-const onwerIcon = [{ emoji: '👑', event: 'onwer' }];
-const inviteIcon = [{ emoji: '✉️', event: 'INVITE' }];
-const banIcon = [{ emoji: '⚠️', event: 'BAN' }];
-
-const userTabIcon = [
-  { emoji: '🔇', event: 'MUTE' },
-  { emoji: '🗙', event: 'KICK' },
-];
-const banTabIcon = [{ emoji: '⊖', event: 'NONE' }];
-const adminIcon = [{ emoji: '🚩', event: 'USER' }];
-const userIcon = [{ emoji: '⚐', event: 'ADMIN' }];
+const icons: Record<string, IconButton[]> = {
+  INVITE: [{ emoji: '✉️', event: Mode.INVITE }],
+  BAN: [{ emoji: '⚠️', event: Mode.BAN }],
+  NONE: [{ emoji: '⊖', event: Mode.NONE }],
+  OWNER: [{ emoji: '👑', event: Role.OWNER }],
+  ADMIN: [{ emoji: '🚩', event: Role.USER }],
+  USER: [{ emoji: '⚐', event: Role.ADMIN }],
+  COMMON: [
+    { emoji: '🔇', event: Mode.ONMUTE },
+    { emoji: '🗙', event: Mode.KICK },
+  ],
+};
 
 const isUserTab = ref(true);
 
@@ -145,12 +152,28 @@ const searchUser = (name: string) => {
 const muteId = ref<number | null>(null);
 const isMuteTimeVisible = ref<boolean>(false);
 
+const getMuteTime = (): { text: string; time: string }[] => {
+  const user = chatStore.rooms[chatStore.selectedID].users.find(user => user.id === muteId.value);
+  if (!user?.abongTime) return [];
+  return new Date(user?.abongTime) < new Date()
+    ? [
+        { text: '1분', time: '00:00:60' },
+        { text: '5분', time: '00:05:00' },
+        { text: '30분', time: '00:30:00' },
+        { text: '1시간', time: '01:00:00' },
+        { text: '1일', time: '24:00:00' },
+      ]
+    : [{ text: '해제', time: '00:00:00' }];
+};
+
 const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
-  if (iconEmitResponse.eventName === 'MUTE') {
-    isMuteTimeVisible.value = true;
+  if (iconEmitResponse.eventName === Mode.ONMUTE) {
+    muteId.value !== iconEmitResponse.id
+      ? (isMuteTimeVisible.value = true)
+      : (isMuteTimeVisible.value = !isMuteTimeVisible.value);
     muteId.value = iconEmitResponse.id;
     return;
-  }
+  } else isMuteTimeVisible.value = false;
   const service = ChatService.getServiceChatUser(iconEmitResponse.eventName);
   if (!service) return;
   try {
@@ -163,8 +186,13 @@ const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
 };
 
 const serviceChatUserMute = async (userId: number, roomId: number, time: string) => {
+  isMuteTimeVisible.value = false;
   const muteTime = new Date(new Date().getTime() + ms(time));
-  const chatUserState: ChatUserState = { userId, roomId, status: 'MUTE', muteTime };
+  const chatUserState: ChatUserState = { userId, roomId, status: Mode.NONE };
+  if (ms(time)) {
+    chatUserState.status = Mode.MUTE;
+    chatUserState.muteTime = muteTime;
+  }
   try {
     const ret = await ChatService.updateUserState(chatUserState);
   } catch (e) {
@@ -175,6 +203,18 @@ const serviceChatUserMute = async (userId: number, roomId: number, time: string)
 const emits = defineEmits<{
   (e: 'close'): void;
 }>();
+
+const buttonPosition = reactive({ x: 0, y: 0 });
+
+const updateMousePosition = (event: MouseEvent) => {
+  buttonPosition.x = event.clientX;
+  buttonPosition.y = event.clientY;
+};
+
+const closeModal = () => {
+  isMuteTimeVisible.value = false;
+  emits('close');
+};
 
 watch(
   () => chatStore.selectedID,
@@ -221,10 +261,7 @@ watch(
   overflow: auto;
   max-height: 300px;
 }
-
 .dropdown-mute-container {
-  position: absolute;
-  left: 370px;
-  top: 30px;
+  z-index: 9998;
 }
 </style>
