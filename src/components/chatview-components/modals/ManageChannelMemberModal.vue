@@ -15,24 +15,24 @@
         <template #search-bar-item>
           <BasicList
             :items="searchedUsers"
-            :iconButtons="isUserTab ? inviteIcon : banIcon"
+            :iconButtons="isUserTab ? icons[Mode.INVITE] : icons[Mode.BAN]"
             @clickIconButton="serviceChatUser"
           />
         </template>
       </SearchBar>
 
       <div v-if="isUserTab" class="modal-user-list-container">
-        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="onwerIcon" style="position: relative" />
+        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="icons[Role.OWNER]" style="position: relative" />
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.ADMIN)"
-          :iconButtons="onwer.id === loginStore.id ? [...adminIcon, ...userTabIcon] : userTabIcon"
+          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.ADMIN], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.USER)"
-          :iconButtons="onwer.id === loginStore.id ? [...userIcon, ...userTabIcon] : userTabIcon"
+          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.USER], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
@@ -55,7 +55,7 @@
       <div v-else class="modal-user-list-container">
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].banUsers"
-          :iconButtons="banTabIcon"
+          :iconButtons="icons[Mode.NONE]"
           style="position: relative"
           @clickIconButton="serviceChatUser"
         />
@@ -85,11 +85,11 @@ import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
 import type { ChatUserState } from '@/interfaces/chat/ChatUser.interface';
+import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
 import { createChatUserByEvent, Role, Mode } from '@/utils/chatuser.utils';
 import { ms } from '@/utils/time.utils';
-import { type } from 'os';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -106,23 +106,23 @@ onMounted(() => {
 
 const getOwner = (currentId: number = chatStore.selectedID): User => {
   const chatInfo = chatStore.rooms[currentId];
-  console.log(chatInfo.self);
   return chatInfo.self.role === Role.OWNER
     ? chatInfo?.self
     : chatInfo?.users?.find(user => user.role == Role.OWNER) || ({} as User);
 };
 
-const onwerIcon = [{ emoji: '👑', event: Role.OWNER }];
-const inviteIcon = [{ emoji: '✉️', event: Mode.INVITE }];
-const banIcon = [{ emoji: '⚠️', event: Mode.BAN }];
-
-const userTabIcon = [
-  { emoji: '🔇', event: Mode.ONMUTE },
-  { emoji: '🗙', event: Mode.KICK },
-];
-const banTabIcon = [{ emoji: '⊖', event: Mode.NONE }];
-const adminIcon = [{ emoji: '🚩', event: Role.USER }];
-const userIcon = [{ emoji: '⚐', event: Role.ADMIN }];
+const icons: Record<string, IconButton[]> = {
+  INVITE: [{ emoji: '✉️', event: Mode.INVITE }],
+  BAN: [{ emoji: '⚠️', event: Mode.BAN }],
+  NONE: [{ emoji: '⊖', event: Mode.NONE }],
+  OWNER: [{ emoji: '👑', event: Role.OWNER }],
+  ADMIN: [{ emoji: '🚩', event: Role.USER }],
+  USER: [{ emoji: '⚐', event: Role.ADMIN }],
+  COMMON: [
+    { emoji: '🔇', event: Mode.ONMUTE },
+    { emoji: '🗙', event: Mode.KICK },
+  ],
+};
 
 const isUserTab = ref(true);
 
@@ -167,8 +167,6 @@ const getMuteTime = (): { text: string; time: string }[] => {
 };
 
 const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
-  console.log('serviceChatUser', iconEmitResponse.eventName);
-
   if (iconEmitResponse.eventName === Mode.ONMUTE) {
     muteId.value !== iconEmitResponse.id
       ? (isMuteTimeVisible.value = true)

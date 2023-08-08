@@ -13,6 +13,7 @@ export enum Mode {
   MUTE = 'MUTE',
   NONE = 'NONE',
   BAN = 'BAN',
+  COMMON = 'COMMON',
 }
 
 export function createChatUserByEvent(
@@ -20,7 +21,7 @@ export function createChatUserByEvent(
   roomId: number,
   eventName: string,
   muteTime?: Date,
-): ChatUser | ChatUserState | ChatUserRole | null {
+): ChatUserInfo | null {
   if (createChatUserFunctions[eventName]) {
     return createChatUserFunctions[eventName](userId, roomId);
   }
