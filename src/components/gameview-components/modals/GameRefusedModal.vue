@@ -9,11 +9,14 @@ import { onMounted } from 'vue';
 
 import Modal from '@/components/Modal.vue';
 
-const emits = defineEmits(['response']);
+import { useGameStore } from '@/stores/game.store';
+
+const gameStore = useGameStore();
 
 onMounted(() => {
   setTimeout(() => {
-    emits('response', '매칭중');
+    gameStore.opponent = null;
+    gameStore.setStatus('매칭중');
   }, 3000);
 });
 </script>

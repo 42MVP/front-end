@@ -1,17 +1,18 @@
 <template>
-  <GameMatching v-if="!isMatched" />
+  <GameMatching v-if="!gameStore.isMatched" />
   <div v-else class="game-screen-div">
     <GameScreen />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 
 import GameMatching from '@/components/gameview-components/GameMatching.vue';
 import GameScreen from '@/components/gameview-components/GameScreen.vue';
 
-const isMatched = ref<boolean>(false);
+import { useGameStore } from '@/stores/game.store';
+
+const gameStore = useGameStore();
 </script>
 
 <style scoped>

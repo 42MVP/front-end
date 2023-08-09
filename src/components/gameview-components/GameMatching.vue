@@ -1,18 +1,17 @@
 <template>
   <div class="conatiner">
-    <GameSettingsModal v-if="isStatusMatched('게임설정')" @response="changeStatus" />
-    <MatchingModal v-else-if="isStatusMatched('매칭중')" @response="changeStatus" />
-    <GameConfirmationModal v-else-if="isStatusMatched('게임여부')" @response="changeStatus" />
-    <WaitingForOpponentModal v-else @response="changeStatus">
-      <GameRefusedModal v-if="isStatusMatched('상대방거절')" @response="changeStatus" />
-      <GameStartingModal v-if="isStatusMatched('게임시작')" @response="changeStatus" />
+    <GameSettingsModal v-if="gameStore.isStatusMatched('게임설정')" />
+    <MatchingModal v-else-if="gameStore.isStatusMatched('매칭중')" />
+    <GameConfirmationModal v-else-if="gameStore.isStatusMatched('게임여부')" />
+    <WaitingForOpponentModal v-else>
+      <GameRefusedModal v-if="gameStore.isStatusMatched('상대방거절')" />
+      <GameStartingModal v-if="gameStore.isStatusMatched('게임시작')" />
     </WaitingForOpponentModal>
-    {{ console.log('gameview', currentStatus) }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 import GameSettingsModal from '@/components/gameview-components/modals/GameSettingsModal.vue';
 import MatchingModal from '@/components/gameview-components/modals/MatchingModal.vue';
@@ -21,32 +20,14 @@ import WaitingForOpponentModal from '@/components/gameview-components/modals/Wai
 import GameStartingModal from '@/components/gameview-components/modals/GameStartingModal.vue';
 import GameRefusedModal from '@/components/gameview-components/modals/GameRefusedModal.vue';
 
-const status: Record<string, number> = {
-  게임설정: 1,
-  매칭중: 2,
-  게임여부: 3,
-  상대방대기: 4,
-  상대방거절: 5,
-  게임시작: 6,
-};
+import { useGameStore } from '@/stores/game.store';
 
-const props = defineProps({
-  opponent: { type: String, default: '' },
-});
-
-const currentStatus = ref<number>(status['게임설정']);
-
-const isStatusMatched = (modalName: string) => {
-  return currentStatus.value === status[modalName];
-};
-
-const changeStatus = (modalName: string) => {
-  currentStatus.value = status[modalName];
-  console.log('changeStatus', modalName, currentStatus.value);
-};
+const gameStore = useGameStore();
 
 onMounted(() => {
-  if (props.opponent) currentStatus.value = status['상대방대기'];
+  if (gameStore.opponent) {
+    gameStore.setStatus('상대방대기');
+  } else gameStore.setStatus('게임설정');
 });
 </script>
 

@@ -1,31 +1,53 @@
 <template>
   <div class="game-ui-continer">
     <div class="user-info-div">
-      <ProfileCard user_id="chaejkim" img="1.png" img_size="100" />
+      <ProfileCard :user_id="loginStore.name" :img="loginStore.avatarURL" img_size="100" />
     </div>
     <span class="score-div">{{ 5 }} : {{ 4 }}</span>
     <div class="user-info-div">
-      <ProfileCard user_id="hyeongki" img="4.png" img_size="100" />
+      <ProfileCard :user_id="gameStore.opponent?.name" :img="gameStore.opponent?.avatarURL" img_size="100" />
     </div>
   </div>
-  <!-- TODO : canvase -->
   <div class="table-div">
     <div class="stick-div" />
-    <div v-if="!isGameConnected" class="user-info-div bold">
+    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
       {{ 'Lose🍂' }} <br />
       {{ 1899 - 12 }} ({{ -12 }})
     </div>
     <div class="net-div" />
-    <div v-if="!isGameConnected" class="user-info-div bold">{{ 'Win👑' }} <br />{{ 1899 + 12 }} (+{{ 12 }})</div>
+    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
+      {{ 'Win👑' }} <br />{{ 1899 + 12 }} (+{{ 12 }})
+    </div>
     <div class="stick-div" />
   </div>
+  <button class="delete-me" @click="tmp1">임시(결과)</button>
+  <button class="delete-me" @click="tmp2">임시(처음)</button>
+  <button class="delete-me" @click="tmp3">임시(다시)</button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import ProfileCard from '@/components/profileview-components/ProfileCard.vue';
 
-const isGameConnected = ref<boolean>(false);
+import { useLoginStore } from '@/stores/login.store';
+import { useGameStore } from '@/stores/game.store';
+
+const loginStore = useLoginStore();
+const gameStore = useGameStore();
+
+// endGame - result
+const tmp1 = () => {
+  gameStore.isGameConnected = false;
+};
+// endGame - 처음으로
+const tmp2 = () => {
+  gameStore.endGame();
+};
+// endGame - 다시
+const tmp3 = () => {
+  gameStore.setStatus('상대방대기');
+  gameStore.setReadyTime();
+  gameStore.isMatched = false;
+};
 </script>
 
 <style scoped>
@@ -42,6 +64,7 @@ const isGameConnected = ref<boolean>(false);
   .score-div {
     font: var(--extra-large);
     align-self: center;
+    min-width: max-content;
   }
 }
 
