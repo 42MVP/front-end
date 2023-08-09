@@ -1,11 +1,11 @@
 <template>
   <div class="game-ui-continer">
     <div class="user-info-div">
-      <ProfileCard :user_id="loginStore.name" :img="loginStore.avatarURL" img_size="100" />
+      <AvatarItem :username="loginStore.name" :avartarUrl="loginStore.avatarURL" imgSize="100" />
     </div>
     <span class="score-div">{{ 5 }} : {{ 4 }}</span>
     <div class="user-info-div">
-      <ProfileCard :user_id="gameStore.opponent?.name" :img="gameStore.opponent?.avatarURL" img_size="100" />
+      <AvatarItem :username="gameStore.opponent?.name" :avartarUrl="gameStore.opponent?.avatarURL" imgSize="100" />
     </div>
   </div>
   <div class="table-div">
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import ProfileCard from '@/components/profileview-components/ProfileCard.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
 
 import { useLoginStore } from '@/stores/login.store';
 import { useGameStore } from '@/stores/game.store';

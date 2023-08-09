@@ -3,15 +3,15 @@
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
-          <ProfileCard :user_id="loginStore.name" :img="loginStore.avatarURL" img_size="100">
+          <AvatarItem :username="loginStore.name" :avartarUrl="loginStore.avatarURL" imgSize="100">
             <span class="bold">1899</span>
-          </ProfileCard>
+          </AvatarItem>
         </div>
         <span class="verse">vs</span>
         <div class="user-info-div">
-          <ProfileCard :user_id="gameStore.opponent?.name" :img="gameStore.opponent?.avatarURL" img_size="100">
+          <AvatarItem :username="gameStore.opponent?.name" :avartarUrl="gameStore.opponent?.avatarURL" imgSize="100">
             <span class="bold">1899</span>
-          </ProfileCard>
+          </AvatarItem>
         </div>
       </div>
     </template>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
-import ProfileCard from '@/components/profileview-components/ProfileCard.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
 
 import { useLoginStore } from '@/stores/login.store';
 import { useGameStore } from '@/stores/game.store';
