@@ -37,4 +37,11 @@ export class UserService {
     });
     return ret.data;
   }
+
+  // TODO: TYPE
+  @APIWithToken()
+  static async getUserById(id: number) {
+    const ret = await axiosAPI.auth().get(`/user/${id}`);
+    return ret.data;
+  }
 }

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
+import { UserService } from '@/services/user.service';
 
 interface ChatState {
   rooms: { [id: number]: ChatInfo };
@@ -34,6 +35,30 @@ export const useChatStore = defineStore('chat', {
         chats.push(newChat);
       }
     },
+    // socket actions
+    async joinUser(roomId: number, userId: number) {
+      // TODO: type
+      const user = await UserService.getUserById(userId);
+      console.log('user: ', user);
+      this.rooms[roomId].users.push({
+        id: userId,
+        name: user.userName,
+        avatarURL: user.avatarURL,
+        role: 'USER',
+        abongTime: new Date(),
+      });
+    },
+    leaveUser(roomId: number, userId: number) {
+      this.rooms[roomId].users = this.rooms[roomId].users.filter(e => e.id !== userId);
+    },
+    changeUserMode(roomId: number, userId: number) {},
+    banUser(roomId: number, userId: number) {
+      const user = this.rooms[roomId].users.find(e => e.id === userId);
+      this.rooms[roomId].users = this.rooms[roomId].users.filter(e => e.id !== userId);
+      this.rooms[roomId].banUser.push(user);
+    },
+    kickUser(roomId: number, userId: number) {},
+    muteUser(roomId: number, userId: number, abongTime: Date) {},
     //    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
     //      const { id, newChat } = event.detail;
     //      this.addChatRoom(id, newChat);
