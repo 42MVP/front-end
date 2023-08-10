@@ -94,7 +94,14 @@
       <div class="chat-box-list-name-left-word">디엠상대 님과의 대화</div>
     </div>
     <MessageList :chats="chatStore.chats[chatStore.selectedID]" />
-    <ChatInputBox @response="newMessage => addChat(newMessage)" :maxLength="150" />
+    <ChatInputBox
+      @response="
+        newMessage => {
+          addChat(newMessage);
+        }
+      "
+      :maxLength="150"
+    />
   </div>
 </template>
 
@@ -118,7 +125,7 @@ import { useChatStore } from '@/stores/chat.store';
 import { RoomMode } from '@/services/chat.service';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // services
-import type { Chat } from '@/interfaces/chat/Chat.interface';
+import { ChatSocket } from '@/services/socket.service';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
@@ -139,17 +146,19 @@ const setModal: Function = (name: string) => {
 };
 
 const addChat = (newMessage: string): void => {
-  const newChat: Chat = {
-    id: loginStore.id,
-    username: loginStore.name,
-    avatarURL: loginStore.avatarURL,
-    message: newMessage,
-    date: new Date(),
-  };
-  chatStore.addChat(chatStore.selectedID, newChat);
+  const instance = ChatSocket.getInstance();
+  instance.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
+  //  const newChat: Chat = {
+  //    id: loginStore.id,
+  //    username: loginStore.name,
+  //    avatarURL: loginStore.avatarURL,
+  //    message: newMessage,
+  //    date: new Date(),
+  //  };
+  //  chatStore.addChat(chatStore.selectedID, newChat);
 };
 
-const emits = defineEmits(['response']);
+//const emits = defineEmits(['response']);
 
 const inviteGame = (iconEmitResponse: IconEmitResponse) => {
   console.log(iconEmitResponse.id, iconEmitResponse.eventName);

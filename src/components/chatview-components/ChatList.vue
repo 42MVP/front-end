@@ -47,6 +47,7 @@ import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
+import { ChatSocket } from '@/services/socket.service';
 
 const chatStore = useChatStore();
 const modalStore = useModalStore();
@@ -60,6 +61,8 @@ const eventResponse = ref<IconEmitResponse>({ id: -1, eventName: '' });
 
 onMounted(async () => {
   try {
+    const instance = ChatSocket.getInstance();
+    instance.onChat();
     const ret: ChatInfo[] = await ChatService.getChatList();
     ret.forEach(e => {
       chatStore.addChatRoom(e.id, e);
