@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import BasicListFrame from '@/components/BasicListFrame.vue';
 import BasicList from '@/components/BasicList.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
@@ -47,7 +47,7 @@ import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
-import { ChatSocket } from '@/services/socket.service';
+import { ChatSocketService } from '@/services/chatSocket.service';
 
 const chatStore = useChatStore();
 const modalStore = useModalStore();
@@ -59,10 +59,13 @@ const modalName = ref<string>('');
 const isMenu = ref<boolean>(false);
 const eventResponse = ref<IconEmitResponse>({ id: -1, eventName: '' });
 
+onUnmounted(() => {
+  ChatSocketService.offChat();
+});
+
 onMounted(async () => {
   try {
-    const instance = ChatSocket.getInstance();
-    instance.onChat();
+    ChatSocketService.onChat();
     const ret: ChatInfo[] = await ChatService.getChatList();
     ret.forEach(e => {
       chatStore.addChatRoom(e.id, e);

@@ -125,7 +125,7 @@ import { useChatStore } from '@/stores/chat.store';
 import { RoomMode } from '@/services/chat.service';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // services
-import { ChatSocket } from '@/services/socket.service';
+import { ChatSocketService } from '@/services/chatSocket.service';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
@@ -146,8 +146,7 @@ const setModal: Function = (name: string) => {
 };
 
 const addChat = (newMessage: string): void => {
-  const instance = ChatSocket.getInstance();
-  instance.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
+  ChatSocketService.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
   //  const newChat: Chat = {
   //    id: loginStore.id,
   //    username: loginStore.name,
