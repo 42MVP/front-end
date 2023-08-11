@@ -10,9 +10,6 @@
           <slot name="footer"></slot>
         </div>
       </div>
-      <div class="top-container">
-        <slot name="top"></slot>
-      </div>
     </div>
   </Transition>
 </template>
@@ -67,11 +64,6 @@ const props = defineProps({
   align-items: center;
   justify-content: right;
   width: 100%;
-}
-
-.top-container {
-  z-index: 9998;
-
 }
 
 /*

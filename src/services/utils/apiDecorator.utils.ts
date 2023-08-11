@@ -21,15 +21,12 @@ export function APIWithToken() {
     const fn = descriptor.value;
     descriptor.value = async function (...args: any) {
       const accessToken = Cookies.get('access-token');
-      if (!accessToken) {
-        return;
-      } else if (isExpiredToken(accessToken)) {
+      if (isExpiredToken(accessToken)) {
         await getNewAccessToken();
       }
       try {
         return await fn.apply(target, args);
       } catch (e) {
-        if (e.response.request.status === 401) await getNewAccessToken();
         throw `요청 에러: ${e}`;
       }
     };
