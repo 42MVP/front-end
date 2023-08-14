@@ -15,7 +15,7 @@ const gameStore = useGameStore();
 
 onMounted(() => {
   setTimeout(() => {
-    gameStore.opponent = null;
+    gameStore.setMatchInfo(null);
     gameStore.setStatus('매칭중');
   }, 3000);
 });

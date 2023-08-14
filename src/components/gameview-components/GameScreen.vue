@@ -1,22 +1,22 @@
 <template>
   <div class="game-ui-continer">
     <div class="user-info-div">
-      <AvatarItem :username="loginStore.name" :avartarUrl="loginStore.avatarURL" imgSize="100" />
+      <AvatarItem :username="leftUser?.name" :avartarUrl="leftUser?.avatarURL" imgSize="100" />
     </div>
     <span class="score-div">{{ 5 }} : {{ 4 }}</span>
     <div class="user-info-div">
-      <AvatarItem :username="gameStore.opponent?.name" :avartarUrl="gameStore.opponent?.avatarURL" imgSize="100" />
+      <AvatarItem :username="rightUser?.name" :avartarUrl="rightUser?.avatarURL" imgSize="100" />
     </div>
   </div>
   <div class="table-div">
     <div class="stick-div" />
     <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
       {{ 'Lose🍂' }} <br />
-      {{ 1899 - 12 }} ({{ -12 }})
+      {{ (leftUser?.rating as number) - 12 }} ({{ -12 }})
     </div>
     <div class="net-div" />
     <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
-      {{ 'Win👑' }} <br />{{ 1899 + 12 }} (+{{ 12 }})
+      {{ 'Win👑' }} <br />{{ (rightUser?.rating as number) + 12 }} (+{{ 12 }})
     </div>
     <div class="stick-div" />
   </div>
@@ -28,11 +28,12 @@
 <script setup lang="ts">
 import AvatarItem from '@/components/common/AvatarItem.vue';
 
-import { useLoginStore } from '@/stores/login.store';
 import { useGameStore } from '@/stores/game.store';
 
-const loginStore = useLoginStore();
 const gameStore = useGameStore();
+
+const leftUser = gameStore.matchInfo?.leftUser;
+const rightUser = gameStore.matchInfo?.rightUser;
 
 // endGame - result
 const tmp1 = () => {
