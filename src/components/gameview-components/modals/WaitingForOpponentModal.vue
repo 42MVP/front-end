@@ -44,7 +44,7 @@ const tmp = () => {
 
 onMounted(() => {
   setTimeout(() => {
-    gameStore.initGame();
+    gameStore.isStatusMatched('게임시작') ? gameStore.initGame() : gameStore.setMatchInfo(null);
   }, gameStore.atReadyTime.getTime() - new Date().getTime());
 });
 </script>
