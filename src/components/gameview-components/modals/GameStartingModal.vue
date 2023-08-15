@@ -3,15 +3,15 @@
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
-          <ProfileCard user_id="chaejkim" img="1.png" img_size="100">
-            <span class="bold">1899</span>
-          </ProfileCard>
+          <AvatarItem :username="leftUser?.name" :avartarUrl="leftUser?.avatarURL" imgSize="100">
+            <span class="bold">{{ leftUser?.rating }}</span>
+          </AvatarItem>
         </div>
         <span class="verse">vs</span>
         <div class="user-info-div">
-          <ProfileCard user_id="hyeongki" img="4.png" img_size="100">
-            <span class="bold">1899</span>
-          </ProfileCard>
+          <AvatarItem :username="rightUser?.name" :avartarUrl="rightUser?.avatarURL" imgSize="100">
+            <span class="bold">{{ rightUser?.rating }}</span>
+          </AvatarItem>
         </div>
       </div>
     </template>
@@ -20,7 +20,14 @@
 
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
-import ProfileCard from '@/components/profileview-components/ProfileCard.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
+
+import { useGameStore } from '@/stores/game.store';
+
+const gameStore = useGameStore();
+
+const leftUser = gameStore.matchInfo?.leftUser;
+const rightUser = gameStore.matchInfo?.rightUser;
 </script>
 
 <style>
