@@ -25,7 +25,7 @@ import { useGameStore } from '@/stores/game.store';
 const gameStore = useGameStore();
 
 onMounted(() => {
-  if (gameStore.opponent) {
+  if (gameStore.matchInfo) {
     gameStore.setStatus('상대방대기');
   } else gameStore.setStatus('게임설정');
 });

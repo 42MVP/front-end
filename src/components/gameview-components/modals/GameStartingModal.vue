@@ -3,14 +3,14 @@
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
-          <AvatarItem :username="loginStore.name" :avartarUrl="loginStore.avatarURL" imgSize="100">
-            <span class="bold">1899</span>
+          <AvatarItem :username="leftUser?.name" :avartarUrl="leftUser?.avatarURL" imgSize="100">
+            <span class="bold">{{ leftUser?.rating }}</span>
           </AvatarItem>
         </div>
         <span class="verse">vs</span>
         <div class="user-info-div">
-          <AvatarItem :username="gameStore.opponent?.name" :avartarUrl="gameStore.opponent?.avatarURL" imgSize="100">
-            <span class="bold">1899</span>
+          <AvatarItem :username="rightUser?.name" :avartarUrl="rightUser?.avatarURL" imgSize="100">
+            <span class="bold">{{ rightUser?.rating }}</span>
           </AvatarItem>
         </div>
       </div>
@@ -22,11 +22,12 @@
 import Modal from '@/components/Modal.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 
-import { useLoginStore } from '@/stores/login.store';
 import { useGameStore } from '@/stores/game.store';
 
-const loginStore = useLoginStore();
 const gameStore = useGameStore();
+
+const leftUser = gameStore.matchInfo?.leftUser;
+const rightUser = gameStore.matchInfo?.rightUser;
 </script>
 
 <style>

@@ -1,30 +1,23 @@
 import { defineStore } from 'pinia';
-import type { User } from '@/interfaces/user/User.interface';
+import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
 
 interface GameState {
   isMatched: boolean;
-  isGameConnected: boolean;
   status: number;
-  option: number;
   atReadyTime: Date;
-  opponent: User | null;
+  isGameConnected: boolean;
+  option: number;
+  matchInfo: GameMatch | null;
 }
-
-// export interface UserInfoGame {
-//   id: number;
-//   name: string;
-//   avatarURL: string;
-//   rate: number;
-// }
 
 export const useGameStore = defineStore('game', {
   state: (): GameState => ({
     isMatched: false,
-    isGameConnected: true,
     status: 0,
-    option: 0,
     atReadyTime: new Date(0),
-    opponent: null,
+    isGameConnected: true,
+    option: 0,
+    matchInfo: null,
   }),
   getters: {
     isStatusMatched:
@@ -43,8 +36,8 @@ export const useGameStore = defineStore('game', {
     setReadyTime(ms: number = 5000): void {
       this.atReadyTime = new Date(new Date().getTime() + ms);
     },
-    setOpponent(user: User | null): void {
-      this.opponent = user;
+    setMatchInfo(matchInfo: GameMatch | null): void {
+      this.matchInfo = matchInfo;
     },
     initGame(): void {
       this.isMatched = true;
@@ -53,7 +46,7 @@ export const useGameStore = defineStore('game', {
     endGame(): void {
       this.isMatched = false;
       this.isGameConnected = false;
-      this.opponent = null;
+      this.matchInfo = null;
     },
   },
 });

@@ -31,7 +31,7 @@ const acceptGame = () => {
 
 const refuseGame = () => {
   gameStore.setStatus('매칭중');
-  gameStore.setOpponent(null);
+  gameStore.setMatchInfo(null);
 };
 </script>
 
