@@ -1,3 +1,5 @@
+export type ChatUserInfo = ChatUser | ChatUserState | ChatUserRole;
+
 export interface ChatUser {
   userId: number;
   roomId: number;

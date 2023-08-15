@@ -8,13 +8,13 @@
         <span>{{ props.item?.name }}</span>
         <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
       </div>
-      <!-- NOTE : back 에서 name 이 아니라 username을 줌.. -->
-      <span v-if="'username' in props.item">
-        {{ props.item?.username }}
-      </span>
     </div>
     <div class="list-element-icon-container">
-      <button v-for="(iconButton, index) in iconButtons" :key="index" @click="onClick(props.item.id, iconButton.event)">
+      <button
+        v-for="(iconButton, index) in iconButtons"
+        :key="index"
+        @click="e => onClick(e, props.item.id, iconButton.event)"
+      >
         {{ iconButton.emoji }}
       </button>
     </div>
@@ -39,10 +39,14 @@ const props = defineProps({
 });
 
 const emits = defineEmits<{
+  (e: 'onMousePosition', event: MouseEvent): void;
   (e: 'clickIconButton', data: IconEmitResponse): void;
 }>();
 
-const onClick = (id: number, iconEvent: string) => {
+const onClick = (event: MouseEvent, id: number, iconEvent: string) => {
+  if (iconEvent === 'ONMUTE') {
+    emits('onMousePosition', event);
+  }
   emits('clickIconButton', { id: id, eventName: iconEvent });
 };
 </script>
