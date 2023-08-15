@@ -31,6 +31,9 @@ import Modal from '@/components/Modal.vue';
 import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
+import { useGameStore } from '@/stores/game.store';
+
+
 const selectedOption = ref<number>(1);
 
 const selectButton = (index: number) => {
@@ -41,10 +44,11 @@ const setActive = (index: number) => {
   return selectedOption.value === index;
 };
 
-const emits = defineEmits(['response']);
+const gameStore = useGameStore();
 
 const findGame = () => {
-  emits('response', '매칭중'); // 대기열 등록 성공시 게임 찾기 모달로 넘어가기
+  gameStore.setOption(selectedOption.value);
+  gameStore.setStatus('매칭중');
 };
 </script>
 

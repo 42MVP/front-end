@@ -1,31 +1,54 @@
 <template>
   <div class="game-ui-continer">
     <div class="user-info-div">
-      <ProfileCard user_id="chaejkim" img="1.png" img_size="100" />
+      <AvatarItem :username="leftUser?.name" :avartarUrl="leftUser?.avatarURL" imgSize="100" />
     </div>
     <span class="score-div">{{ 5 }} : {{ 4 }}</span>
     <div class="user-info-div">
-      <ProfileCard user_id="hyeongki" img="4.png" img_size="100" />
+      <AvatarItem :username="rightUser?.name" :avartarUrl="rightUser?.avatarURL" imgSize="100" />
     </div>
   </div>
-  <!-- TODO : canvase -->
   <div class="table-div">
     <div class="stick-div" />
-    <div v-if="!isGameConnected" class="user-info-div bold">
+    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
       {{ 'Lose🍂' }} <br />
-      {{ 1899 - 12 }} ({{ -12 }})
+      {{ (leftUser?.rating as number) - 12 }} ({{ -12 }})
     </div>
     <div class="net-div" />
-    <div v-if="!isGameConnected" class="user-info-div bold">{{ 'Win👑' }} <br />{{ 1899 + 12 }} (+{{ 12 }})</div>
+    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
+      {{ 'Win👑' }} <br />{{ (rightUser?.rating as number) + 12 }} (+{{ 12 }})
+    </div>
     <div class="stick-div" />
   </div>
+  <button class="delete-me" @click="tmp1">임시(결과)</button>
+  <button class="delete-me" @click="tmp2">임시(처음)</button>
+  <button class="delete-me" @click="tmp3">임시(다시)</button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import ProfileCard from '@/components/profileview-components/ProfileCard.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
 
-const isGameConnected = ref<boolean>(false);
+import { useGameStore } from '@/stores/game.store';
+
+const gameStore = useGameStore();
+
+const leftUser = gameStore.matchInfo?.leftUser;
+const rightUser = gameStore.matchInfo?.rightUser;
+
+// endGame - result
+const tmp1 = () => {
+  gameStore.isGameConnected = false;
+};
+// endGame - 처음으로
+const tmp2 = () => {
+  gameStore.endGame();
+};
+// endGame - 다시
+const tmp3 = () => {
+  gameStore.setStatus('상대방대기');
+  gameStore.setReadyTime();
+  gameStore.isMatched = false;
+};
 </script>
 
 <style scoped>
@@ -42,6 +65,7 @@ const isGameConnected = ref<boolean>(false);
   .score-div {
     font: var(--extra-large);
     align-self: center;
+    min-width: max-content;
   }
 }
 
@@ -58,11 +82,12 @@ const isGameConnected = ref<boolean>(false);
   background-color: var(--base-ivory);
 
   .net-div {
-    border: 1px dashed;
+    border: 1px dashed var(--base-gray);
     width: 1px;
     height: 100%;
-    border-color: var(--base-gray);
+    min-height: inherit;
   }
+
   .stick-div {
     background-color: var(--brown);
     width: 10px;
