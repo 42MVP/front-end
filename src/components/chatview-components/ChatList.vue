@@ -83,7 +83,17 @@ watch(eventResponse, async () => {
   const eventName = eventResponse.value.eventName;
   const id = eventResponse.value.id;
   if (eventName === 'click') {
-    chatStore.selectedID = id;
+    if (chatStore.isKicked(id))
+      modalStore.on({
+        title: '알림',
+        text: '강퇴 당하셨습니다',
+        buttonText: '닫기',
+        buttonFunc: () => {
+          chatStore.deleteChatRoom(id);
+          modalStore.off();
+        },
+      });
+    else chatStore.selectChatRoom(id);
   } else if (eventName === 'quit') {
     try {
       await ChatService.exitRoom(id);
@@ -98,6 +108,24 @@ watch(eventResponse, async () => {
     }
   }
 });
+
+watch(
+  () => chatStore.kickedRooms,
+  () => {
+    const id = chatStore.selectedID;
+    if (chatStore.isKicked(id))
+      modalStore.on({
+        title: '알림',
+        text: '강퇴 당하셨습니다',
+        buttonText: '닫기',
+        buttonFunc: () => {
+          chatStore.selectChatRoom(-1);
+          chatStore.deleteChatRoom(id);
+          modalStore.off();
+        },
+      });
+  },
+);
 
 watch(
   () => chatStore.rooms,
