@@ -1,6 +1,6 @@
 import { SocketService } from './socket.service';
 import { chatStore } from '@/main';
-import { Chat } from '@/interfaces/chat/Chat.interface';
+import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 interface SocketChat {
   roomId: number;
@@ -41,6 +41,10 @@ export class ChatSocketService {
       };
       chatStore.addChat(chat.roomId, newChat);
     });
+  }
+
+  static onChannel(): void {
+    const socket = SocketService.getInstance().getSocket();
     socket.on('join', (d: SocketUserAction) => {
       console.log('join:', d);
       chatStore.joinUser(d.roomId, d.userId);
@@ -67,7 +71,7 @@ export class ChatSocketService {
     });
   }
 
-  static offChat(): void {
+  static offChannel(): void {
     const socket = SocketService.getInstance().getSocket();
     socket.off('join');
     socket.off('leave');
