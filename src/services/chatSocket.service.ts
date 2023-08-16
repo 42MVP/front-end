@@ -1,6 +1,7 @@
 import { SocketService } from './socket.service';
 import { chatStore } from '@/main';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
+import { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 interface SocketChat {
   roomId: number;
@@ -56,6 +57,9 @@ export class ChatSocketService {
       console.log('join:', d);
       chatStore.joinUser(d.roomId, d.userId, d.name, d.avatarURL);
     });
+    socket.on('addedRoom', (d: ChatInfo) => {
+      chatStore.addChatRoom(d.id, d);
+    });
     socket.on('leave', (d: SocketUserAction) => {
       console.log('leave:', d);
       chatStore.leaveUser(d.roomId, d.userId);
@@ -85,6 +89,7 @@ export class ChatSocketService {
   static offChannel(): void {
     const socket = SocketService.getInstance().getSocket();
     socket.off('join');
+    socket.off('addedRoom');
     socket.off('leave');
     socket.off('userMode');
     socket.off('ban');
