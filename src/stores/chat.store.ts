@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
-import { UserService } from '@/services/user.service';
+import type { User } from '@/interfaces/user/User.interface';
 
 interface ChatState {
   rooms: { [id: number]: ChatInfo };
@@ -36,17 +36,14 @@ export const useChatStore = defineStore('chat', {
       }
     },
     // socket actions
-    async joinUser(roomId: number, userId: number) {
-      // TODO: type
-      const user = await UserService.getUserById(userId);
-      console.log('user: ', user);
-      this.rooms[roomId].users.push({
+    joinUser(roomId: number, userId: number, name: string, avatarURL: string) {
+      const user: User = {
         id: userId,
-        name: user.userName,
-        avatarURL: user.avatarURL,
+        name: name,
+        avatarURL: avatarURL,
         role: 'USER',
         abongTime: new Date(),
-      });
+      };
       this.rooms[roomId].users = [...this.rooms[roomId].users, ...[user]];
       console.log('socket join');
     },

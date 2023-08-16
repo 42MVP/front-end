@@ -52,9 +52,9 @@ export class ChatSocketService {
 
   static onChannel(): void {
     const socket = SocketService.getInstance().getSocket();
-    socket.on('join', (d: SocketUserAction) => {
+    socket.on('join', (d: SocketUserInfo) => {
       console.log('join:', d);
-      chatStore.joinUser(d.roomId, d.userId);
+      chatStore.joinUser(d.roomId, d.userId, d.name, d.avatarURL);
     });
     socket.on('leave', (d: SocketUserAction) => {
       console.log('leave:', d);
