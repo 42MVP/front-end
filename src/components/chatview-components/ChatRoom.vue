@@ -1,6 +1,7 @@
 <template>
   <ManageChannelMemberModal
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    v-if="modalName === '멤버 관리'"
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
   />

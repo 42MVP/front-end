@@ -70,7 +70,7 @@ export class ChatSocketService {
     });
     socket.on('kick', (d: SocketUserAction) => {
       console.log('kick');
-      chatStore.leaveUser(d.roomId, d.userId);
+      chatStore.kickUser(d.roomId, d.userId);
     });
     socket.on('userMode', (d: SocketUserMode) => {
       console.log('userMode');

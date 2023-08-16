@@ -7,6 +7,7 @@ interface ChatState {
   rooms: { [id: number]: ChatInfo };
   chats: { [id: number]: Chat[] };
   selectedID: number;
+  kickedRooms: number[];
 }
 
 export const useChatStore = defineStore('chat', {
@@ -14,6 +15,7 @@ export const useChatStore = defineStore('chat', {
     rooms: [],
     chats: [],
     selectedID: -1,
+    kickedRooms: [],
   }),
   getters: {
     isSelected(): boolean {
@@ -25,6 +27,16 @@ export const useChatStore = defineStore('chat', {
     addChatRoom(id: number, room: ChatInfo) {
       this.rooms[id] = room;
       if (!this.chats[id]) this.chats[id] = [];
+    },
+    isKicked(id: number) {
+      if (this.kickedRooms.find(roomId => roomId === id)) return true;
+      return false;
+    },
+    selectChatRoom(id: number) {
+      if (this.isKicked(id)) this.selectedID = -2;
+      else this.selectedID = id;
+      // this.kickedRooms. ? console.log('this is kicked room!!!') : (this.selectedID = id);
+      console.log('hohoho');
     },
     deleteChatRoom(id: number) {
       delete this.rooms[id];
@@ -60,7 +72,7 @@ export const useChatStore = defineStore('chat', {
       this.rooms[roomId].banUser = this.rooms[roomId].users.filter(user => user.id !== userId);
     },
     kickUser(roomId: number, userId: number) {
-      this.rooms[roomId].users = this.rooms[roomId].users.filter(user => user.id !== userId);
+      this.kickedRooms = [...this.kickedRooms, ...[roomId]];
     },
     muteUser(roomId: number, userId: number, abongTime: Date) {
       const selectedUser = this.rooms[roomId].users.find(user => user.id === userId);
