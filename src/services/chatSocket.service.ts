@@ -10,6 +10,13 @@ interface SocketChat {
   message: string;
 }
 
+interface SocketUserInfo {
+  roomId: number;
+  userId: number;
+  name: string;
+  avatarURL: string;
+}
+
 interface SocketUserAction {
   roomId: number;
   userId: number;
@@ -53,30 +60,35 @@ export class ChatSocketService {
       console.log('leave:', d);
       chatStore.leaveUser(d.roomId, d.userId);
     });
-    socket.on('ban', (d: SocketUserAction) => {
+    socket.on('ban', (d: SocketUserInfo) => {
       console.log('ban');
-      console.log(d);
+      chatStore.banUser(d.roomId, d.userId, d.name, d.avatarURL);
+    });
+    socket.on('unban', (d: SocketUserAction) => {
+      console.log('unban');
+      chatStore.unbanUser(d.roomId, d.userId);
     });
     socket.on('kick', (d: SocketUserAction) => {
       console.log('kick');
-      console.log(d);
+      chatStore.leaveUser(d.roomId, d.userId);
     });
     socket.on('userMode', (d: SocketUserMode) => {
       console.log('userMode');
-      console.log(d);
+      chatStore.changeUserMode(d.roomId, d.userId, d.role);
     });
     socket.on('mute', (d: SocketMute) => {
       console.log('mute');
-      console.log(d);
+      chatStore.muteUser(d.roomId, d.userId, d.abongTime);
     });
   }
 
-  static offChannel(): void {
+  static offChat(): void {
     const socket = SocketService.getInstance().getSocket();
     socket.off('join');
     socket.off('leave');
     socket.off('userMode');
     socket.off('ban');
+    socket.off('unban');
     socket.off('kick');
     socket.off('mute');
   }

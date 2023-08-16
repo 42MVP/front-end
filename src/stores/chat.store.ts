@@ -47,18 +47,33 @@ export const useChatStore = defineStore('chat', {
         role: 'USER',
         abongTime: new Date(),
       });
+      this.rooms[roomId].users = [...this.rooms[roomId].users, ...[user]];
+      console.log('socket join');
     },
     leaveUser(roomId: number, userId: number) {
       this.rooms[roomId].users = this.rooms[roomId].users.filter(e => e.id !== userId);
+      console.log('socket leave');
+      // TODO : userId === loginStore.id
     },
-    changeUserMode(roomId: number, userId: number) {},
-    banUser(roomId: number, userId: number) {
-      const user = this.rooms[roomId].users.find(e => e.id === userId);
-      this.rooms[roomId].users = this.rooms[roomId].users.filter(e => e.id !== userId);
-      this.rooms[roomId].banUser.push(user);
+    banUser(roomId: number, userId: number, name: string, avatarURL: string) {
+      const user = { id: userId, name: name, avatarURL: avatarURL };
+      this.rooms[roomId].banUser = [...this.rooms[roomId].banUser, ...[user]];
     },
-    kickUser(roomId: number, userId: number) {},
-    muteUser(roomId: number, userId: number, abongTime: Date) {},
+    unbanUser(roomId: number, userId: number) {
+      this.rooms[roomId].banUser = this.rooms[roomId].users.filter(user => user.id !== userId);
+    },
+    kickUser(roomId: number, userId: number) {
+      this.rooms[roomId].users = this.rooms[roomId].users.filter(user => user.id !== userId);
+    },
+    muteUser(roomId: number, userId: number, abongTime: Date) {
+      const selectedUser = this.rooms[roomId].users.find(user => user.id !== userId);
+      selectedUser.abongTime = abongTime;
+    },
+    changeUserMode(roomId: number, userId: number, role: string) {
+      const selectedUser = this.rooms[roomId].users.find(user => user.id !== userId);
+      selectedUser.role = role;
+      this.rooms[roomId].users = [...this.rooms[roomId].users];
+    },
     //    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
     //      const { id, newChat } = event.detail;
     //      this.addChatRoom(id, newChat);
