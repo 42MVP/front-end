@@ -35,8 +35,6 @@ export const useChatStore = defineStore('chat', {
     selectChatRoom(id: number) {
       if (this.isKicked(id)) this.selectedID = -2;
       else this.selectedID = id;
-      // this.kickedRooms. ? console.log('this is kicked room!!!') : (this.selectedID = id);
-      console.log('hohoho');
     },
     deleteChatRoom(id: number) {
       delete this.rooms[id];
@@ -57,43 +55,27 @@ export const useChatStore = defineStore('chat', {
         abongTime: new Date(),
       };
       this.rooms[roomId].users = [...this.rooms[roomId].users, ...[user]];
-      console.log('socket join');
     },
     leaveUser(roomId: number, userId: number) {
       this.rooms[roomId].users = this.rooms[roomId].users.filter(e => e.id !== userId);
-      console.log('socket leave');
-      // TODO : userId === loginStore.id
     },
     banUser(roomId: number, userId: number, name: string, avatarURL: string) {
       const user = { id: userId, name: name, avatarURL: avatarURL };
-      this.rooms[roomId].banUser = [...this.rooms[roomId].banUser, ...[user]];
+      this.rooms[roomId].banUsers = [...this.rooms[roomId].banUsers, ...[user]];
     },
     unbanUser(roomId: number, userId: number) {
-      this.rooms[roomId].banUser = this.rooms[roomId].users.filter(user => user.id !== userId);
+      this.rooms[roomId].banUsers = this.rooms[roomId].users.filter(user => user.id !== userId);
     },
-    kickUser(roomId: number, userId: number) {
+    kickUser(roomId: number) {
       this.kickedRooms = [...this.kickedRooms, ...[roomId]];
     },
     muteUser(roomId: number, userId: number, abongTime: Date) {
       const selectedUser = this.rooms[roomId].users.find(user => user.id === userId);
-      selectedUser.abongTime = abongTime;
+      if (selectedUser) selectedUser.abongTime = abongTime;
     },
     changeUserMode(roomId: number, userId: number, role: string) {
       const selectedUser = this.rooms[roomId].users.find(user => user.id === userId);
-      selectedUser.role = role;
-      this.rooms[roomId].users = [...this.rooms[roomId].users];
+      if (selectedUser) selectedUser.role = role;
     },
-    //    handleJoinEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
-    //      const { id, newChat } = event.detail;
-    //      this.addChatRoom(id, newChat);
-    //    },
-    //    handleMessageEvent(event: CustomEvent<{ id: number; newChat: Chat }>) {
-    //      const { id, newChat } = event.detail;
-    //      this.addChat(id, newChat);
-    //    },
-    //    handleLeaveEvent(event: CustomEvent<{ id: number }>) {
-    //      const { id } = event.detail;
-    //      this.deleteChatRoom(id);
-    //    },
   },
 });

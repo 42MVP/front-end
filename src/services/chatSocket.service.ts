@@ -1,7 +1,7 @@
 import { SocketService } from './socket.service';
 import { chatStore } from '@/main';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
-import { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 interface SocketChat {
   roomId: number;
@@ -39,7 +39,6 @@ export class ChatSocketService {
   static onChat(): void {
     const socket = SocketService.getInstance().getSocket();
     socket.on('receive-message', (chat: SocketChat) => {
-      console.log('receive-message: ', chat);
       const newChat: Chat = {
         id: chat.userId,
         username: chat.userName,
@@ -54,34 +53,27 @@ export class ChatSocketService {
   static onChannel(): void {
     const socket = SocketService.getInstance().getSocket();
     socket.on('join', (d: SocketUserInfo) => {
-      console.log('join:', d);
       chatStore.joinUser(d.roomId, d.userId, d.name, d.avatarURL);
     });
     socket.on('addedRoom', (d: ChatInfo) => {
       chatStore.addChatRoom(d.id, d);
     });
     socket.on('leave', (d: SocketUserAction) => {
-      console.log('leave:', d);
       chatStore.leaveUser(d.roomId, d.userId);
     });
     socket.on('ban', (d: SocketUserInfo) => {
-      console.log('ban');
       chatStore.banUser(d.roomId, d.userId, d.name, d.avatarURL);
     });
     socket.on('unban', (d: SocketUserAction) => {
-      console.log('unban');
       chatStore.unbanUser(d.roomId, d.userId);
     });
     socket.on('kick', (d: SocketUserAction) => {
-      console.log('kick');
-      chatStore.kickUser(d.roomId, d.userId);
+      chatStore.kickUser(d.roomId);
     });
     socket.on('userMode', (d: SocketUserMode) => {
-      console.log('userMode');
       chatStore.changeUserMode(d.roomId, d.userId, d.role);
     });
     socket.on('mute', (d: SocketMute) => {
-      console.log('mute');
       chatStore.muteUser(d.roomId, d.userId, new Date(d.abongTime));
     });
   }
