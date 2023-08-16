@@ -63,11 +63,11 @@ export const useChatStore = defineStore('chat', {
       this.rooms[roomId].users = this.rooms[roomId].users.filter(user => user.id !== userId);
     },
     muteUser(roomId: number, userId: number, abongTime: Date) {
-      const selectedUser = this.rooms[roomId].users.find(user => user.id !== userId);
+      const selectedUser = this.rooms[roomId].users.find(user => user.id === userId);
       selectedUser.abongTime = abongTime;
     },
     changeUserMode(roomId: number, userId: number, role: string) {
-      const selectedUser = this.rooms[roomId].users.find(user => user.id !== userId);
+      const selectedUser = this.rooms[roomId].users.find(user => user.id === userId);
       selectedUser.role = role;
       this.rooms[roomId].users = [...this.rooms[roomId].users];
     },

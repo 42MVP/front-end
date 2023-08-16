@@ -78,7 +78,7 @@ export class ChatSocketService {
     });
     socket.on('mute', (d: SocketMute) => {
       console.log('mute');
-      chatStore.muteUser(d.roomId, d.userId, d.abongTime);
+      chatStore.muteUser(d.roomId, d.userId, new Date(d.abongTime));
     });
   }
 
