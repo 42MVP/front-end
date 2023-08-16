@@ -82,7 +82,7 @@ export class ChatSocketService {
     });
   }
 
-  static offChat(): void {
+  static offChannel(): void {
     const socket = SocketService.getInstance().getSocket();
     socket.off('join');
     socket.off('leave');
