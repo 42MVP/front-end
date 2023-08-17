@@ -1,5 +1,7 @@
 import { gameStore } from '@/main';
 import { SocketService } from './socket.service';
+import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
+import type { GameInfo, GameTable } from '@/interfaces/game/GamePlay.interface';
 
 /**
  * matching
@@ -13,19 +15,6 @@ const GameMatchingEvent = {
   timeout: 'timeout',
   confirm: 'confirm',
 };
-
-interface GameUser {
-  id: number;
-  name: string;
-  avatarURL: string;
-}
-
-interface EmitConfirm {
-  result: boolean;
-  leftUser: GameUser | undefined;
-  rightUser: GameUser | undefined;
-  gameRoomId: number | undefined;
-}
 
 interface EmitMatched {
   matchingId: number;
@@ -62,19 +51,6 @@ interface EmitInviteSuccess {
   invitationId: number;
 }
 
-interface GameUser {
-  id: number;
-  name: string;
-  avatarURL: string;
-}
-
-interface EmitInviteConfirm {
-  result: boolean;
-  leftUser: GameUser | undefined;
-  rightUser: GameUser | undefined;
-  gameRoomId: number | undefined;
-}
-
 export class GameSocketService {
   /**
    * matching
@@ -92,7 +68,7 @@ export class GameSocketService {
       gameStore.matchingId = d.matchingId;
     });
 
-    socket.on(GameMatchingEvent.confirm, (d: EmitConfirm) => {
+    socket.on(GameMatchingEvent.confirm, (d: GameMatch) => {
       console.log('confirm:', d);
       if (d.result === true) {
         gameStore.matchInfo = d;
@@ -102,7 +78,7 @@ export class GameSocketService {
       }
     });
 
-    socket.on(GameMatchingEvent.timeout, (d: void) => {
+    socket.on(GameMatchingEvent.timeout, () => {
       gameStore.setStatus('시간초과');
     });
   }
@@ -160,7 +136,7 @@ export class GameSocketService {
       console.log(d);
     });
 
-    socket.on(GameInviteEvent.inviteConfirm, (d: EmitInviteConfirm) => {
+    socket.on(GameInviteEvent.inviteConfirm, (d: GameMatch) => {
       if (d.result === true) {
         console.log('게임 수락됨');
         gameStore.matchInfo = d;
@@ -192,5 +168,70 @@ export class GameSocketService {
     const socket = SocketService.getInstance().getSocket();
 
     socket.emit('reject-invite', { invitationId: invitationId });
+  }
+  /**
+   * play
+   * play
+   * play
+   * play
+   * play
+   */
+  private static _background: string;
+  private static _leftScore: number;
+  private static _rightScore: number;
+  private static _tableInfo: GameTable;
+
+  static onPlay(): void {
+    const socket = SocketService.getInstance().getSocket();
+    socket.on('init', (gameInfo: GameInfo) => {
+      this.initGame(gameInfo);
+      console.log('game-init', gameInfo);
+    });
+    socket.on('render', (table: GameTable) => {
+      this._tableInfo = table;
+      console.log('cur:', this._tableInfo);
+      console.log('game-render', table);
+    });
+    socket.on('finish');
+    window.addEventListener('keydown', GameSocketService.keyDown);
+  }
+
+  static offPlay(): void {
+    const socket = SocketService.getInstance().getSocket();
+    socket.off('init');
+    socket.off('render');
+    socket.off('finish');
+    window.removeEventListener('keydown', GameSocketService.keyDown);
+  }
+  static keyDown(event: KeyboardEvent): void {
+    const socket = SocketService.getInstance().getSocket();
+    if (event.key === 'ArrowUp') socket.emit('arrowUp');
+    else if (event.key === 'ArrowDown') socket.emit('arrowDown');
+  }
+  // game play
+  static initGame(gameInfo: GameInfo): void {
+    this._background = gameInfo.background;
+    this._leftScore = gameInfo.leftScore;
+    this._rightScore = gameInfo.rightScore;
+    this._tableInfo = gameInfo.tableInfo;
+  }
+  static set tableInfo(newInfo: GameTable) {
+    this._tableInfo = newInfo;
+  }
+
+  static get tableInfo() {
+    return this._tableInfo;
+  }
+
+  static get leftScore() {
+    return this._leftScore;
+  }
+
+  static get rightScore() {
+    return this._rightScore;
+  }
+
+  static get backGround() {
+    return this._background;
   }
 }
