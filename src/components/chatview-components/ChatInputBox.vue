@@ -4,7 +4,7 @@
       v-on:keypress.enter="sendEvent()"
       class="chat-input-box-input"
       v-model="text"
-      placeholder="메세지를 입력해주세요"
+      :placeholder="getPlaceholder"
     />
     <p :style="{ color: text.length >= maxLength ? '#e0afa0' : '#463f3a' }" class="chat-input-box-counter">
       {{ text.length }}/{{ maxLength }}
@@ -14,8 +14,10 @@
 </template>
 
 <script setup lang="ts">
-import { watch, ref } from 'vue';
+import { watch, ref, computed } from 'vue';
 import BasicButton from '@/components/BasicButton.vue';
+
+import { useChatStore } from '@/stores/chat.store';
 
 const text = ref<string>('');
 const emits = defineEmits(['response']);
@@ -33,6 +35,13 @@ const sendEvent: Function = () => {
     text.value = '';
   }
 };
+
+const chatStore = useChatStore();
+
+const getPlaceholder = computed(() => {
+  const abongTime = chatStore.rooms[chatStore.selectedID].self.abongTime;
+  return abongTime && new Date(abongTime) < new Date() ? '메세지를 입력해주세요' : '채팅 금지 입니다';
+});
 </script>
 
 <style scoped>
