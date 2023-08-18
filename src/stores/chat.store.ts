@@ -41,6 +41,7 @@ export const useChatStore = defineStore('chat', {
     },
     deleteChatRoom(id: number) {
       delete this.rooms[id];
+      this.rooms = { ...this.rooms };
     },
     addChat(id: number, newChat: Chat) {
       const chats = this.chats[id];
