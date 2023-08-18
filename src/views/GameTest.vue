@@ -9,7 +9,7 @@
         <AvatarItem :username="matchInfo?.rightUser.name" :avartarUrl="matchInfo?.rightUser.avatarURL" imgSize="100" />
       </div>
     </div>
-    <canvas class="gameBoard" ref="gameBoard" width="1500" height="800"></canvas>
+    <canvas class="gameBoard" ref="gameBoard" width="1100" height="700"></canvas>
   </div>
 </template>
 
@@ -29,29 +29,16 @@ const lPlayerScore = ref<number>(GameSocketService.leftScore);
 const rPlayerScore = ref<number>(GameSocketService.rightScore);
 
 const gameSettings = {
-  gameWidth: 1500,
-  gameHeight: 800,
+  gameWidth: 1100,
+  gameHeight: 700,
   boardBackground: GameSocketService.backGround,
-  paddle1Color: 'lightblue',
-  paddle2Color: 'red',
-  paddleBorder: 'black',
-  ballColor: 'yellow',
-  ballBorderColor: 'black',
+  paddleColor: '#463F3A',
+  ballColor: '#E0AFA0',
   ballRadius: 12.5,
   paddleSpeed: 50,
 };
 
-const {
-  gameWidth,
-  gameHeight,
-  boardBackground,
-  paddle1Color,
-  paddle2Color,
-  paddleBorder,
-  ballColor,
-  ballBorderColor,
-  ballRadius,
-} = gameSettings;
+const { gameWidth, gameHeight, boardBackground, paddleColor, ballColor, ballRadius } = gameSettings;
 
 const table = ref<GameTable>(GameSocketService.tableInfo);
 
@@ -65,7 +52,6 @@ watchEffect(() => {
 const drawBall = (ball: Ball) => {
   if (!ctx.value) return;
   ctx.value.fillStyle = ballColor;
-  ctx.value.strokeStyle = ballBorderColor;
   ctx.value.lineWidth = 2;
   ctx.value.beginPath();
   ctx.value.arc(ball.x, ball.y, ballRadius, 0, 2 * Math.PI);
@@ -75,13 +61,12 @@ const drawBall = (ball: Ball) => {
 
 const drawPaddles = (paddle1: Paddle, paddle2: Paddle) => {
   if (!ctx.value) return;
-  ctx.value.strokeStyle = paddleBorder;
 
-  ctx.value.fillStyle = paddle1Color;
+  ctx.value.fillStyle = paddleColor;
   ctx.value.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
   ctx.value.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
 
-  ctx.value.fillStyle = paddle2Color;
+  ctx.value.fillStyle = paddleColor;
   ctx.value.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
   ctx.value.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
 };
@@ -145,5 +130,6 @@ onBeforeUnmount(() => {
 
 .gameBoard {
   border: 3px solid;
+  margin-top: 15px;
 }
 </style>
