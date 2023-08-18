@@ -1,15 +1,23 @@
 <template>
   <div class="gameContainer">
-    <div class="game-ui-continer">
+    <!-- <div class="game-ui-continer">
       <div class="user-info-div">
-        <AvatarItem :username="matchInfo?.leftUser.name" :avartarUrl="matchInfo?.leftUser.avatarURL" imgSize="100" />
+        <AvatarItem :username="leftPlayer?.name" :avartarUrl="leftPlayer?.avatarURL" imgSize="100" />
       </div>
       <span class="score-div">{{ lPlayerScore }} : {{ rPlayerScore }}</span>
       <div class="user-info-div">
-        <AvatarItem :username="matchInfo?.rightUser.name" :avartarUrl="matchInfo?.rightUser.avatarURL" imgSize="100" />
+        <AvatarItem :username="rightPlayer?.name" :avartarUrl="rightPlayer?.avatarURL" imgSize="100" />
       </div>
-    </div>
+    </div> -->
     <canvas class="gameBoard" ref="gameBoard" width="1100" height="700"></canvas>
+    <!-- <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
+      {{ 'Lose🍂' }} <br />
+      {{ (leftPlayer?.rating as number) - 12 }} ({{ -12 }})
+    </div>
+    <div class="net-div" />
+    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
+      {{ 'Win👑' }} <br />{{ (rightPlayer?.rating as number) + 12 }} (+{{ 12 }})
+    </div> -->
   </div>
 </template>
 
@@ -20,7 +28,9 @@ import { GameSocketService } from '@/services/gameSocket.service';
 import type { GameTable, Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
 
 const gameStore = useGameStore();
-const matchInfo = gameStore.matchInfo;
+
+const leftPlayer = gameStore.matchInfo?.leftUser;
+const rightPlayer = gameStore.matchInfo?.rightUser;
 
 const gameBoard = ref<null | HTMLCanvasElement>(null);
 const ctx = ref<null | CanvasRenderingContext2D>(null);
@@ -59,16 +69,16 @@ const drawBall = (ball: Ball) => {
   ctx.value.fill();
 };
 
-const drawPaddles = (paddle1: Paddle, paddle2: Paddle) => {
+const drawPaddles = (leftPaddle: Paddle, rightPaddle: Paddle) => {
   if (!ctx.value) return;
 
   ctx.value.fillStyle = paddleColor;
-  ctx.value.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-  ctx.value.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+  ctx.value.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
+  ctx.value.strokeRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
 
   ctx.value.fillStyle = paddleColor;
-  ctx.value.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-  ctx.value.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
+  ctx.value.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
+  ctx.value.strokeRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
 };
 
 const clearBoard = () => {
@@ -131,5 +141,11 @@ onBeforeUnmount(() => {
 .gameBoard {
   border: 3px solid;
   margin-top: 15px;
+  .net-div {
+    border: 1px dashed var(--base-gray);
+    width: 1px;
+    height: 100%;
+    min-height: inherit;
+  }
 }
 </style>
