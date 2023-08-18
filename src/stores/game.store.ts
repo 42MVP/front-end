@@ -3,6 +3,7 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
 
 interface GameState {
   isMatched: boolean;
+  matchingId: number;
   status: number;
   atReadyTime: Date;
   isGameConnected: boolean;
@@ -13,6 +14,7 @@ interface GameState {
 export const useGameStore = defineStore('game', {
   state: (): GameState => ({
     isMatched: false,
+    matchingId: -1,
     status: 0,
     atReadyTime: new Date(0),
     isGameConnected: true,
@@ -34,7 +36,7 @@ export const useGameStore = defineStore('game', {
       this.option = option;
     },
     setReadyTime(ms: number = 5000): void {
-      this.atReadyTime = new Date(new Date().getTime() + ms);
+      this.atReadyTime = new Date(new Date().getTime() + 15000);
     },
     setMatchInfo(matchInfo: GameMatch | null): void {
       this.matchInfo = matchInfo;

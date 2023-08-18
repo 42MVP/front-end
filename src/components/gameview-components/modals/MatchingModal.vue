@@ -5,7 +5,6 @@
     </template>
     <template #footer>
       <Button class="button-div" text="취소" @response="cancle" />
-      <button class="delete-me" @click="tmp">임시</button>
     </template>
   </Modal>
 </template>
@@ -15,16 +14,13 @@ import Modal from '@/components/Modal.vue';
 import Button from '@/components/BasicButton.vue';
 
 import { useGameStore } from '@/stores/game.store';
+import { GameSocketService } from '@/services/gameSocket.service';
 
 const gameStore = useGameStore();
 
 const cancle = () => {
+  GameSocketService.nonoQueue();
   gameStore.setStatus('게임설정');
-};
-
-const tmp = () => {
-  gameStore.setReadyTime();
-  gameStore.setStatus('게임여부'); // TODO : 웹소켓에서 이벤트 오는거 감지
 };
 </script>
 

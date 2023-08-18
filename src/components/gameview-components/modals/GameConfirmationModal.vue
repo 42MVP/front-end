@@ -1,7 +1,7 @@
 <template>
   <Modal title="게임을 찾았습니다!">
     <template #body>
-      <CountdownTimer :targetTime="gameStore.atReadyTime" @timeout="timeout" />
+      <CountdownTimer :targetTime="gameStore.atReadyTime" />
     </template>
     <template #footer>
       <div class="button-div">
@@ -18,20 +18,21 @@ import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { useGameStore } from '@/stores/game.store';
+import { GameSocketService } from '@/services/gameSocket.service';
+import { useLoginStore } from '@/stores/login.store';
 
 const gameStore = useGameStore();
-
-const timeout = () => {
-  gameStore.setStatus('매칭중');
-};
+const loginStore = useLoginStore();
 
 const acceptGame = () => {
+  GameSocketService.acceptGame(gameStore.matchingId);
   gameStore.setStatus('상대방대기');
 };
 
 const refuseGame = () => {
-  gameStore.setStatus('매칭중');
+  GameSocketService.rejectGame(loginStore.id, gameStore.matchingId);
   gameStore.setMatchInfo(null);
+  gameStore.setStatus('게임설정');
 };
 </script>
 

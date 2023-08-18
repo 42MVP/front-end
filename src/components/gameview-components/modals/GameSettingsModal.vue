@@ -19,7 +19,7 @@
       </div>
     </template>
     <template #footer>
-      <Button class="button-div" text="게임 찾기" @response="findGame" />
+      <Button class="button-div" text="게임 찾기" @response="findGame" @click="GameSocketService.gogoqueue()" />
     </template>
   </Modal>
 </template>
@@ -32,7 +32,7 @@ import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
 import { useGameStore } from '@/stores/game.store';
-
+import { GameSocketService } from '@/services/gameSocket.service';
 
 const selectedOption = ref<number>(1);
 
