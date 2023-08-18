@@ -1,20 +1,32 @@
 <template>
   <div class="gameContainer">
-    <div class="scoreText">{{ player1Score }} : {{ player2Score }}</div>
+    <div class="game-ui-continer">
+      <div class="user-info-div">
+        <AvatarItem :username="matchInfo?.leftUser.name" :avartarUrl="matchInfo?.leftUser.avatarURL" imgSize="100" />
+      </div>
+      <span class="score-div">{{ lPlayerScore }} : {{ rPlayerScore }}</span>
+      <div class="user-info-div">
+        <AvatarItem :username="matchInfo?.rightUser.name" :avartarUrl="matchInfo?.rightUser.avatarURL" imgSize="100" />
+      </div>
+    </div>
     <canvas class="gameBoard" ref="gameBoard" width="1500" height="800"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
+import { useGameStore } from '@/stores/game.store';
 import { GameSocketService } from '@/services/gameSocket.service';
 import type { GameTable, Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
+
+const gameStore = useGameStore();
+const matchInfo = gameStore.matchInfo;
 
 const gameBoard = ref<null | HTMLCanvasElement>(null);
 const ctx = ref<null | CanvasRenderingContext2D>(null);
 
-const player1Score = ref<number>(GameSocketService.leftScore);
-const player2Score = ref<number>(GameSocketService.rightScore);
+const lPlayerScore = ref<number>(GameSocketService.leftScore);
+const rPlayerScore = ref<number>(GameSocketService.rightScore);
 
 const gameSettings = {
   gameWidth: 1500,
@@ -97,9 +109,38 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
+.game-ui-continer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0px 50px;
+  min-width: 500px;
+  .user-info-div {
+    font: var(--medium);
+  }
+
+  .score-div {
+    font: var(--extra-large);
+    align-self: center;
+    min-width: max-content;
+  }
+}
 .scoreText {
   font-family: 'consolas', monospace;
   font-size: 100px;
+}
+
+.user-info-div {
+  margin: 0 100px;
+  align-self: center;
+  text-align: center;
+  font: var(--large);
+}
+
+.score-div {
+  font: var(--extra-large);
+  align-self: center;
+  font-weight: bolder;
 }
 
 .gameBoard {
