@@ -79,10 +79,10 @@ onMounted(async () => {
 });
 
 const chooseChatRoom = (roomId: number) => {
-  if (chatStore.isKicked(roomId))
+  if (chatStore.removedRooms[roomId])
     modalStore.on({
       title: '알림',
-      text: '강퇴 당하셨습니다',
+      text: chatStore.getNotice(roomId),
       buttonText: '닫기',
       buttonFunc: () => {
         chatStore.deleteChatRoom(roomId);
@@ -108,13 +108,13 @@ const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
 };
 
 watch(
-  () => chatStore.kickedRooms,
+  () => chatStore.removedRooms,
   () => {
     const id = chatStore.selectedID;
-    if (chatStore.isKicked(id))
+    if (chatStore.removedRooms[id])
       modalStore.on({
         title: '알림',
-        text: '강퇴 당하셨습니다',
+        text: chatStore.getNotice(id),
         buttonText: '닫기',
         buttonFunc: () => {
           chatStore.selectChatRoom(-1);
