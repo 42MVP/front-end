@@ -21,7 +21,7 @@ export class ChatService {
   @APIWithToken()
   static async createRoom(body: ChatRoomCreate): Promise<ChatRoom> {
     const ret = await axiosAPI.auth().post('/chat/create-room', body);
-    const chatRoom: ChatRoom = ret.data;
+    const chatRoom: ChatInfo = ret.data;
     return chatRoom;
   }
 
