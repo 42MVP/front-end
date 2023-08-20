@@ -11,13 +11,24 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue';
 // component
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
 // store
 import { useChatStore } from '@/stores/chat.store';
+// service
+import { ChatSocketService } from '@/services/chatSocket.service';
 
 const chatStore = useChatStore();
+
+onMounted(() => {
+  ChatSocketService.onChannel();
+});
+
+onUnmounted(() => {
+  ChatSocketService.offChannel();
+});
 </script>
 
 <style scoped>

@@ -5,23 +5,26 @@
     </template>
     <template #footer>
       <Button class="button-div" text="취소" @response="cancle" />
+      <button class="delete-me" @click="tmp">임시</button>
     </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
-import GameLoading from '../GameLoading.vue';
 import Button from '@/components/BasicButton.vue';
 
-const emits = defineEmits(['response']);
+import { useGameStore } from '@/stores/game.store';
+
+const gameStore = useGameStore();
 
 const cancle = () => {
-  emits('response', '게임설정');
+  gameStore.setStatus('게임설정');
 };
 
 const tmp = () => {
-  emits('response', '게임여부'); // TODO : 웹소켓에서 이벤트 오는거 감지
+  gameStore.setReadyTime();
+  gameStore.setStatus('게임여부'); // TODO : 웹소켓에서 이벤트 오는거 감지
 };
 </script>
 

@@ -6,6 +6,7 @@ import router from './router';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { useLoginStore } from '@/stores/login.store';
+import { useChatStore } from './stores/chat.store';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -15,5 +16,6 @@ app.use(pinia);
 app.use(router);
 
 export const loginStore = useLoginStore();
+export const chatStore = useChatStore();
 
 app.mount('#app');

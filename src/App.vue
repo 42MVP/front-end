@@ -1,10 +1,16 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { useModalStore } from '@/stores/modal.store';
+import { ChatSocketService } from './services/chatSocket.service';
 
 const modalStore = useModalStore();
+
+onMounted(() => {
+  ChatSocketService.onChat();
+});
 </script>
 
 <template>
