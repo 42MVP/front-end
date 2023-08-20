@@ -63,11 +63,14 @@
       <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
         <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'OWNER'">
-            <button v-for="(modeButton, index) in roomModeIcon[roomMode]" :key="index" @click="modeButton.action">
-              {{ modeButton.emoji }}
-            </button>
-          </div>
+          <button
+            v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
+            v-for="(modeButton, index) in roomModeIcon[roomMode]"
+            :key="index"
+            @click="modeButton.action"
+          >
+            {{ modeButton.emoji }}
+          </button>
         </div>
       </div>
     </div>
@@ -168,10 +171,6 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
 </script>
 
 <style scoped>
-.title-icon-relative {
-  position: relative;
-}
-
 .chat-list-container {
   display: flex;
   flex-direction: column;
@@ -221,14 +220,6 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
   align-content: center;
 }
 
-.chat-box-icon-list {
-  display: flex;
-  border-radius: 5px;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #f4f3ee;
-}
-
 .chat-box-icon {
   display: flex;
   padding: 3px;
@@ -242,40 +233,6 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
 .chat-box-icon:hover {
   opacity: 0.5;
   transition: 0.1s ease-out;
-}
-
-.send-message {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.input-bottom {
-  display: flex;
-  width: 100px;
-  justify-content: space-between;
-}
-.list-element-container {
-  display: flex;
-  flex: none;
-  justify-content: space-between;
-  align-self: stretch;
-  height: 80px;
-  flex: 1;
-}
-
-.list-element-info-container {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.list-element-info-container span {
-  display: flex;
-  align-items: center;
-  color: var(--brown, #463f3a);
-  font: var(--small);
-  height: fit-content;
 }
 
 .list-element-icon-container {
