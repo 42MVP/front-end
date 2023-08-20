@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
 
 import GameSettingsModal from '@/components/gameview-components/modals/GameSettingsModal.vue';
 import MatchingModal from '@/components/gameview-components/modals/MatchingModal.vue';
@@ -29,13 +29,10 @@ const gameStore = useGameStore();
 
 onMounted(() => {
   GameSocketService.onGame();
+  // FIXME: asd
   if (gameStore.matchInfo) {
     //gameStore.setStatus('상대방대기');
   } else gameStore.setStatus('게임설정');
-});
-
-onUnmounted(() => {
-  GameSocketService.nonoQueue();
 });
 </script>
 

@@ -5,11 +5,13 @@ import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { useModalStore } from '@/stores/modal.store';
 import { ChatSocketService } from './services/chatSocket.service';
+import { GameSocketService } from './services/gameSocket.service';
 
 const modalStore = useModalStore();
 
 onMounted(() => {
   ChatSocketService.onChat();
+  GameSocketService.onGameInvitation();
 });
 </script>
 

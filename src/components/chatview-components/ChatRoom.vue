@@ -127,6 +127,7 @@ import { RoomMode } from '@/services/chat.service';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
+import { GameService } from '@/services/Game.service';
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
@@ -161,7 +162,7 @@ const addChat = (newMessage: string): void => {
 //const emits = defineEmits(['response']);
 
 const inviteGame = (iconEmitResponse: IconEmitResponse) => {
-  console.log(iconEmitResponse.id, iconEmitResponse.eventName);
+  GameService.inviteMatching(iconEmitResponse.id);
 };
 </script>
 

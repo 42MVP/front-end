@@ -12,8 +12,8 @@ export class UserService {
         avatarURL: '',
       },
       {
-        id: 15,
-        name: 'haha2',
+        id: 2,
+        name: 'hyeongki',
         avatarURL: '',
       },
       {
