@@ -43,6 +43,23 @@
 
   <div class="chat-list-container">
     <div v-if="chatStore.rooms[chatStore.selectedID].roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
+      <div class="chat-box-list-name-left">
+        <div class="chat-box-list-name-left-word">{{ chatStore.rooms[chatStore.selectedID].name }}</div>
+        <div class="chat-box-list-name-left-icon-container">
+          <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
+            {{ !isActiveDropdown ? '⊕' : '⊖' }}
+          </div>
+          <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
+            <template #dropdown-item>
+              <BasicList
+                :items="chatStore.rooms[chatStore.selectedID].users"
+                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
+                @clickIconButton="inviteGame"
+              />
+            </template>
+          </DropdownMenu>
+        </div>
+      </div>
       <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
         <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
@@ -99,7 +116,7 @@ const loginStore = useLoginStore();
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
-const roomMode = ref('');
+const roomMode = ref(chatStore.rooms[chatStore.selectedID].roomMode);
 const role = chatStore.rooms[chatStore.selectedID].self.role;
 
 watch(
