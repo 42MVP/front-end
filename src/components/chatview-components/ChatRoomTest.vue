@@ -1,22 +1,23 @@
 <template>
   <ManageChannelMemberModal
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
+    v-if="modalName === '멤버 관리'"
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
   />
   <ChangeChannelPasswordModal
-    :isShow="modalName === 'setPassword'"
+    :isShow="modalName === '비밀번호 변경'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
   />
   <SetChannelPasswordModal
-    :isShow="modalName === 'setPassword'"
+    :isShow="modalName === '비밀번호 설정'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="modalName = ''"
   />
   <DeleteChannelPasswordModal
-    :isShow="modalName === 'deletePassword'"
+    :isShow="modalName === '비밀번호 해제'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="
@@ -25,7 +26,7 @@
     "
   />
   <SetChannelPrivateModal
-    :isShow="modalName === 'setPrivate'"
+    :isShow="modalName === '프라이빗 설정'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @submit="
       console.log('프라이빗 설정');
@@ -33,7 +34,7 @@
     "
   />
   <UndoChannelPrivateModal
-    :isShow="modalName === 'setPrivate'"
+    :isShow="modalName === '프라이빗 해제'"
     :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @submit="
       console.log('프라이빗 설정');
@@ -51,11 +52,8 @@
           </div>
           <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
             <template #dropdown-item>
-              <BasicList
-                :items="chatStore.rooms[chatStore.selectedID].users"
-                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
-                @clickIconButton="inviteGame"
-              />
+              <BasicList :items="chatStore.rooms[chatStore.selectedID].users"
+                :iconButtons="[{ emoji: '✉️', event: 'invite' }]" @clickIconButton="inviteGame" />
             </template>
           </DropdownMenu>
         </div>
@@ -63,12 +61,8 @@
       <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
         <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <button
-            v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
-            v-for="(modeButton, index) in roomModeIcon[roomMode]"
-            :key="index"
-            @click="modeButton.action"
-          >
+          <button v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
+            v-for="(modeButton, index) in roomModeIcon[roomMode]" :key="index" @click="setModal(modeButton.modal)">
             {{ modeButton.emoji }}
           </button>
         </div>
@@ -78,14 +72,10 @@
       <div class="chat-box-list-name-left-word">디엠상대 님과의 대화</div>
     </div>
     <MessageList :chats="chatStore.chats[chatStore.selectedID]" />
-    <ChatInputBox
-      @response="
-        newMessage => {
-          addChat(newMessage);
-        }
-      "
-      :maxLength="150"
-    />
+    <ChatInputBox @response="newMessage => {
+      addChat(newMessage);
+    }
+      " :maxLength="150" />
   </div>
 </template>
 
@@ -119,7 +109,7 @@ const loginStore = useLoginStore();
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
-const roomMode = ref(chatStore.rooms[chatStore.selectedID].roomMode);
+const roomMode = ref<string>(chatStore.rooms[chatStore.selectedID].roomMode);
 const role = chatStore.rooms[chatStore.selectedID].self.role;
 
 watch(
@@ -130,37 +120,27 @@ watch(
 );
 const addChat = (newMessage: string): void => {
   ChatSocketService.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
-  //  const newChat: Chat = {
-  //    id: loginStore.id,
-  //    username: loginStore.name,
-  //    avatarURL: loginStore.avatarURL,
-  //    message: newMessage,
-  //    date: new Date(),
-  //  };
-  //  chatStore.addChat(chatStore.selectedID, newChat);
 };
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
+  console.log(name);
 };
 
-const getRoomMode = () => {
-  roomMode.value = chatStore.rooms[chatStore.selectedID].roomMode;
-};
 
 const roomModeIcon: Record<string, RoomModeIcon[]> = {
-  PUBLIC: [
-    { emoji: '🔓', action: "setModal('setPassword')" },
-    { emoji: '🙉', action: "setModal('changePrivate')" },
+  'PUBLIC': [
+    { emoji: '🔓', modal: '비밀번호 설정' },
+    { emoji: '🙉', modal: '프라이빗 설정' }
   ],
-  PRIVATE: [
-    { emoji: '🔓', action: "setModal('setPassword')" },
-    { emoji: '🙈', action: "setModal('changePublic')" },
+  'PRIVATE': [
+    { emoji: '🔓', modal: '비밀번호 설정' },
+    { emoji: '🙈', modal: '프라이빗 해제' }
   ],
-  PROTECTED: [
-    { emoji: '🔒', action: "setModal('setPassword')" },
-    { emoji: '🔑', action: "setModal('deletePassword')" },
-  ],
+  'PROTECTED': [
+    { emoji: '🔒', modal: '비밀번호 변경' },
+    { emoji: '🔑', modal: '비밀번호 해제' }
+  ]
 };
 
 const emits = defineEmits(['response']);

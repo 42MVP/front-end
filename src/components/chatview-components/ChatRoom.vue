@@ -52,44 +52,19 @@
           </div>
           <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
             <template #dropdown-item>
-              <BasicList
-                :items="chatStore.rooms[chatStore.selectedID].users"
-                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
-                @clickIconButton="inviteGame"
-              />
+              <BasicList :items="chatStore.rooms[chatStore.selectedID].users"
+                :iconButtons="[{ emoji: '✉️', event: 'invite' }]" @clickIconButton="inviteGame" />
             </template>
           </DropdownMenu>
         </div>
       </div>
       <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
-        <div class="chat-box-icon-list">
+        <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <div v-if="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'">
-            <div
-              v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
-              class="chat-box-icon"
-              @click="setModal('비밀번호 변경')"
-            >
-              🔐
-            </div>
-            <div
-              v-if="chatStore.rooms[chatStore.selectedID].roomMode === 'PROTECTED'"
-              class="chat-box-icon"
-              @click="setModal('비밀번호 해제')"
-              style="border: 0px"
-            >
-              🔓
-            </div>
-            <div v-else class="chat-box-icon" @click="setModal('비밀번호 설정')" style="border: 0px">🔒</div>
-            <div
-              v-if="chatStore.rooms[chatStore.selectedID].roomMode !== 'PRIVATE'"
-              class="chat-box-icon"
-              @click="setModal('프라이빗 설정')"
-            >
-              🙈
-            </div>
-            <div v-else class="chat-box-icon" @click="setModal('프라이빗 해제')">🙉</div>
-          </div>
+          <button v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
+            v-for="(modeButton, index) in roomModeIcon[roomMode]" :key="index" @click="setModal(modeButton.modal)">
+            {{ modeButton.emoji }}
+          </button>
         </div>
       </div>
     </div>
@@ -97,14 +72,10 @@
       <div class="chat-box-list-name-left-word">디엠상대 님과의 대화</div>
     </div>
     <MessageList :chats="chatStore.chats[chatStore.selectedID]" />
-    <ChatInputBox
-      @response="
-        newMessage => {
-          addChat(newMessage);
-        }
-      "
-      :maxLength="150"
-    />
+    <ChatInputBox @response="newMessage => {
+      addChat(newMessage);
+    }
+      " :maxLength="150" />
   </div>
 </template>
 
@@ -121,21 +92,25 @@ import MessageList from '@/components/chatview-components/MessageList.vue';
 import ChatInputBox from '@/components/chatview-components/ChatInputBox.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import BasicList from '@/components/BasicList.vue';
+
 // stores
 import { useLoginStore } from '@/stores/login.store';
 import { useChatStore } from '@/stores/chat.store';
 // interfaces
 import { RoomMode } from '@/services/chat.service';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
+import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
+
+const chatStore = useChatStore();
+const loginStore = useLoginStore();
 
 const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
-
-const chatStore = useChatStore();
-const loginStore = useLoginStore();
+const roomMode = ref<string>(chatStore.rooms[chatStore.selectedID].roomMode);
+const role = chatStore.rooms[chatStore.selectedID].self.role;
 
 watch(
   () => chatStore.rooms[chatStore.selectedID],
@@ -143,28 +118,29 @@ watch(
     isSelect.value = true;
   },
 );
+const addChat = (newMessage: string): void => {
+  ChatSocketService.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
+};
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
+  console.log(name);
 };
 
-const addChat = (newMessage: string): void => {
-  ChatSocketService.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
-  //  const newChat: Chat = {
-  //    id: loginStore.id,
-  //    username: loginStore.name,
-  //    avatarURL: loginStore.avatarURL,
-  //    message: newMessage,
-  //    date: new Date(),
-  //  };
-  //  chatStore.addChat(chatStore.selectedID, newChat);
-};
 
-const isOwner = (): boolean => {
-  if (chatStore.rooms[chatStore.selectedID].self.role === 'OWNER') {
-    return true;
-  }
-  return false;
+const roomModeIcon: Record<string, RoomModeIcon[]> = {
+  'PUBLIC': [
+    { emoji: '🔓', modal: '비밀번호 설정' },
+    { emoji: '🙉', modal: '프라이빗 설정' }
+  ],
+  'PRIVATE': [
+    { emoji: '🔓', modal: '비밀번호 설정' },
+    { emoji: '🙈', modal: '프라이빗 해제' }
+  ],
+  'PROTECTED': [
+    { emoji: '🔒', modal: '비밀번호 변경' },
+    { emoji: '🔑', modal: '비밀번호 해제' }
+  ]
 };
 
 const emits = defineEmits(['response']);
@@ -175,10 +151,6 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
 </script>
 
 <style scoped>
-.title-icon-relative {
-  position: relative;
-}
-
 .chat-list-container {
   display: flex;
   flex-direction: column;
@@ -228,14 +200,6 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
   align-content: center;
 }
 
-.chat-box-icon-list {
-  display: flex;
-  border-radius: 5px;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #f4f3ee;
-}
-
 .chat-box-icon {
   display: flex;
   padding: 3px;
@@ -251,15 +215,29 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
   transition: 0.1s ease-out;
 }
 
-.send-message {
-  width: 100%;
+.list-element-icon-container {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: right;
+  margin-right: 15px;
 }
 
-.input-bottom {
+.list-element-icon-container button {
   display: flex;
-  width: 100px;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10%;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.list-element-icon-container button:hover {
+  opacity: 0.5;
+  transition: 0.1s ease-out;
 }
 </style>
