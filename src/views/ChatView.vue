@@ -4,7 +4,7 @@
       <ChatList />
     </div>
     <div class="chat-right">
-      <ChatRoomTest v-if="chatStore.isSelected" />
+      <ChatRoom v-if="chatStore.isSelected" />
       <div v-else class="chat-box-unchoose">☺️</div>
     </div>
   </div>
@@ -15,7 +15,6 @@ import { onMounted, onUnmounted } from 'vue';
 // component
 import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
-import ChatRoomTest from '@/components/chatview-components/ChatRoomTest.vue';
 // store
 import { useChatStore } from '@/stores/chat.store';
 // service
