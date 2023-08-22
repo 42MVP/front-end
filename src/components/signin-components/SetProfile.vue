@@ -1,6 +1,6 @@
 <template>
   <div class="getInfoWrap">
-    <UploadImage />
+    <UploadImage @image="getimage" />
     <div class="setProfile">
       <a>닉네임 설정</a>
       <TextInputBox
@@ -15,6 +15,11 @@
         required
       />
     </div>
+    <label class="container"
+      >2차 인증 사용하기
+      <input type="checkbox" v-model="isCheckAuth" />
+      <span class="checkmark"></span>
+    </label>
     <div class="submitButton">
       <BasicButton @click="submitNickname()" text="완료" />
     </div>
@@ -30,13 +35,21 @@ import { ref } from 'vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import UploadImage from '../common/UploadImage.vue';
+import { UserService } from '@/services/user.service';
 
 const username = ref<string>('');
+const file = ref<File | undefined>(undefined);
+const isCheckAuth = ref<boolean>(false);
 const router = useRouter();
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
 
-const submitNickname: Function = (): void => {
+const getimage = (image: File): void => {
+  file.value = image;
+  loginStore.avatarURL = URL.createObjectURL(image);
+};
+
+const submitNickname: Function = async (): Promise<void> => {
   if (username.value.length === 0) {
     modalStore.on({
       title: '알림',
@@ -55,9 +68,26 @@ const submitNickname: Function = (): void => {
       buttonFunc: () => {},
     });
   } else {
-    // TODO: api
-    loginStore.name = username.value;
-    router.push('/');
+    try {
+      await UserService.setUserProfile({
+        userName: username.value,
+        isAuth: isCheckAuth.value,
+        avatar: file.value,
+      });
+      loginStore.isLogin = true;
+      loginStore.name = username.value;
+      router.push('/');
+    } catch (e) {
+      modalStore.on({
+        title: '오류',
+        text: '프로필 수정 중 에러 발생!',
+        buttonText: '닫기',
+        buttonFunc: () => {
+          loginStore.resetAll();
+          router.push('/');
+        },
+      });
+    }
   }
 };
 </script>

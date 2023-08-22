@@ -132,7 +132,6 @@ const searchedUsers = ref<User[]>([] as User[]);
 const serviceGetUser = async () => {
   try {
     const ret = await UserService.mockUser();
-    // const ret = await UserService.getAllUser();
     const allUsers: User[] = ret;
     const channelUserIds = new Set(chatStore.rooms[chatStore.selectedID].users.map(user => user.id));
     usersNotInChannel.value = allUsers.filter(user => !channelUserIds.has(user.id));
