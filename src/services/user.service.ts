@@ -2,6 +2,7 @@ import { APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 
 export class UserService {
   @APIWithToken()
@@ -36,17 +37,17 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async getFriendsList(): Promise<UserInfo[]> {
+  static async getFriendsList(): Promise<OthersInfo[]> {
     const ret = await axiosAPI.auth().get(`/friends`);
-    const friendsList: UserInfo[] = ret.data;
+    const friendsList: OthersInfo[] = ret.data;
 
     return friendsList;
   }
 
   @APIWithToken()
-  static async getBlocksList(): Promise<UserInfo[]> {
+  static async getBlocksList(): Promise<OthersInfo[]> {
     const ret = await axiosAPI.auth().get(`/Blocks`);
-    const BlocksList: UserInfo[] = ret.data;
+    const BlocksList: OthersInfo[] = ret.data;
 
     return BlocksList;
   }

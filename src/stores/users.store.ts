@@ -15,7 +15,7 @@ export const useUsersSotre = defineStore('users', {
   }),
   getters: {},
   actions: {
-    addFriends() {},
-    addBlocks() {},
+    addFriends(user: OthersInfo) {},
+    addBlocks(user: OthersInfo) {},
   },
 });
