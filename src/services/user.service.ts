@@ -4,26 +4,6 @@ import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 
 export class UserService {
-  static mockUser = (): User[] => {
-    return [
-      {
-        id: 3,
-        name: 'kanghyki',
-        avatarURL: '',
-      },
-      {
-        id: 2,
-        name: 'hyeongki',
-        avatarURL: '',
-      },
-      {
-        id: 16,
-        name: 'ha3ha2',
-        avatarURL: '',
-      },
-    ];
-  };
-
   @APIWithToken()
   static async getAllUser(): Promise<User> {
     const ret = await axiosAPI.auth().get('/user');
@@ -40,8 +20,34 @@ export class UserService {
 
   // TODO: TYPE
   @APIWithToken()
-  static async getUserById(id: number) {
+  static async getUserById(id: number): Promise<UserInfo> {
     const ret = await axiosAPI.auth().get(`/user/${id}`);
-    return ret.data;
+    const userInfo: UserInfo = ret.data;
+
+    return userInfo;
+  }
+
+  @APIWithToken()
+  static async getUserByName(name: string): Promise<UserInfo> {
+    const ret = await axiosAPI.auth().get(`/user/${name}`);
+    const userInfo: UserInfo = ret.data;
+
+    return userInfo;
+  }
+
+  @APIWithToken()
+  static async getFriendsList(): Promise<UserInfo[]> {
+    const ret = await axiosAPI.auth().get(`/friends`);
+    const friendsList: UserInfo[] = ret.data;
+
+    return friendsList;
+  }
+
+  @APIWithToken()
+  static async getBlocksList(): Promise<UserInfo[]> {
+    const ret = await axiosAPI.auth().get(`/Blocks`);
+    const BlocksList: UserInfo[] = ret.data;
+
+    return BlocksList;
   }
 }

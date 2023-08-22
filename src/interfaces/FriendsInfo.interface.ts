@@ -1,9 +1,8 @@
-export interface FriendInfo {
-  id: number;
+export interface OthersInfo {
   name: string;
   avatarURL: string;
-  isFollow: boolean;
-  isBlock: boolean;
-  level: number;
-  achievement: string;
+  achievements: number[];
+  winNum: number;
+  loseNum: number;
+  rate: number;
 }
