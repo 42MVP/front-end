@@ -1,35 +1,101 @@
 import { gameStore } from '@/main';
 import { SocketService } from './socket.service';
 
+/**
+ * matching
+ * matching
+ * matching
+ * matching
+ * matching
+ */
 const GameMatchingEvent = {
   matched: 'matched',
   timeout: 'timeout',
   confirm: 'confirm',
 };
 
+interface GameUser {
+  id: number;
+  name: string;
+  avatarURL: string;
+}
+
+interface EmitConfirm {
+  result: boolean;
+  leftUser: GameUser | undefined;
+  rightUser: GameUser | undefined;
+  gameRoomId: number | undefined;
+}
+
+interface EmitMatched {
+  matchingId: number;
+}
+
+/**
+ * invatation
+ * invatation
+ * invatation
+ * invatation
+ * invatation
+ */
+
 const GameInviteEvent = {
   invite: 'invite',
   inviteFailed: 'invite-failed',
   inviteSuccess: 'invite-success',
-  inviteAccepted: 'invite-accepted',
-  inviteRejected: 'invite-rejected',
+  inviteConfirm: 'invite-confirm',
   inviteTimeout: 'invite-timeout',
   inviteError: 'invite-error',
 };
 
+interface EmitInviteError {
+  msg: string;
+}
+
+interface EmitInvite {
+  inviterName: string;
+  inviterAvatarUrl: string;
+  invitationId: number;
+}
+
+interface EmitInviteSuccess {
+  invitationId: number;
+}
+
+interface GameUser {
+  id: number;
+  name: string;
+  avatarURL: string;
+}
+
+interface EmitInviteConfirm {
+  result: boolean;
+  leftUser: GameUser | undefined;
+  rightUser: GameUser | undefined;
+  gameRoomId: number | undefined;
+}
+
 export class GameSocketService {
+  /**
+   * matching
+   * matching
+   * matching
+   * matching
+   * matching
+   */
   static onGame(): void {
     const socket = SocketService.getInstance().getSocket();
-    socket.on(GameMatchingEvent.matched, (d: any) => {
+    socket.on(GameMatchingEvent.matched, (d: EmitMatched) => {
       console.log('matched: ', d);
       gameStore.setReadyTime();
       gameStore.setStatus('게임여부');
       gameStore.matchingId = d.matchingId;
     });
 
-    socket.on(GameMatchingEvent.confirm, (d: any) => {
+    socket.on(GameMatchingEvent.confirm, (d: EmitConfirm) => {
       console.log('confirm:', d);
-      if (d === true) {
+      if (d.result === true) {
+        gameStore.matchInfo = d;
         gameStore.setStatus('게임시작');
       } else {
         gameStore.setStatus('상대방거절');
@@ -54,6 +120,7 @@ export class GameSocketService {
       console.log('init: ', d);
     });
   }
+  //-----------
 
   static acceptGame(matchingId: number) {
     const socket = SocketService.getInstance().getSocket();
@@ -61,16 +128,23 @@ export class GameSocketService {
     socket.emit('accept-matching', { matchingId: matchingId });
   }
 
-  static rejectGame(userId: number, matchingId: number) {
+  static rejectGame(matchingId: number) {
     const socket = SocketService.getInstance().getSocket();
 
-    socket.emit('reject-matching', { userId: userId, matchingId: matchingId });
+    socket.emit('reject-matching', { matchingId: matchingId });
   }
 
+  /**
+   * invatation
+   * invatation
+   * invatation
+   * invatation
+   * invatation
+   */
   static onGameInvitation() {
     const socket = SocketService.getInstance().getSocket();
 
-    socket.on(GameInviteEvent.invite, (d: { inviterName: string; inviterAvatarUrl: string; invitationId: number }) => {
+    socket.on(GameInviteEvent.invite, (d: EmitInvite) => {
       console.log(d);
       const isConfirmed = confirm(`${d.inviterName}님의 게임 초대를 수락하시겠습니까?`);
 
@@ -81,23 +155,19 @@ export class GameSocketService {
       }
     });
 
-    socket.on(GameInviteEvent.inviteFailed, (d: { msg: string }) => {
-      alert(d.msg);
-    });
-
-    socket.on(GameInviteEvent.inviteSuccess, (d: { invitationId: number }) => {
+    socket.on(GameInviteEvent.inviteSuccess, (d: EmitInviteSuccess) => {
       console.log('상대가 초대를 수신함');
       console.log(d);
     });
 
-    socket.on(GameInviteEvent.inviteAccepted, (d: void) => {
-      console.log('게임 수락됨');
-      console.log(d);
-    });
-
-    socket.on(GameInviteEvent.inviteRejected, (d: void) => {
-      console.log('초대 게임 거절됨');
-      console.log(d);
+    socket.on(GameInviteEvent.inviteConfirm, (d: EmitInviteConfirm) => {
+      if (d.result === true) {
+        console.log('게임 수락됨');
+        gameStore.matchInfo = d;
+        gameStore.initGame();
+      } else {
+        console.log('초대 게임 거절됨');
+      }
     });
 
     socket.on(GameInviteEvent.inviteTimeout, (d: void) => {
@@ -105,11 +175,12 @@ export class GameSocketService {
       console.log(d);
     });
 
-    socket.on(GameInviteEvent.inviteError, (d: { msg: string }) => {
+    socket.on(GameInviteEvent.inviteError, (d: EmitInviteError) => {
       console.log(`error from server: ${d.msg}`);
       console.log(d);
     });
   }
+  //-----------
 
   static acceptInvitation(invitationId: number) {
     const socket = SocketService.getInstance().getSocket();

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
 
 interface GameState {
+  isOnGame: boolean;
   isMatched: boolean;
   matchingId: number;
   status: number;
@@ -13,6 +14,7 @@ interface GameState {
 
 export const useGameStore = defineStore('game', {
   state: (): GameState => ({
+    isOnGame: false,
     isMatched: false,
     matchingId: -1,
     status: 0,

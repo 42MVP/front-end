@@ -19,10 +19,8 @@ import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { useGameStore } from '@/stores/game.store';
 import { GameSocketService } from '@/services/gameSocket.service';
-import { useLoginStore } from '@/stores/login.store';
 
 const gameStore = useGameStore();
-const loginStore = useLoginStore();
 
 const acceptGame = () => {
   GameSocketService.acceptGame(gameStore.matchingId);
@@ -30,7 +28,7 @@ const acceptGame = () => {
 };
 
 const refuseGame = () => {
-  GameSocketService.rejectGame(loginStore.id, gameStore.matchingId);
+  GameSocketService.rejectGame(gameStore.matchingId);
   gameStore.setMatchInfo(null);
   gameStore.setStatus('게임설정');
 };
