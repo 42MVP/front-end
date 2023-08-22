@@ -1,7 +1,8 @@
 <template>
-  <GameMatching v-if="!isMatched" />
-  <div v-else class="game-screen-div">
-    <GameScreen />
+  <!-- <GameMatching v-if="!isMatched" />
+  <div v-else class="game-screen-div"> -->
+    <!-- <GameScreen /> -->
+    <GameResultModal />
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import GameMatching from '@/components/gameview-components/GameMatching.vue';
 import GameScreen from '@/components/gameview-components/GameScreen.vue';
 
 import { useGameStore } from '@/stores/game.store';
+import GameResultModal from '@/components/gameview-components/modals/GameResultModal.vue';
 
 const gameStore = useGameStore();
 
