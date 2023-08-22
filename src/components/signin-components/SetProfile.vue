@@ -69,11 +69,13 @@ const submitNickname: Function = async (): Promise<void> => {
     });
   } else {
     try {
-      await UserService.setUserProfile({
-        userName: username.value,
-        isAuth: isCheckAuth.value,
-        avatar: file.value,
-      });
+      const formData = new FormData();
+      formData.append('name', username.value);
+      formData.append('isAuth', String(isCheckAuth.value));
+      if (file.value) {
+        formData.append('avatar', file.value);
+      }
+      await UserService.setUserProfile(formData);
       loginStore.isLogin = true;
       loginStore.name = username.value;
       router.push('/');
