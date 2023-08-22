@@ -3,6 +3,7 @@
     <GameSettingsModal v-if="gameStore.isStatusMatched('게임설정')" />
     <MatchingModal v-else-if="gameStore.isStatusMatched('매칭중')" />
     <GameConfirmationModal v-else-if="gameStore.isStatusMatched('게임여부')" />
+    <GameTimeoutModal v-else-if="gameStore.isStatusMatched('시간초과')" />
     <WaitingForOpponentModal v-else>
       <GameRefusedModal v-if="gameStore.isStatusMatched('상대방거절')" />
       <GameStartingModal v-if="gameStore.isStatusMatched('게임시작')" />
@@ -19,14 +20,18 @@ import GameConfirmationModal from '@/components/gameview-components/modals/GameC
 import WaitingForOpponentModal from '@/components/gameview-components/modals/WaitingForOpponentModal.vue';
 import GameStartingModal from '@/components/gameview-components/modals/GameStartingModal.vue';
 import GameRefusedModal from '@/components/gameview-components/modals/GameRefusedModal.vue';
+import GameTimeoutModal from '@/components/gameview-components/modals/GameTimeoutModal.vue';
 
 import { useGameStore } from '@/stores/game.store';
+import { GameSocketService } from '@/services/gameSocket.service';
 
 const gameStore = useGameStore();
 
 onMounted(() => {
+  GameSocketService.onGame();
+  // FIXME: asd
   if (gameStore.matchInfo) {
-    gameStore.setStatus('상대방대기');
+    //gameStore.setStatus('상대방대기');
   } else gameStore.setStatus('게임설정');
 });
 </script>

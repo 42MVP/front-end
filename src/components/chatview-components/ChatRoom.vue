@@ -113,6 +113,7 @@ import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
+import { GameService } from '@/services/Game.service';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -164,7 +165,7 @@ const roomModeIcon: Record<string, RoomModeIcon[]> = {
 const emits = defineEmits(['response']);
 
 const inviteGame = (iconEmitResponse: IconEmitResponse) => {
-  console.log(iconEmitResponse.id, iconEmitResponse.eventName);
+  GameService.inviteMatching(iconEmitResponse.id);
 };
 </script>
 

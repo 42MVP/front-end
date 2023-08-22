@@ -4,8 +4,7 @@
       <div id="spinner"></div>
     </template>
     <template #footer>
-      <Button class="button-div" text="취소" @response="cancle" />
-      <button class="delete-me" @click="tmp">임시</button>
+      <Button class="button-div" text="취소" @response="cancelQueue" />
     </template>
   </Modal>
 </template>
@@ -15,16 +14,17 @@ import Modal from '@/components/Modal.vue';
 import Button from '@/components/BasicButton.vue';
 
 import { useGameStore } from '@/stores/game.store';
+import { GameService } from '@/services/game.service';
 
 const gameStore = useGameStore();
 
-const cancle = () => {
-  gameStore.setStatus('게임설정');
-};
-
-const tmp = () => {
-  gameStore.setReadyTime();
-  gameStore.setStatus('게임여부'); // TODO : 웹소켓에서 이벤트 오는거 감지
+const cancelQueue = () => {
+  try {
+    GameService.cancelQueue();
+    gameStore.setStatus('게임설정');
+  } catch (e) {
+    console.log('cancel queue error...', e);
+  }
 };
 </script>
 

@@ -19,7 +19,7 @@
       </div>
     </template>
     <template #footer>
-      <Button class="button-div" text="게임 찾기" @response="findGame" />
+      <Button class="button-div" text="게임 찾기" @response="applyQueue" />
     </template>
   </Modal>
 </template>
@@ -32,7 +32,7 @@ import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
 import { useGameStore } from '@/stores/game.store';
-
+import { GameService } from '@/services/game.service';
 
 const selectedOption = ref<number>(1);
 
@@ -46,9 +46,14 @@ const setActive = (index: number) => {
 
 const gameStore = useGameStore();
 
-const findGame = () => {
-  gameStore.setOption(selectedOption.value);
-  gameStore.setStatus('매칭중');
+const applyQueue = async () => {
+  try {
+    await GameService.applyQueue();
+    gameStore.setOption(selectedOption.value);
+    gameStore.setStatus('매칭중');
+  } catch (e) {
+    console.log('applyQueue error...', e);
+  }
 };
 </script>
 
