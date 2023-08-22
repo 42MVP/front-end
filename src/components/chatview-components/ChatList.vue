@@ -108,7 +108,7 @@ const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
 };
 
 watch(
-  () => chatStore.removedRooms,
+  () => chatStore.isSelected && chatStore.removedRooms,
   () => {
     const id = chatStore.selectedID;
     if (chatStore.removedRooms[id])

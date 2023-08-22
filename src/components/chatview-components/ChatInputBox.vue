@@ -39,7 +39,7 @@ const sendEvent: Function = () => {
 const chatStore = useChatStore();
 
 const getPlaceholder = computed(() => {
-  const abongTime = chatStore.rooms[chatStore.selectedID].self.abongTime;
+  const abongTime = chatStore.chatRoom?.self.abongTime;
   return abongTime && new Date(abongTime) < new Date() ? '메세지를 입력해주세요' : '채팅 금지 입니다';
 });
 </script>

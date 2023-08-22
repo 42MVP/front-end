@@ -24,8 +24,15 @@ export const useChatStore = defineStore('chat', {
   }),
   getters: {
     isSelected(): boolean {
-      if (this.selectedID === -1) return false;
-      return true;
+      return this.selectedID !== -1 ? true : false;
+    },
+    chatRoom(): ChatInfo | undefined {
+      const id = this.selectedID;
+      return this.rooms[id];
+    },
+    chat(): Chat[] {
+      const chats = this.chats[this.selectedID];
+      return chats ? chats : [];
     },
   },
   actions: {
@@ -34,7 +41,7 @@ export const useChatStore = defineStore('chat', {
       if (!this.chats[id]) this.chats[id] = [];
     },
     setRoomMode(id: number, roomMode: string) {
-      this.rooms[id].roomMode = roomMode; 
+      this.rooms[id].roomMode = roomMode;
     },
     isOwner(roomId: number, userId: number): boolean {
       const user = this.rooms[roomId].users.find(user => user.id === userId);
@@ -51,8 +58,7 @@ export const useChatStore = defineStore('chat', {
       }
     },
     selectChatRoom(id: number) {
-      if (this.removedRooms[id]) this.selectedID = -1;
-      else this.selectedID = id;
+      this.selectedID = id;
     },
     deleteChatRoom(id: number) {
       delete this.rooms[id];
