@@ -16,6 +16,7 @@ import type { ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 import { ChatService } from '@/services/chat.service';
+import { useChatStore } from '@/stores/chat.store';
 
 const emits = defineEmits(['close', 'submit']);
 const props = defineProps<{
@@ -23,13 +24,20 @@ const props = defineProps<{
   isShow: boolean;
 }>();
 
-const changeRoomModePublic = () => {
+const chatSotre = useChatStore();
+
+const changeRoomModePublic = async () => {
   const roomMode: ChatRoomMode = {
     roomId: props.chatInfo.id,
     roomMode: 'PUBLIC',
   };
   console.log(roomMode);
-  ChatService.changeRoomMode(roomMode);
+  try {
+    ChatService.changeRoomMode(roomMode);
+    chatSotre.setRoomMode(roomMode.roomId, roomMode.roomMode);
+  } catch (e) {
+    console.warn(e);
+  }
 };
 </script>
 
