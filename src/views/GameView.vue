@@ -1,9 +1,9 @@
 <template>
   <!-- <GameMatching v-if="!isMatched" />
   <div v-else class="game-screen-div"> -->
-    <!-- <GameScreen /> -->
-    <GameResultModal />
-  </div>
+  <!-- <GameScreen /> -->
+  <GameResultModal />
+  <!-- </div> -->
 </template>
 
 <script setup lang="ts">

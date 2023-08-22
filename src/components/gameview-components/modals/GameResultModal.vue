@@ -3,17 +3,17 @@
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
-          <span class="bold">{{ 'Lose🍂' }}</span>
-          <ProfileCard user_id="chaejkim" img="1.png" img_size="150">
-            <span class="bold">{{ 1899 - 12 }} ({{ -12 }})</span>
-          </ProfileCard>
+          <span class="bold">Lose🍂</span>
+          <AvatarItem :username="leftUser?.name" :avartarUrl="leftUser?.avatarURL" imgSize="100">
+            <span class="bold">{{ leftUser?.rating }}</span>
+          </AvatarItem>
         </div>
-        <span class="score-div">{{ 10 }} : {{ 15 }}</span>
+        <span class="verse">vs</span>
         <div class="user-info-div">
-          <span class="bold">{{ 'Win👑' }}</span>
-          <ProfileCard user_id="hyeongki" img="4.png" img_size="150">
-            <span class="bold">{{ 1899 + 12 }} ({{ +12 }})</span>
-          </ProfileCard>
+          <span class="bold">Win👑</span>
+          <AvatarItem :username="rightUser?.name" :avartarUrl="rightUser?.avatarURL" imgSize="100">
+            <span class="bold">{{ rightUser?.rating }}</span>
+          </AvatarItem>
         </div>
       </div>
     </template>
@@ -46,12 +46,15 @@ onMounted(async () => {
 <style scoped>
 .game-result-container {
   display: flex;
+  flex-flow: row;
   justify-content: center;
   align-self: center;
 }
 
 .user-info-div {
   margin: 0 100px;
+  display: flex;
+  flex-flow: columns;
   text-align: center;
   font: var(--large);
 }
