@@ -25,7 +25,7 @@
         <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="icons[Role.OWNER]" style="position: relative" />
         <BasicList
           :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.ADMIN)"
-          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.OWNER], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
+          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.ADMIN], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"

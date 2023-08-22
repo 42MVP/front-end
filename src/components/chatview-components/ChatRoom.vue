@@ -52,8 +52,11 @@
           </div>
           <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
             <template #dropdown-item>
-              <BasicList :items="chatStore.rooms[chatStore.selectedID].users"
-                :iconButtons="[{ emoji: '✉️', event: 'invite' }]" @clickIconButton="inviteGame" />
+              <BasicList
+                :items="chatStore.rooms[chatStore.selectedID].users"
+                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
+                @clickIconButton="inviteGame"
+              />
             </template>
           </DropdownMenu>
         </div>
@@ -61,8 +64,12 @@
       <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
         <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <button v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
-            v-for="(modeButton, index) in roomModeIcon[roomMode]" :key="index" @click="setModal(modeButton.modal)">
+          <button
+            v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
+            v-for="(modeButton, index) in roomModeIcon[roomMode]"
+            :key="index"
+            @click="setModal(modeButton.modal)"
+          >
             {{ modeButton.emoji }}
           </button>
         </div>
@@ -72,10 +79,14 @@
       <div class="chat-box-list-name-left-word">디엠상대 님과의 대화</div>
     </div>
     <MessageList :chats="chatStore.chats[chatStore.selectedID]" />
-    <ChatInputBox @response="newMessage => {
-      addChat(newMessage);
-    }
-      " :maxLength="150" />
+    <ChatInputBox
+      @response="
+        newMessage => {
+          addChat(newMessage);
+        }
+      "
+      :maxLength="150"
+    />
   </div>
 </template>
 
@@ -127,20 +138,19 @@ const setModal: Function = (name: string) => {
   console.log(name);
 };
 
-
 const roomModeIcon: Record<string, RoomModeIcon[]> = {
-  'PUBLIC': [
+  PUBLIC: [
     { emoji: '🔓', modal: '비밀번호 설정' },
-    { emoji: '🙉', modal: '프라이빗 설정' }
+    { emoji: '🙉', modal: '프라이빗 설정' },
   ],
-  'PRIVATE': [
+  PRIVATE: [
     { emoji: '🔓', modal: '비밀번호 설정' },
-    { emoji: '🙈', modal: '프라이빗 해제' }
+    { emoji: '🙈', modal: '프라이빗 해제' },
   ],
-  'PROTECTED': [
+  PROTECTED: [
     { emoji: '🔒', modal: '비밀번호 변경' },
-    { emoji: '🔑', modal: '비밀번호 해제' }
-  ]
+    { emoji: '🔑', modal: '비밀번호 해제' },
+  ],
 };
 
 const emits = defineEmits(['response']);

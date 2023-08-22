@@ -51,7 +51,7 @@ export class ChatService {
     const ret = await axiosAPI.auth().get(`/chat`);
     const chatInfo: ChatInfo[] = ret.data;
 
-    return ret.data;
+    return chatInfo;
   }
 
   @APIWithToken()
