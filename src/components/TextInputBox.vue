@@ -7,7 +7,7 @@
       :placeholder="placeholderText"
       @input="emits('response', text)"
     />
-    <p :class="{ 'text-input-box-counter': !isTextOver, 'text-input-box-counter-false': isTextOver }">
+    <p :class="{ 'text-input-box-counter': !isInvalid, 'text-input-box-counter-false': isInvalid }">
       {{ text.length }}/{{ props.maxLength }}
     </p>
   </div>
@@ -20,20 +20,24 @@ const props = defineProps({
   maxLength: { type: Number, default: 0 },
   placeholderText: { type: String, default: '' },
   type: { default: '' },
+  prevPassword: { type: String, default: '' },
 });
 
 const text = ref('');
 
 const emits = defineEmits(['response']);
 
-const isTextOver = ref(false);
+const isInvalid = ref(false);
 
 watch(text, () => {
   if (text.value.length >= props.maxLength) {
     text.value = text.value.slice(0, props.maxLength);
-    isTextOver.value = true;
+    isInvalid.value = true;
   } else {
-    isTextOver.value = false;
+    isInvalid.value = false;
+  }
+  if (props.type === 'passwordConfirm' && text.value !== props.prevPassword) {
+    isInvalid.value = true;
   }
 });
 </script>

@@ -8,9 +8,10 @@
         @response="pass => (password = pass)"
       />
       <TextInputBox
-        type="password"
+        type="passwordConfirm"
         placeholderText="비밀번호 입력 확인"
         :maxLength="15"
+        :prevPassword="password"
         @response="pass => (passwordDup = pass)"
       />
     </template>
@@ -22,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';

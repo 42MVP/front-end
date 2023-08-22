@@ -10,9 +10,10 @@
       <div v-if="setActive(2)">
         <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
         <TextInputBox
-          type="password"
+          type="passwordConfirm"
           placeholderText="비밀번호 입력 확인"
           :maxLength="15"
+          :prevPassword="password"
           @response="e => (password2th = e)"
         />
       </div>
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { ChatService } from '@/services/chat.service';
 
 import Modal from '@/components/Modal.vue';
@@ -56,6 +57,16 @@ const setActive = (index: number) => {
 const roomName = ref<string>('');
 const password = ref<string>('');
 const password2th = ref<string>('');
+
+const isCorrectPassword = ref<boolean>(true);
+
+watch(password2th, () => {
+  if (password2th.value !== password.value) {
+    isCorrectPassword.value = false;
+  } else {
+    isCorrectPassword.value = true;
+  }
+});
 
 const createRoom = () => {
   if (mode[selectedMode.value] === 'PROTECTED') {
