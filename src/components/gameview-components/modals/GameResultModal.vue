@@ -1,5 +1,5 @@
 <template>
-  <Modal title="경기 결과">
+  <Modal title="경기 결과" :show="$props.isShow">
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
@@ -30,6 +30,10 @@ import type { GameHistory } from '@/interfaces/game/GameHistory.interface';
 
 const gameStore = useGameStore();
 const gameResult = ref<GameHistory>();
+
+const props = defineProps<{
+  isShow: boolean;
+}>();
 
 onMounted(async () => {
   try {
