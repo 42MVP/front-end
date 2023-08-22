@@ -3,11 +3,11 @@
     <input
       :type="props.type"
       v-model="text"
-      class="text-input-box"
+      :class="{ 'text-input-box': !isInvalid, 'text-input-box-false': isInvalid }"
       :placeholder="placeholderText"
       @input="emits('response', text)"
     />
-    <p :class="{ 'text-input-box-counter': !isInvalid, 'text-input-box-counter-false': isInvalid }">
+    <p :class="{ 'text-input-box-counter': !isTextOver, 'text-input-box-counter-false': isTextOver }">
       {{ text.length }}/{{ props.maxLength }}
     </p>
   </div>
@@ -27,17 +27,21 @@ const text = ref('');
 
 const emits = defineEmits(['response']);
 
+const isTextOver = ref(false);
+
 const isInvalid = ref(false);
 
 watch(text, () => {
   if (text.value.length >= props.maxLength) {
     text.value = text.value.slice(0, props.maxLength);
+    isTextOver.value = true;
+  } else {
+    isTextOver.value = false;
+  }
+  if (props.prevPassword.length !== 0 && text.value !== props.prevPassword) {
     isInvalid.value = true;
   } else {
     isInvalid.value = false;
-  }
-  if (props.type === 'passwordConfirm' && text.value !== props.prevPassword) {
-    isInvalid.value = true;
   }
 });
 </script>
@@ -56,6 +60,19 @@ watch(text, () => {
   width: 100%;
   height: 100%;
   border: 2px solid #bcb8b1;
+  border-radius: 15px;
+  background-color: inherit;
+  color: var(--brown, #463f3a);
+  font: var(--medium);
+  height: 65px;
+  padding: 15px;
+  outline: none;
+}
+
+.text-input-box-false {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #e0afa0;
   border-radius: 15px;
   background-color: inherit;
   color: var(--brown, #463f3a);

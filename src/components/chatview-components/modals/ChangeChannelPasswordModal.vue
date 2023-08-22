@@ -3,7 +3,7 @@
     <template #body>
       <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
       <TextInputBox
-        type="passwordConfirm"
+        type="password"
         placeholderText="비밀번호 입력 확인"
         :maxLength="15"
         :prevPassword="password"
