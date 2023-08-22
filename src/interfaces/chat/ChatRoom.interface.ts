@@ -22,3 +22,8 @@ export interface ChatRoomMode {
   roomMode: string;
   password?: string;
 }
+
+export interface RoomModeIcon {
+  emoji: string;
+  modal: string;
+}
