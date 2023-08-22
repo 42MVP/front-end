@@ -129,6 +129,14 @@ watch(
     isSelect.value = true;
   },
 );
+
+watch(
+  () => chatStore.rooms[chatStore.selectedID].roomMode,
+  () => {
+    roomMode.value = chatStore.rooms[chatStore.selectedID].roomMode;
+  },
+);
+
 const addChat = (newMessage: string): void => {
   ChatSocketService.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
 };

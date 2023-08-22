@@ -28,6 +28,9 @@ export const useChatStore = defineStore('chat', {
       this.rooms[id] = room;
       if (!this.chats[id]) this.chats[id] = [];
     },
+    setRoomMode(id: number, roomMode: string) {
+      this.rooms[id].roomMode = roomMode; 
+    },
     isKicked(id: number) {
       if (this.kickedRooms.find(roomId => roomId === id)) return true;
       return false;
