@@ -4,15 +4,14 @@
       <div class="body-container">
         <div class="user-info-div">
           <span class="bold">Lose🍂</span>
-          <AvatarItem :username="leftUser?.name" :avartarUrl="leftUser?.avatarURL" imgSize="100">
-            <span class="bold">{{ leftUser?.rating }}</span>
+          <AvatarItem :username="gameResult?.winner" :avartarUrl="gameResult?.winnerAvatarUrl" imgSize="100">
+            <span class="bold">{{ gameResult?.winnerScore }}</span>
           </AvatarItem>
         </div>
-        <span class="verse">vs</span>
         <div class="user-info-div">
           <span class="bold">Win👑</span>
-          <AvatarItem :username="rightUser?.name" :avartarUrl="rightUser?.avatarURL" imgSize="100">
-            <span class="bold">{{ rightUser?.rating }}</span>
+          <AvatarItem :username="gameResult?.loser" :avartarUrl="gameResult?.loserAvatarUrl" imgSize="100">
+            <span class="bold">{{ gameResult?.loserScore }}</span>
           </AvatarItem>
         </div>
       </div>
@@ -30,13 +29,11 @@ import { GameService } from '@/services/game.service';
 import type { GameHistory } from '@/interfaces/game/GameHistory.interface';
 
 const gameStore = useGameStore();
-
-const leftUser = gameStore.matchInfo?.leftUser;
-const rightUser = gameStore.matchInfo?.rightUser;
+const gameResult = ref<GameHistory>();
 
 onMounted(async () => {
   try {
-    // const gameResult = await GameService.getGameResult(gameStore.matchInfo?.gameroomID);
+    gameResult.value = await GameService.getGameResult(gameStore.matchInfo!.gameroomID);
   } catch (e) {
     console.log(e);
   }
@@ -44,9 +41,14 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.game-result-container {
+.body-container {
   display: flex;
   flex-flow: row;
+  text-align: center;
+}
+
+.game-result-container {
+  display: flex;
   justify-content: center;
   align-self: center;
 }
@@ -54,7 +56,7 @@ onMounted(async () => {
 .user-info-div {
   margin: 0 100px;
   display: flex;
-  flex-flow: columns;
+  flex-flow: column;
   text-align: center;
   font: var(--large);
 }
