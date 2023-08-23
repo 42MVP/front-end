@@ -6,6 +6,7 @@
         type="password"
         placeholderText="비밀번호 입력 확인"
         :maxLength="15"
+        :prevPassword="password"
         @response="e => (passwordDup = e)"
       />
     </template>
