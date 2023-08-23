@@ -27,10 +27,7 @@ export class ChatService {
 
   @APIWithToken()
   static async enterRoom(body: ChatRoomEnter): Promise<ChatInfo> {
-    const ret = await axiosAPI.auth().post('/chat/enter-room', {
-      roomId: body.roomId,
-      password: body.password,
-    });
+    const ret = await axiosAPI.auth().post('/chat/enter-room', body);
     const chatInfo: ChatInfo = ret.data;
     return chatInfo;
   }
