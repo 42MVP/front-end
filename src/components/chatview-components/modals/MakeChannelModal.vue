@@ -35,8 +35,8 @@ import RadioButton from '@/components/RadioButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
 import type { ChatRoomCreateChannel } from '@/interfaces/chat/ChatRoom.interface';
-import { chatStore } from '@/main';
-import { loginStore } from '@/main';
+import { useChatStore } from '@/stores/chat.store';
+import { useLoginStore } from '@/stores/login.store';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 const emits = defineEmits(['close']);
@@ -60,6 +60,9 @@ const setActive = (index: number) => {
 const roomName = ref<string>('');
 const password = ref<string>('');
 const password2th = ref<string>('');
+
+const chatStore = useChatStore();
+const loginStore = useLoginStore();
 
 const createRoom = async () => {
   try {
