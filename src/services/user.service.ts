@@ -24,11 +24,7 @@ export class UserService {
   };
 
   @APIWithToken()
-  static async setUserProfile(data: { userName: string; isAuth: boolean; avatar: File }) {
-    return axiosAPI.auth().put(`/user`, {
-      userName: data.userName,
-      isAuth: data.isAuth,
-      avatar: data.avatar,
-    });
+  static async setUserProfile(formData: FormData) {
+    return axiosAPI.auth().put(`/user`, formData);
   }
 }
