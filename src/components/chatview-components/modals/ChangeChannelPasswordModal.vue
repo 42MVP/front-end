@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';

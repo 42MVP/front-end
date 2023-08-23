@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { ChatService } from '@/services/chat.service';
 
 import Modal from '@/components/Modal.vue';
@@ -57,16 +57,6 @@ const setActive = (index: number) => {
 const roomName = ref<string>('');
 const password = ref<string>('');
 const password2th = ref<string>('');
-
-const isCorrectPassword = ref<boolean>(true);
-
-watch(password2th, () => {
-  if (password2th.value !== password.value) {
-    isCorrectPassword.value = false;
-  } else {
-    isCorrectPassword.value = true;
-  }
-});
 
 const createRoom = () => {
   if (mode[selectedMode.value] === 'PROTECTED') {
