@@ -13,8 +13,8 @@
         />
       </AvatarItem>
       <div class="g-info-div">
-        <GBox class="g-box" :rate="profileUser.rate" />
-        <Achieve :achievement="profileUser.achievement" class="achieve"/>
+        <GBox class="g-box" :record="gameRecord" />
+        <Achieve :achievement="profileUser.achievement" class="achieve" />
       </div>
     </div>
     <div v-show="profileUser.gameHistory.length" class="bottom">
@@ -36,6 +36,7 @@ import { useLoginStore } from '@/stores/login.store';
 import { ProfileService } from '@/services/profile.service';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
+import type { UserGameRecord } from '@/interfaces/user/UserGameRecord.interface';
 
 const props = defineProps({
   username: { type: String, default: '' },
@@ -43,9 +44,17 @@ const props = defineProps({
 
 const profileUser = ref<UserInfo>();
 
+const gameRecord = ref<UserGameRecord>();
+
 onMounted(async () => {
   try {
     profileUser.value = await ProfileService.getProfile(props.username);
+    gameRecord.value = {
+      rate: profileUser.value.rate,
+      totalGame: profileUser.value.winNum + profileUser.value.loseNum,
+      winNum: profileUser.value.winNum,
+      loseNum: profileUser.value.loseNum,
+    };
   } catch (e) {
     console.warn(e);
   }
