@@ -17,18 +17,22 @@ import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 import { ChatService } from '@/services/chat.service';
 import { useChatStore } from '@/stores/chat.store';
+import { chatStore } from '@/main';
 
 const emits = defineEmits(['close', 'submit']);
 const props = defineProps<{
-  chatInfo: ChatInfo;
   isShow: boolean;
 }>();
 
 const chatSotre = useChatStore();
 
 const changeRoomModePublic = async () => {
+  if (!chatStore.isSelected) {
+    console.log('채팅룸 선택 오류');
+    return;
+  }
   const roomMode: ChatRoomMode = {
-    roomId: props.chatInfo.id,
+    roomId: chatStore.selectedID,
     roomMode: 'PUBLIC',
   };
   console.log(roomMode);

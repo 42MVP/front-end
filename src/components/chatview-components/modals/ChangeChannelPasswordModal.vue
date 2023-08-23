@@ -23,14 +23,12 @@ import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 import { ChatService, RoomMode } from '@/services/chat.service';
 import { useChatStore } from '@/stores/chat.store';
 
 const emits = defineEmits(['close', 'submit']);
 const props = defineProps<{
-  chatInfo: ChatInfo;
   isShow: boolean;
 }>();
 const password = ref<string>('');
@@ -39,15 +37,20 @@ const passwordDup = ref<string>('');
 const chatStore = useChatStore();
 
 const changeRoomPassword = async () => {
+  if (!chatStore.isSelected) {
+    console.log('채팅룸 선택 오류');
+    return;
+  }
   if (password.value === '') {
     console.log('비밀번호 공백');
     return;
   }
   if (password.value !== passwordDup.value) {
     console.log('비밀번호 확인 필요');
+    return;
   }
   const roomInfo: ChatRoomMode = {
-    roomId: props.chatInfo.id,
+    roomId: chatStore.selectedID,
     roomMode: 'PROTECTED',
     password: password.value,
   };

@@ -4,6 +4,11 @@ export interface ChatRoom {
   roomMode: string;
 }
 
+export interface ChatRoomEnter {
+  roomId: number;
+  password?: string;
+}
+
 export type ChatRoomCreate = ChatRoomCreateDM | ChatRoomCreateChannel;
 
 export interface ChatRoomCreateDM {
