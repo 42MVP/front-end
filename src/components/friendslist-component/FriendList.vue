@@ -15,12 +15,7 @@
       </DropdownMenu>
     </template>
     <template #user-element>
-      <BasicList
-        :items="users"
-        @chooseItem="(id : number) => $emit('updateSelection', id)"
-        @clickItemSlot="removeFromList"
-        #default="{ clickButton }"
-      >
+      <BasicList :items="users" @chooseItem="chooseUser" @clickItemSlot="removeFromList" #default="{ clickButton }">
         <BasicButton :text="getButtonTitle()" @click="clickButton" />
       </BasicList>
     </template>
@@ -28,72 +23,68 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { type FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import { ref, watch, onMounted } from 'vue';
+import { type OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import BasicListFrame from '@/components/BasicListFrame.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
+import { UserService } from '@/services/user.service';
+import { useUsersSotre } from '@/stores/users.store';
 
 const isMenu = ref(false);
-
-var users = ref<FriendInfo[]>([
-  {
-    id: 1,
-    name: 'chaejkim',
-    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LNN8QWJV-4c936417baf6-512',
-    isFollow: false,
-    isBlock: false,
-    level: 42,
-    achievement: 'Achievement1',
-  },
-  {
-    id: 2,
-    name: 'kanghyki',
-    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U035MTQ4U4T-9333cd362cf2-512',
-    isFollow: false,
-    isBlock: false,
-    level: 42,
-    achievement: 'Achievement1',
-  },
-  {
-    id: 3,
-    name: 'hejang',
-    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LA4V3351-b8f6020a843c-512',
-    isFollow: false,
-    isBlock: false,
-    level: 42,
-    achievement: 'Achievement1',
-  },
-  {
-    id: 4,
-    name: 'hyeonki',
-    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02L3CLQ6S2-gadbfaa25482-512',
-    isFollow: false,
-    isBlock: false,
-    level: 52,
-    achievement: 'Achievement1',
-  },
-  {
-    id: 5,
-    name: 'hyeonkkim',
-    avatarURL: 'https://ca.slack-edge.com/T039P7U66-U02LA445WF4-bee783ffc454-512',
-    isFollow: false,
-    isBlock: false,
-    level: 42,
-    achievement: 'Achievement1',
-  },
-]);
-
-const removeFromList = (id: number) => {
-  users.value = users.value.filter(friend => friend.id !== id);
-};
+const userStore = useUsersSotre();
 
 const listType = ref<string>('Friends');
+const users = ref<OthersInfo[]>([]);
+
+const removeFromList = (id: number) => {
+  console.log('removeFromList');
+  console.log(id);
+  users.value.filter(u => u.id !== id);
+  if (listType.value === 'Friends') {
+    userStore.friends.filter(u => u.id !== id);
+  } else if (listType.value === 'Blocks') {
+    userStore.blocks.filter(u => u.id !== id);
+  }
+  console.log(users.value);
+};
 
 const getButtonTitle = () => {
   return listType.value === 'Friends' ? 'unfollow' : 'unblock';
+};
+
+onMounted(async () => {
+  try {
+    const friends: OthersInfo[] = await UserService.getFriendsList();
+    friends.forEach(e => {
+      userStore.addFriends(e);
+    });
+    console.log(friends);
+    users.value = friends;
+    const blocks: OthersInfo[] = await UserService.getBlocksList();
+    blocks.forEach(e => {
+      userStore.addBlocks(e);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+watch(
+  () => listType.value,
+  () => {
+    if (listType.value === 'Friends') {
+      users.value = userStore.friends;
+    } else if (listType.value === 'Blocks') {
+      users.value = userStore.blocks;
+    }
+  },
+);
+
+const chooseUser = (userId: number) => {
+  userStore.selectedUserId = userId;
 };
 </script>
 

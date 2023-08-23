@@ -38,15 +38,24 @@ export class UserService {
 
   @APIWithToken()
   static async getFriendsList(): Promise<OthersInfo[]> {
-    const ret = await axiosAPI.auth().get(`/friends`);
+    const ret = await axiosAPI.auth().get(`/friend`);
     const friendsList: OthersInfo[] = ret.data;
 
+    friendsList.push({
+      id: 1,
+      name: 'test',
+      avatarURL: 'asdf',
+      rate: 1234,
+      achievements: [0, 1, 2],
+      loseNum: 1,
+      winNum: 3,
+    });
     return friendsList;
   }
 
   @APIWithToken()
   static async getBlocksList(): Promise<OthersInfo[]> {
-    const ret = await axiosAPI.auth().get(`/Blocks`);
+    const ret = await axiosAPI.auth().get(`/block`);
     const BlocksList: OthersInfo[] = ret.data;
 
     return BlocksList;

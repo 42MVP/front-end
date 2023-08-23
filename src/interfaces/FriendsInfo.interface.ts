@@ -1,8 +1,9 @@
 export interface OthersInfo {
+  id: number;
   name: string;
   avatarURL: string;
-  achievements: number[];
-  winNum: number;
-  loseNum: number;
   rate: number;
+  achievements: number[];
+  loseNum: number;
+  winNum: number;
 }
