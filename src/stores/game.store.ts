@@ -19,7 +19,7 @@ export const useGameStore = defineStore('game', {
     matchingId: -1,
     status: 0,
     atReadyTime: new Date(0),
-    isGameConnected: true,
+    isGameConnected: false,
     option: 0,
     matchInfo: null,
   }),

@@ -71,6 +71,7 @@ export class GameSocketService {
     socket.on(GameMatchingEvent.confirm, (d: GameMatch) => {
       console.log('confirm:', d);
       if (d.result === true) {
+        gameStore.isGameConnected = true;
         gameStore.matchInfo = d;
         gameStore.setStatus('게임시작');
       } else {
@@ -182,10 +183,11 @@ export class GameSocketService {
   private static _tableInfo: GameTable;
 
   static onPlay(): void {
+    console.log('onPlay==============');
     const socket = SocketService.getInstance().getSocket();
     socket.on('init', (gameInfo: GameInfo) => {
-      this.initGame(gameInfo);
       console.log('game-init', gameInfo);
+      this.initGame(gameInfo);
     });
     socket.on('render', (table: GameTable) => {
       this._tableInfo = table;

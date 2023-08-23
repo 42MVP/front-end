@@ -22,10 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watchEffect, watch } from 'vue';
 import { useGameStore } from '@/stores/game.store';
 import { GameSocketService } from '@/services/gameSocket.service';
-import type { GameTable, Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
+import type { Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
+import { SocketService } from '@/services/socket.service';
 
 const gameStore = useGameStore();
 
@@ -50,14 +51,28 @@ const gameSettings = {
 
 const { gameWidth, gameHeight, boardBackground, paddleColor, ballColor, ballRadius } = gameSettings;
 
-const table = ref<GameTable>(GameSocketService.tableInfo);
-
-watchEffect(() => {
-  const tableInfo = table.value;
+const renderTable = () => {
+  const tableInfo = GameSocketService.tableInfo;
   clearBoard();
   drawBall(tableInfo.ball);
   drawPaddles(tableInfo.leftPaddle, tableInfo.rightPaddle);
-});
+  requestAnimationFrame(renderTable);
+};
+
+// watch(
+//   //() => GameSocketService.tableInfo.ball,
+//   () => supertable.value,
+
+//   () => {
+//     //  const tableInfo = table.value;
+//     console.log(table.value);
+
+//     //console.log(GameSocketService.tableInfo, 'socket table')
+//     clearBoard();
+//     drawBall(supertable.value.ball);
+//     drawPaddles(supertable.value.leftPaddle, supertable.value.rightPaddle);
+//   },
+// );
 
 const drawBall = (ball: Ball) => {
   if (!ctx.value) return;
@@ -83,15 +98,51 @@ const drawPaddles = (leftPaddle: Paddle, rightPaddle: Paddle) => {
 
 const clearBoard = () => {
   if (!ctx.value) return;
-  ctx.value.fillStyle = boardBackground;
+  ctx.value.fillStyle = boardBackground || '#E0AFA0FF';
   ctx.value.fillRect(0, 0, gameWidth, gameHeight);
 };
 
+watchEffect(() => {
+  if (gameStore.isGameConnected) {
+    GameSocketService.onPlay();
+    requestAnimationFrame(renderTable);
+  } else {
+    GameSocketService.offPlay();
+  }
+});
+
 onMounted(() => {
-  GameSocketService.onPlay();
   if (gameBoard.value) {
     ctx.value = gameBoard.value.getContext('2d');
   }
+  clearBoard();
+  const tableInfo = {
+    leftPaddle: {
+      width: 20,
+      height: 100,
+      x: Math.random(),
+      y: Math.random(),
+    },
+    rightPaddle: {
+      width: 20,
+      height: 100,
+      x: Math.random() * 1100,
+      y: Math.random() * 700,
+    },
+    ball: {
+      x: Math.random() * 1100,
+      y: Math.random() * 700,
+      dx: 1,
+      dy: 1,
+    },
+  };
+  const gameInfo = {
+    background: 'green',
+    leftScore: 0,
+    rightScore: 0,
+    tableInfo: tableInfo,
+  };
+  GameSocketService.initGame(gameInfo);
 });
 
 onBeforeUnmount(() => {
