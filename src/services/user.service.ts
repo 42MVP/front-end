@@ -56,7 +56,7 @@ export class UserService {
 
   @APIWithToken()
   static async unfollowUser(id: number): Promise<void> {
-    const ret = await axiosAPI.auth().post('/friend');
+    // const ret = await axiosAPI.auth().post('/friend');
   }
 
   @APIWithToken()
@@ -69,6 +69,6 @@ export class UserService {
 
   @APIWithToken()
   static async unblockUser(id: number): Promise<void> {
-    const ret = await axiosAPI.auth().delete('/block');
+    // const ret = await axiosAPI.auth().delete('/block');
   }
 }
