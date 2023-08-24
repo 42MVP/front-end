@@ -1,12 +1,12 @@
 <template>
   <div class="wrap">
-    <div v-if="!props.user">
+    <div v-if="!selectedUser">
       <!-- {{ selectedUser.name }} -->
-      not found
+      🫥
     </div>
     <div v-else class="p-container">
       <div class="top">
-        <AvatarItem class="p-info" :username="props.user.name" :avartarUrl="props.user.avatarURL"/>
+        <AvatarItem class="p-info" :username="selectedUser?.name" :avartarUrl="selectedUser.avatarURL" />
         <div class="g-info">
           <GBox :rate="1000" />
           <Achieve class="achieve"></Achieve>
@@ -17,15 +17,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
-import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+import { useUsersSotre } from '@/stores/users.store';
 
-const props = defineProps<{
-  user: FriendInfo | undefined;
-}>();
+const userStore = useUsersSotre();
+
+const selectedUser = ref<OthersInfo>();
+
+watch(
+  () => userStore.selectedUserId,
+  () => {
+    selectedUser.value = userStore.friends.find(u => u.id === userStore.selectedUserId);
+  },
+);
+
+onMounted(() => {
+  selectedUser.value = userStore.friends.find(u => u.id === userStore.selectedUserId);
+});
 </script>
 
 <style scoped>

@@ -16,14 +16,14 @@
 
 <script setup lang="ts">
 import type { User } from '@/interfaces/user/User.interface';
-import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom } from '@/interfaces/chat/ChatRoom.interface';
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 import BasicListItem from '@/components/BasicListItem.vue';
 
-type ItemsInfo = User[] | ChatInfo[] | FriendInfo[] | ChatRoom[];
+type ItemsInfo = User[] | ChatInfo[] | OthersInfo[] | ChatRoom[];
 
 const props = defineProps({
   items: { type: Object as () => ItemsInfo, defalut: [] as User[] },
