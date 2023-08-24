@@ -56,7 +56,6 @@ const iconButtons = [{ emoji: '❌', event: 'quit' }];
 
 const modalName = ref<string>('');
 const isMenu = ref<boolean>(false);
-const eventResponse = ref<IconEmitResponse>({ id: -1, eventName: '' });
 
 onMounted(async () => {
   try {
@@ -79,44 +78,43 @@ onMounted(async () => {
   }
 });
 
-watch(eventResponse, async () => {
-  const eventName = eventResponse.value.eventName;
-  const id = eventResponse.value.id;
-  if (eventName === 'click') {
-    if (chatStore.isKicked(id))
-      modalStore.on({
-        title: '알림',
-        text: '강퇴 당하셨습니다',
-        buttonText: '닫기',
-        buttonFunc: () => {
-          chatStore.deleteChatRoom(id);
-          modalStore.off();
-        },
-      });
-    else chatStore.selectChatRoom(id);
-  } else if (eventName === 'quit') {
-    try {
-      await ChatService.exitRoom(id);
-      chatStore.deleteChatRoom(id);
-    } catch (e) {
-      modalStore.on({
-        title: '알림',
-        text: e,
-        buttonText: '닫기',
-        buttonFunc: () => {},
-      });
-    }
+const chooseChatRoom = (roomId: number) => {
+  if (chatStore.removedRooms[roomId])
+    modalStore.on({
+      title: '알림',
+      text: chatStore.getNotice(roomId),
+      buttonText: '닫기',
+      buttonFunc: () => {
+        chatStore.deleteChatRoom(roomId);
+        modalStore.off();
+      },
+    });
+  else chatStore.selectChatRoom(roomId);
+};
+
+const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
+  try {
+    await ChatService.exitRoom(iconEmitResponse.id);
+    chatStore.selectChatRoom(-1);
+    chatStore.deleteChatRoom(iconEmitResponse.id);
+  } catch (e) {
+    modalStore.on({
+      title: '알림',
+      text: e,
+      buttonText: '닫기',
+      buttonFunc: () => {},
+    });
   }
-});
+};
 
 watch(
-  () => chatStore.kickedRooms,
+  () => chatStore.isSelected && chatStore.removedRooms,
   () => {
     const id = chatStore.selectedID;
-    if (chatStore.isKicked(id))
+    if (chatStore.removedRooms[id])
       modalStore.on({
         title: '알림',
-        text: '강퇴 당하셨습니다',
+        text: chatStore.getNotice(id),
         buttonText: '닫기',
         buttonFunc: () => {
           chatStore.selectChatRoom(-1);
@@ -139,14 +137,6 @@ watch(
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
-};
-
-const chooseChatRoom = (roomId: number) => {
-  eventResponse.value = { id: roomId, eventName: 'click' };
-};
-
-const actionChatRoom = (iconEmitResponse: IconEmitResponse) => {
-  eventResponse.value = iconEmitResponse;
 };
 </script>
 

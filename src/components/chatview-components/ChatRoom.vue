@@ -1,24 +1,13 @@
 <template>
   <ManageChannelMemberModal
-    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     v-if="modalName === '멤버 관리'"
     :isShow="modalName === '멤버 관리'"
     @close="modalName = ''"
   />
-  <ChangeChannelPasswordModal
-    :isShow="modalName === '비밀번호 변경'"
-    :chatInfo="chatStore.rooms[chatStore.selectedID]"
-    @close="modalName = ''"
-  />
-  <SetChannelPasswordModal
-    :isShow="modalName === '비밀번호 설정'"
-    :chatInfo="chatStore.rooms[chatStore.selectedID]"
-    @close="modalName = ''"
-    @submit="modalName = ''"
-  />
+  <ChangeChannelPasswordModal :isShow="modalName === '비밀번호 변경'" @close="modalName = ''" />
+  <SetChannelPasswordModal :isShow="modalName === '비밀번호 설정'" @close="modalName = ''" @submit="modalName = ''" />
   <DeleteChannelPasswordModal
     :isShow="modalName === '비밀번호 해제'"
-    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @close="modalName = ''"
     @submit="
       console.log('비밀 번호 해제');
@@ -27,7 +16,6 @@
   />
   <SetChannelPrivateModal
     :isShow="modalName === '프라이빗 설정'"
-    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @submit="
       console.log('프라이빗 설정');
       modalName = '';
@@ -35,7 +23,6 @@
   />
   <UndoChannelPrivateModal
     :isShow="modalName === '프라이빗 해제'"
-    :chatInfo="chatStore.rooms[chatStore.selectedID]"
     @submit="
       console.log('프라이빗 설정');
       modalName = '';
@@ -43,9 +30,9 @@
   />
 
   <div class="chat-list-container">
-    <div v-if="chatStore.rooms[chatStore.selectedID].roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
+    <div v-if="chatStore.chatRoom?.roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
-        <div class="chat-box-list-name-left-word">{{ chatStore.rooms[chatStore.selectedID].name }}</div>
+        <div class="chat-box-list-name-left-word">{{ chatStore.chatRoom?.name }}</div>
         <div class="chat-box-list-name-left-icon-container">
           <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
@@ -53,7 +40,7 @@
           <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
             <template #dropdown-item>
               <BasicList
-                :items="chatStore.rooms[chatStore.selectedID].users"
+                :items="chatStore.chatRoom?.users"
                 :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
                 @clickIconButton="inviteGame"
               />
@@ -61,11 +48,11 @@
           </DropdownMenu>
         </div>
       </div>
-      <div v-if="chatStore.rooms[chatStore.selectedID].self.role !== 'USER'" class="chat-box-list-name-right">
+      <div v-if="chatStore.chatRoom?.self.role !== 'USER'" class="chat-box-list-name-right">
         <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
           <button
-            v-show="chatStore.rooms[chatStore.selectedID].self.role === 'OWNER'"
+            v-show="chatStore.chatRoom?.self.role === 'OWNER'"
             v-for="(modeButton, index) in roomModeIcon[roomMode]"
             :key="index"
             @click="setModal(modeButton.modal)"
@@ -78,7 +65,7 @@
     <div v-else class="chat-box-list-name">
       <div class="chat-box-list-name-left-word">디엠상대 님과의 대화</div>
     </div>
-    <MessageList :chats="chatStore.chats[chatStore.selectedID]" />
+    <MessageList :chats="chatStore.chat" />
     <ChatInputBox
       @response="
         newMessage => {
@@ -113,33 +100,32 @@ import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
-import { GameService } from '@/services/Game.service';
+import { GameService } from '@/services/game.service';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
 
-const isSelect = ref<boolean>(false);
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
-const roomMode = ref<string>(chatStore.rooms[chatStore.selectedID].roomMode);
-const role = chatStore.rooms[chatStore.selectedID].self.role;
+const roomMode = ref<string>(chatStore.chatRoom?.roomMode || '');
+const role = chatStore.chatRoom?.self.role;
 
 watch(
-  () => chatStore.rooms[chatStore.selectedID],
-  () => {
-    isSelect.value = true;
-  },
-);
-
-watch(
-  () => chatStore.rooms[chatStore.selectedID].roomMode,
-  () => {
-    roomMode.value = chatStore.rooms[chatStore.selectedID].roomMode;
+  () => chatStore.isSelected && chatStore.chatRoom?.roomMode,
+  newMode => {
+    newMode ? (roomMode.value = newMode) : (roomMode.value = '');
   },
 );
 
 const addChat = (newMessage: string): void => {
-  ChatSocketService.sendMessage(chatStore.selectedID, loginStore.id, loginStore.name, loginStore.avatarURL, newMessage);
+  if (chatStore.isSelected)
+    ChatSocketService.sendMessage(
+      chatStore.selectedID,
+      loginStore.id,
+      loginStore.name,
+      loginStore.avatarURL,
+      newMessage,
+    );
 };
 
 const setModal: Function = (name: string) => {

@@ -22,17 +22,19 @@
       </SearchBar>
 
       <div v-if="isUserTab" class="modal-user-list-container">
-        <BasicList :items="[onwer]" :clickEvent="false" :iconButtons="icons[Role.OWNER]" style="position: relative" />
+        <BasicListItem :item="owner" :iconButtons="icons[Role.OWNER]" />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.ADMIN)"
-          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.ADMIN], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
+          :items="chatStore.chatRoom?.users.filter(user => user.role === Role.ADMIN)"
+          :iconButtons="
+            owner?.id === loginStore.id ? [...icons[Role.ADMIN], ...icons[Mode.COMMON]] : icons[Mode.COMMON]
+          "
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
         />
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].users.filter(user => user.role === Role.USER)"
-          :iconButtons="onwer.id === loginStore.id ? [...icons[Role.USER], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
+          :items="chatStore.chatRoom?.users.filter(user => user.role === Role.USER)"
+          :iconButtons="owner?.id === loginStore.id ? [...icons[Role.USER], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
           @onMousePosition="updateMousePosition"
           @clickIconButton="serviceChatUser"
           style="position: relative"
@@ -47,14 +49,14 @@
               v-for="(item, index) in getMuteTime()"
               v-bind:key="index"
               :text="item.text"
-              @click="serviceChatUserMute(muteId, chatStore.selectedID, item.time)"
+              @click="chatStore.isSelected && serviceChatUserMute(muteId, chatStore.selectedID, item.time)"
             />
           </template>
         </DropdownMenu>
       </div>
       <div v-else class="modal-user-list-container">
         <BasicList
-          :items="chatStore.rooms[chatStore.selectedID].banUsers"
+          :items="chatStore.chatRoom?.banUsers"
           :iconButtons="icons[Mode.NONE]"
           style="position: relative"
           @clickIconButton="serviceChatUser"
@@ -73,6 +75,7 @@ import { onMounted, ref, watch, reactive } from 'vue';
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import BasicList from '@/components/BasicList.vue';
+import BasicListItem from '@/components/BasicListItem.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
@@ -98,17 +101,15 @@ const props = defineProps<{
   isShow: boolean;
 }>();
 
-const onwer = ref<User>({} as User);
+const owner = ref<User | undefined>();
 
 onMounted(() => {
-  onwer.value = getOwner();
+  owner.value = getOwner();
 });
 
-const getOwner = (currentId: number = chatStore.selectedID): User => {
-  const chatInfo = chatStore.rooms[currentId];
-  return chatInfo.self.role === Role.OWNER
-    ? chatInfo?.self
-    : chatInfo?.users?.find(user => user.role == Role.OWNER) || ({} as User);
+const getOwner = (): User | undefined => {
+  const chatInfo = chatStore.chatRoom;
+  return chatInfo?.self.role === Role.OWNER ? chatInfo?.self : chatInfo?.users?.find(user => user.role == Role.OWNER);
 };
 
 const icons: Record<string, IconButton[]> = {
@@ -132,9 +133,8 @@ const searchedUsers = ref<User[]>([] as User[]);
 const serviceGetUser = async () => {
   try {
     const ret = await UserService.mockUser();
-    // const ret = await UserService.getAllUser();
     const allUsers: User[] = ret;
-    const channelUserIds = new Set(chatStore.rooms[chatStore.selectedID].users.map(user => user.id));
+    const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
     usersNotInChannel.value = allUsers.filter(user => !channelUserIds.has(user.id));
   } catch (e) {
     console.warn(e);
@@ -153,7 +153,7 @@ const muteId = ref<number | null>(null);
 const isMuteTimeVisible = ref<boolean>(false);
 
 const getMuteTime = (): { text: string; time: string }[] => {
-  const user = chatStore.rooms[chatStore.selectedID].users.find(user => user.id === muteId.value);
+  const user = chatStore.chatRoom?.users.find(user => user.id === muteId.value);
   if (!user?.abongTime) return [];
   return new Date(user?.abongTime) < new Date()
     ? [
@@ -177,6 +177,7 @@ const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
   const service = ChatService.getServiceChatUser(iconEmitResponse.eventName);
   if (!service) return;
   try {
+    if (!chatStore.isSelected) throw '채팅룸 선택 오류';
     const chatUser = createChatUserByEvent(iconEmitResponse.id, chatStore.selectedID, iconEmitResponse.eventName);
     if (!chatUser) throw '채팅 유저 관리 모달 오류';
     const ret = await service(chatUser);
@@ -218,8 +219,8 @@ const closeModal = () => {
 
 watch(
   () => chatStore.selectedID,
-  (currentId: number) => {
-    onwer.value = getOwner(currentId);
+  () => {
+    owner.value = getOwner();
   },
 );
 </script>

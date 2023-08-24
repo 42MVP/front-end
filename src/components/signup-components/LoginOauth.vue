@@ -20,7 +20,7 @@ onMounted(async () => {
     const ret = await LoginService.getUserInfo();
     const data = ret.data;
     console.log(data);
-    loginStore.name = data.userName;
+    loginStore.name = data.name;
     loginStore.id = data.id;
     loginStore.isLogin = true;
     router.push('/');

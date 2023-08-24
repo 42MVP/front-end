@@ -14,13 +14,12 @@ import BasicButton from '@/components/BasicButton.vue';
 
 const loginStore = useLoginStore();
 
+const emits = defineEmits<{ (e: 'image', image: File): void }>();
+
 const addImage = (e: Event) => {
   const file = (e.target as HTMLInputElement).files;
-  console.log((e.target as HTMLInputElement).files);
-  if (file) {
-    // TOOD: post -> get/set avatarURL
-    loginStore.avatarURL = URL.createObjectURL(file[0]);
-  }
+
+  if (file) emits('image', file[0]);
 };
 </script>
 

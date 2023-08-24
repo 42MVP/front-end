@@ -13,6 +13,7 @@
           type="password"
           placeholderText="비밀번호 입력 확인"
           :maxLength="15"
+          :prevPassword="password"
           @response="e => (password2th = e)"
         />
       </div>
@@ -34,6 +35,9 @@ import RadioButton from '@/components/RadioButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
 import type { ChatRoomCreateChannel } from '@/interfaces/chat/ChatRoom.interface';
+import { chatStore } from '@/main';
+import { loginStore } from '@/main';
+import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 
 const emits = defineEmits(['close']);
 const props = defineProps<{ isShow: boolean }>();
@@ -57,18 +61,32 @@ const roomName = ref<string>('');
 const password = ref<string>('');
 const password2th = ref<string>('');
 
-const createRoom = () => {
-  if (mode[selectedMode.value] === 'PROTECTED') {
-    // TODO : password 처리
-    if (!password.value) return;
-    if (password.value !== password2th.value) return;
+const createRoom = async () => {
+  try {
+    if (mode[selectedMode.value] === 'PROTECTED') {
+      // TODO : password 처리
+      if (!password.value) throw '패스워드 필요';
+      if (password.value !== password2th.value) throw '패스워드 불일치';
+    }
+    const chatRoom: ChatRoomCreateChannel = {
+      roomName: roomName.value,
+      roomMode: mode[selectedMode.value],
+      password: password.value,
+    };
+    const room = await ChatService.createRoom(chatRoom);
+    const chatInfo: ChatInfo = {
+      id: room.id,
+      name: room.name,
+      roomMode: room.roomMode,
+      isChannel: true,
+      self: loginStore.owner,
+      users: [],
+      banUsers: [],
+    };
+    chatStore.addChatRoom(room.id, chatInfo);
+  } catch (e) {
+    console.warn(e);
   }
-  const chatRoom: ChatRoomCreateChannel = {
-    roomName: roomName.value,
-    roomMode: mode[selectedMode.value],
-    password: password.value,
-  };
-  ChatService.createRoom(chatRoom);
 };
 </script>
 
