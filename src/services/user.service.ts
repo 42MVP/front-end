@@ -4,7 +4,6 @@ import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 
-
 export class UserService {
   @APIWithToken()
   static async getAllUser(): Promise<User> {
@@ -71,6 +70,8 @@ export class UserService {
   @APIWithToken()
   static async unblockUser(id: number): Promise<void> {
     // const ret = await axiosAPI.auth().delete('/block');
+  }
+
   static async setUserProfile(formData: FormData) {
     return axiosAPI.auth().put(`/user`, formData);
   }
