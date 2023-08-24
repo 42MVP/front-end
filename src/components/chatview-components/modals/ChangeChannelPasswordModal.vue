@@ -36,25 +36,19 @@ const passwordDup = ref<string>('');
 
 const chatStore = useChatStore();
 
+const isValidPassword = () => {
+  if (password.value === '') return false;
+  if (password.value !== passwordDup.value) return false;
+  return true;
+};
+
 const changeRoomPassword = async () => {
-  if (!chatStore.isSelected) {
-    console.log('채팅룸 선택 오류');
-    return;
-  }
-  if (password.value === '') {
-    console.log('비밀번호 공백');
-    return;
-  }
-  if (password.value !== passwordDup.value) {
-    console.log('비밀번호 확인 필요');
-    return;
-  }
+  if (!chatStore.isSelected || !isValidPassword) return;
   const roomInfo: ChatRoomMode = {
     roomId: chatStore.selectedID,
     roomMode: 'PROTECTED',
     password: password.value,
   };
-  console.log(roomInfo);
   try {
     await ChatService.changeRoomMode(roomInfo);
     chatStore.setRoomMode(roomInfo.roomId, roomInfo.roomMode);
