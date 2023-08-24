@@ -39,16 +39,20 @@ const userStore = useUsersSotre();
 const listType = ref<string>('Friends');
 const users = ref<OthersInfo[]>([]);
 
-const removeFromList = (id: number) => {
-  console.log('removeFromList');
-  console.log(id);
-  users.value.filter(u => u.id !== id);
-  if (listType.value === 'Friends') {
-    userStore.friends.filter(u => u.id !== id);
-  } else if (listType.value === 'Blocks') {
-    userStore.blocks.filter(u => u.id !== id);
+const removeFromList = async (id: number) => {
+  try {
+    users.value = users.value.filter(u => u.id !== id);
+    if (listType.value === 'Friends') {
+      userStore.friends.filter(u => u.id !== id);
+      await UserService.unfollowUser(id);
+    } else if (listType.value === 'Blocks') {
+      userStore.blocks.filter(u => u.id !== id);
+      await UserService.unblockUser(id);
+    }
+    userStore.selectedUserId = -1;
+  } catch (e) {
+    console.log(e);
   }
-  console.log(users.value);
 };
 
 const getButtonTitle = () => {

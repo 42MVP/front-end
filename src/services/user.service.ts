@@ -1,4 +1,4 @@
-import { APIWithToken } from '@/services/utils/apiDecorator.utils';
+import { API, APIWithToken } from '@/services/utils/apiDecorator.utils';
 import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
@@ -50,7 +50,13 @@ export class UserService {
       loseNum: 1,
       winNum: 3,
     });
+
     return friendsList;
+  }
+
+  @APIWithToken()
+  static async unfollowUser(id: number): Promise<void> {
+    const ret = await axiosAPI.auth().post('/friend');
   }
 
   @APIWithToken()
@@ -59,5 +65,10 @@ export class UserService {
     const BlocksList: OthersInfo[] = ret.data;
 
     return BlocksList;
+  }
+
+  @APIWithToken()
+  static async unblockUser(id: number): Promise<void> {
+    const ret = await axiosAPI.auth().delete('/block');
   }
 }

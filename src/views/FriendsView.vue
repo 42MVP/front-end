@@ -6,10 +6,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import FriendList from '@/components/friendslist-component/FriendList.vue';
 import FriendProfile from '@/components/friendslist-component/FriendProfile.vue';
-import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 </script>
 
 <style scoped>

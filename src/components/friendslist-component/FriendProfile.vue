@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
@@ -27,6 +27,13 @@ import { useUsersSotre } from '@/stores/users.store';
 const userStore = useUsersSotre();
 
 const selectedUser = ref<OthersInfo>();
+
+watch(
+  () => userStore.selectedUserId,
+  () => {
+    selectedUser.value = userStore.friends.find(u => u.id === userStore.selectedUserId);
+  },
+);
 
 onMounted(() => {
   selectedUser.value = userStore.friends.find(u => u.id === userStore.selectedUserId);

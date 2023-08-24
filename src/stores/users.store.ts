@@ -21,5 +21,13 @@ export const useUsersSotre = defineStore('users', {
     addBlocks(user: OthersInfo) {
       this.blocks.push(user);
     },
+    deleteFriends(id: number) {
+      this.friends.filter(user => user.id !== id);
+    },
+    deleteBlocks(id: number) {
+      this.blocks.filter(user => user.id !== id);
+    },
+
+    //unfollow, unblock이 있으니까 delete action 도 추가해두기
   },
 });
