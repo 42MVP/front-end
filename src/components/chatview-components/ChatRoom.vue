@@ -1,9 +1,5 @@
 <template>
-  <ManageChannelMemberModal
-    v-if="modalName === '멤버 관리'"
-    :isShow="modalName === '멤버 관리'"
-    @close="modalName = ''"
-  />
+  <ManageChannelMemberModal :isShow="modalName === '멤버 관리'" @close="modalName = ''" />
   <ChangeChannelPasswordModal :isShow="modalName === '비밀번호 변경'" @close="modalName = ''" />
   <SetChannelPasswordModal :isShow="modalName === '비밀번호 설정'" @close="modalName = ''" @submit="modalName = ''" />
   <DeleteChannelPasswordModal

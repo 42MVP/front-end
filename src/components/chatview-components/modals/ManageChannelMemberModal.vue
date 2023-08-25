@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, reactive, computed } from 'vue';
+import { ref, watch, reactive, computed } from 'vue';
 // component
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
@@ -100,16 +100,10 @@ const props = defineProps<{
   isShow: boolean;
 }>();
 
-const owner = ref<User | undefined>();
-
-onMounted(() => {
-  owner.value = getOwner();
-});
-
-const getOwner = (): User | undefined => {
+const owner = computed(() => {
   const chatInfo = chatStore.chatRoom;
   return chatInfo?.self.role === Role.OWNER ? chatInfo?.self : chatInfo?.users?.find(user => user.role == Role.OWNER);
-};
+});
 
 const icons: Record<string, IconButton[]> = {
   INVITE: [{ emoji: '✉️', event: Mode.INVITE }],
@@ -233,13 +227,6 @@ const closeModal = () => {
   isMuteTimeVisible.value = false;
   emits('close');
 };
-
-watch(
-  () => chatStore.selectedID,
-  () => {
-    owner.value = getOwner();
-  },
-);
 </script>
 
 <style scoped>
