@@ -29,7 +29,7 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async getProfile(name: string): Promise<UserInfo> {
+  static async getUserProfile(name: string): Promise<UserInfo> {
     const ret = await axiosAPI.auth().get(`/user/name/${name}`);
     const userInfo: UserInfo = ret.data;
     return userInfo;
