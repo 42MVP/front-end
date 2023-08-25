@@ -33,7 +33,7 @@ import GameHistory from '@/components/profileview-components/GameHistory.vue';
 // stores
 import { useLoginStore } from '@/stores/login.store';
 // services
-import { ProfileService } from '@/services/profile.service';
+import { UserService } from '@/services/user.service';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { UserGameRecord } from '@/interfaces/user/UserGameRecord.interface';
@@ -48,7 +48,7 @@ const gameRecord = ref<UserGameRecord>();
 
 onMounted(async () => {
   try {
-    profileUser.value = await ProfileService.getProfile(props.username);
+    profileUser.value = await UserService.getProfile(props.username);
     gameRecord.value = {
       rate: profileUser.value.rate,
       totalGame: profileUser.value.winNum + profileUser.value.loseNum,

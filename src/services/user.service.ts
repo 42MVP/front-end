@@ -29,10 +29,9 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async getUserByName(name: string): Promise<UserInfo> {
-    const ret = await axiosAPI.auth().get(`/user/${name}`);
+  static async getProfile(name: string): Promise<UserInfo> {
+    const ret = await axiosAPI.auth().get(`/user/name/${name}`);
     const userInfo: UserInfo = ret.data;
-
     return userInfo;
   }
 
