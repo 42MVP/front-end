@@ -13,11 +13,11 @@
         />
       </AvatarItem>
       <div class="g-info-div">
-        <GBox class="g-box" :rate="profileUser.rate" />
-        <Achieve class="achieve"></Achieve>
+        <GBox class="g-box" :record="gameRecord" />
+        <Achieve :achievement="profileUser.achievement" class="achieve" />
       </div>
     </div>
-    <div class="bottom">
+    <div v-show="profileUser.gameHistory.length" class="bottom">
       <GameHistory :username="profileUser.name" :img="profileUser.avatarURL" :histories="profileUser.gameHistory" />
     </div>
   </div>
@@ -30,9 +30,13 @@ import ProfileButton from '@/components/profileview-components/ProfileButton.vue
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import GameHistory from '@/components/profileview-components/GameHistory.vue';
-import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
-import * as mock from '@/services/profile.service';
+// stores
 import { useLoginStore } from '@/stores/login.store';
+// services
+import { UserService } from '@/services/user.service';
+// interfaces
+import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
+import type { UserGameRecord } from '@/interfaces/user/UserGameRecord.interface';
 
 const props = defineProps({
   username: { type: String, default: '' },
@@ -40,8 +44,20 @@ const props = defineProps({
 
 const profileUser = ref<UserInfo>();
 
-onMounted(() => {
-  profileUser.value = mock.getUserInfo(props.username);
+const gameRecord = ref<UserGameRecord>();
+
+onMounted(async () => {
+  try {
+    profileUser.value = await UserService.getUserProfile(props.username);
+    gameRecord.value = {
+      rate: profileUser.value.rate,
+      totalGame: profileUser.value.winNum + profileUser.value.loseNum,
+      winNum: profileUser.value.winNum,
+      loseNum: profileUser.value.loseNum,
+    };
+  } catch (e) {
+    console.warn(e);
+  }
 });
 
 const getLoginName = computed(() => {

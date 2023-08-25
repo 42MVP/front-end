@@ -7,6 +7,8 @@ export interface UserInfo {
   isFollow: boolean;
   isBlock: boolean;
   rate: number;
+  winNum: number;
+  loseNum: number;
   achievement: number[];
   gameHistory: GameHistory[];
 }
