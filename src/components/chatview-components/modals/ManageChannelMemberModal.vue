@@ -9,8 +9,8 @@
         placeholderText="유저명을 입력하세요"
         icon="👩‍🌾"
         :isMenu="searchedUsers.length > 0"
-        @activateSearch="serviceGetUser"
-        @response="searchUser"
+        @activateSearch="searchUser"
+        @response="updateSearchName"
       >
         <template #search-bar-item>
           <BasicList
@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, reactive } from 'vue';
+import { onMounted, ref, watch, reactive, computed } from 'vue';
 // component
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
@@ -126,27 +126,47 @@ const icons: Record<string, IconButton[]> = {
 
 const isUserTab = ref(true);
 
-const usersNotInChannel = ref<User[]>([] as User[]);
-const searchedUsers = ref<User[]>([] as User[]);
+const joinableUsers = ref<User[]>([] as User[]);
 
-const serviceGetUser = async () => {
+const searchUser = async () => {
   try {
-    const ret = await UserService.mockUser();
-    const allUsers: User[] = ret;
+    const allUsers: User[] = await UserService.getAllUser();
     const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
-    usersNotInChannel.value = allUsers.filter(user => !channelUserIds.has(user.id));
+    const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
+    const filteredOutUserIds = new Set([...channelUserIds, ...banUserIds, loginStore.id]);
+    joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
   } catch (e) {
     console.warn(e);
   }
 };
 
-const searchUser = (name: string) => {
-  if (name === '') {
-    searchedUsers.value = [];
-  } else if (name === ' ') {
-    searchedUsers.value = usersNotInChannel.value;
-  } else searchedUsers.value = usersNotInChannel.value.filter(user => user.name.startsWith(name));
+const searchName = ref<string>('');
+
+const updateSearchName = (name: string) => {
+  searchName.value = name;
 };
+
+const searchedUsers = computed((): User[] => {
+  if (searchName.value === '') return [];
+  if (searchName.value === ' ') return joinableUsers.value;
+  return joinableUsers.value.filter(user => user.name.startsWith(searchName.value));
+});
+
+watch(
+  () => props.isShow && chatStore.chatRoom?.users,
+  () => {
+    const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
+    joinableUsers.value = joinableUsers.value.filter(user => !channelUserIds.has(user.id));
+  },
+);
+
+watch(
+  () => props.isShow && chatStore.chatRoom?.banUsers,
+  () => {
+    const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
+    joinableUsers.value = joinableUsers.value.filter(user => !banUserIds.has(user.id));
+  },
+);
 
 const muteId = ref<number | null>(null);
 const isMuteTimeVisible = ref<boolean>(false);

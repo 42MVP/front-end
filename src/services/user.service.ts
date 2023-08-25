@@ -6,7 +6,7 @@ import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 
 export class UserService {
   @APIWithToken()
-  static async getAllUser(): Promise<User> {
+  static async getAllUser(): Promise<User[]> {
     const ret = await axiosAPI.auth().get('/user');
     return ret.data;
   }
