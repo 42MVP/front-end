@@ -1,4 +1,3 @@
-import { APIWithToken } from './utils/apiDecorator.utils';
 import { axiosAPI } from './utils/axiosInstance.utils';
 import { SocketService } from './socket.service';
 import { gameStore, matchingStore } from '@/main';
@@ -9,13 +8,11 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
  * API
  */
 export class GameMatchingService {
-  @APIWithToken()
   async applyQueue(): Promise<void> {
     await axiosAPI.auth().post('/game-matching/queue');
     matchingStore.setStep(MatchingStep.InQueue);
   }
 
-  @APIWithToken()
   async cancelQueue(): Promise<void> {
     await axiosAPI.auth().post('/game-matching/cancel-queue');
     matchingStore.setStep(MatchingStep.GameSetting);
