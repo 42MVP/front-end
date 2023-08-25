@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const endpoint = 'http://localhost:3000';
 
@@ -7,7 +6,7 @@ class Axios {
   auth() {
     const tokenInstance = axios.create({
       baseURL: endpoint,
-      headers: { Authorization: 'Bearer ' + Cookies.get('access-token') },
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('access-token') },
     });
     return tokenInstance;
   }

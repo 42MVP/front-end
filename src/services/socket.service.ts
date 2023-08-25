@@ -1,12 +1,11 @@
 import { io } from 'socket.io-client';
-import Cookies from 'js-cookie';
 
 export class SocketService {
   private static instance: SocketService;
   private socket: any;
 
   private constructor() {
-    const accessToken = Cookies.get('access-token');
+    const accessToken = localStorage.getItem('access-token');
     const URL = 'http://localhost:3000/';
     this.socket = io(URL, {
       auth: {
