@@ -3,7 +3,7 @@
     <DBox :middle="'Lv.' + calculateLevel(props.record.rate).toString()" />
     <DBox
       :top="`total ${props.record.totalGame || 0} games`"
-      :middle="(props.record.winNum / props.record.totalGame * 100).toString().slice(0,4) + '%'"
+      :middle="`${((props.record.winNum / props.record.totalGame) * 100 || 0).toString().slice(0, 4) || '-'} %`"
       :bottom="`win ${props.record.winNum || 0} lose ${props.record.loseNum || 0} `"
     />
   </div>
