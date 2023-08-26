@@ -25,7 +25,6 @@ const props = defineProps({
 
 <style scoped>
 .box-container {
-  z-index: 9997;
   border-radius: 15px;
   border: 1px solid #463f3a;
   background: #f4f3ee;
