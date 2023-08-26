@@ -64,7 +64,7 @@ const links = [
     text: 'Friends',
   },
   {
-    to: '/game',
+    to: '/matching',
     text: 'Game',
   },
 ];

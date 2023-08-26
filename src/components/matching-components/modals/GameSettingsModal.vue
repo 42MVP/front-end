@@ -1,5 +1,5 @@
 <template>
-  <Modal title="게임 설정">
+  <MatchingBox title="게임 설정">
     <template #body>
       <div class="radio-button-out-div">
         <RadioButton
@@ -21,18 +21,18 @@
     <template #footer>
       <Button class="button-div" text="게임 찾기" @response="applyQueue" />
     </template>
-  </Modal>
+  </MatchingBox>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import Modal from '@/components/Modal.vue';
+import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
-import { useGameStore } from '@/stores/game.store';
-import { GameService } from '@/services/game.service';
+import { PreGameService } from '@/services/preGame.service';
+import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
 
 const selectedOption = ref<number>(1);
 
@@ -44,15 +44,16 @@ const setActive = (index: number) => {
   return selectedOption.value === index;
 };
 
-const gameStore = useGameStore();
+const matchingStore = useMatchingStore();
 
 const applyQueue = async () => {
   try {
-    await GameService.applyQueue();
-    gameStore.setOption(selectedOption.value);
-    gameStore.setStatus('매칭중');
+    await PreGameService.applyQueue();
+    matchingStore.setStep(MatchingStep.InQueue);
   } catch (e) {
-    console.log('applyQueue error...', e);
+    console.error('매칭 실패...');
+    console.error(e);
+    console.error('----------');
   }
 };
 </script>

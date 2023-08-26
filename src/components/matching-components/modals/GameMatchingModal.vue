@@ -1,27 +1,27 @@
 <template>
-  <Modal title="매칭중">
+  <MatchingBox title="매칭중">
     <template #body>
       <div id="spinner"></div>
     </template>
     <template #footer>
       <Button class="button-div" text="취소" @response="cancelQueue" />
     </template>
-  </Modal>
+  </MatchingBox>
 </template>
 
 <script setup lang="ts">
-import Modal from '@/components/Modal.vue';
+import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 
-import { useGameStore } from '@/stores/game.store';
-import { GameService } from '@/services/game.service';
+import { PreGameService } from '@/services/preGame.service';
+import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
 
-const gameStore = useGameStore();
+const matchingStore = useMatchingStore();
 
-const cancelQueue = () => {
+const cancelQueue = async () => {
   try {
-    GameService.cancelQueue();
-    gameStore.setStatus('게임설정');
+    await PreGameService.cancelQueue();
+    matchingStore.setStep(MatchingStep.GameSetting);
   } catch (e) {
     console.log('cancel queue error...', e);
   }

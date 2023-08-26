@@ -1,7 +1,7 @@
 <template>
-  <Modal title="게임을 찾았습니다!">
+  <MatchingBox title="게임을 찾았습니다!">
     <template #body>
-      <CountdownTimer :targetTime="gameStore.atReadyTime" />
+      <CountdownTimer :targetTime="new Date(matchingStore.matchingEndTimeMs)" />
     </template>
     <template #footer>
       <div class="button-div">
@@ -9,28 +9,27 @@
         <Button text="거절" style="margin: 0 10px" @response="refuseGame" />
       </div>
     </template>
-  </Modal>
+  </MatchingBox>
 </template>
 
 <script setup lang="ts">
-import Modal from '@/components/Modal.vue';
+import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
-import { useGameStore } from '@/stores/game.store';
-import { GameSocketService } from '@/services/gameSocket.service';
+import { PreGameSocketService } from '@/services/preGameSocket.service';
+import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
 
-const gameStore = useGameStore();
+const matchingStore = useMatchingStore();
 
 const acceptGame = () => {
-  GameSocketService.acceptGame(gameStore.matchingId);
-  gameStore.setStatus('상대방대기');
+  PreGameSocketService.acceptGame(matchingStore.id);
+  matchingStore.setStep(MatchingStep.Waiting);
 };
 
 const refuseGame = () => {
-  GameSocketService.rejectGame(gameStore.matchingId);
-  gameStore.setMatchInfo(null);
-  gameStore.setStatus('게임설정');
+  PreGameSocketService.rejectGame(matchingStore.id);
+  matchingStore.setStep(MatchingStep.GameSetting);
 };
 </script>
 

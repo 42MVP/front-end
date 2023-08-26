@@ -1,5 +1,5 @@
 <template>
-  <Modal title="잠시 후 경기가 시작됩니다">
+  <MatchingBox title="잠시 후 경기가 시작됩니다">
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
@@ -15,19 +15,36 @@
         </div>
       </div>
     </template>
-  </Modal>
+  </MatchingBox>
 </template>
 
 <script setup lang="ts">
-import Modal from '@/components/Modal.vue';
+import MatchingBox from '../MatchingBox.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
+import type { GameUser } from '@/interfaces/game/GameUser.interface';
 
 import { useGameStore } from '@/stores/game.store';
+import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
+import { onMounted } from 'vue';
 
 const gameStore = useGameStore();
+const matchingStore = useMatchingStore();
 
-const leftUser = gameStore.matchInfo?.leftUser;
-const rightUser = gameStore.matchInfo?.rightUser;
+const UnknownPlayer: GameUser = {
+  name: 'Unknown',
+  avatarURL: '',
+  rating: '0',
+};
+
+const leftUser = gameStore.matchInfo?.leftUser ? gameStore.matchInfo.leftUser : UnknownPlayer;
+const rightUser = gameStore.matchInfo?.rightUser ? gameStore.matchInfo.rightUser : UnknownPlayer;
+
+onMounted(() => {
+  setTimeout(() => {
+    matchingStore.setStep(MatchingStep.InGame);
+    console.log('move to game!');
+  }, 5000);
+});
 </script>
 
 <style>

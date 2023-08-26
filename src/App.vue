@@ -1,30 +1,17 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue';
+import { onMounted } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { useModalStore } from '@/stores/modal.store';
 import { ChatSocketService } from './services/chatSocket.service';
-import { GameSocketService } from './services/gameSocket.service';
-import { useGameStore } from './stores/game.store';
-import { useRouter } from 'vue-router';
+import { PreGameSocketService } from './services/preGameSocket.service';
 
 const modalStore = useModalStore();
-const gameStore = useGameStore();
-const router = useRouter();
-
-watch(
-  () => gameStore.isMatched,
-  () => {
-    if (gameStore.isOnGame === true) return;
-    GameSocketService.onGameInit();
-    router.push('/game');
-  },
-);
 
 onMounted(() => {
   ChatSocketService.onChat();
-  GameSocketService.onGameInvitation();
+  PreGameSocketService.onGameInvitation();
 });
 </script>
 
