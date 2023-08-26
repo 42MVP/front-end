@@ -16,18 +16,18 @@
 import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
-import { GameMatchingService } from '@/services/gameMatching.service';
+import { GameService } from '@/services/game.service';
 
 import { useMatchingStore } from '@/stores/matching.store';
 
 const matchingStore = useMatchingStore();
 
 const acceptGame = () => {
-  GameMatchingService.socket.acceptGame(matchingStore.id);
+  GameService.matching.socket.acceptGame(matchingStore.id);
 };
 
 const refuseGame = () => {
-  GameMatchingService.socket.rejectGame(matchingStore.id);
+  GameService.matching.socket.rejectGame(matchingStore.id);
 };
 </script>
 

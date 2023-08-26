@@ -27,16 +27,16 @@ import AvatarItem from '@/components/common/AvatarItem.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { useInvitationStore } from '@/stores/invitation.store';
-import { GameInvitationService } from '@/services/gameInvitation.service';
+import { GameService } from '@/services/game.service';
 
 const invitationStore = useInvitationStore();
 
 const acceptGame = () => {
-  GameInvitationService.socket.acceptInvitation(invitationStore.id);
+  GameService.invitation.socket.acceptInvitation(invitationStore.id);
 };
 
 const refuseGame = () => {
-  GameInvitationService.socket.rejectInvitation(invitationStore.id);
+  GameService.invitation.socket.rejectInvitation(invitationStore.id);
 };
 </script>
 

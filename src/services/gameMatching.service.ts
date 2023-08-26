@@ -10,18 +10,18 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
  */
 export class GameMatchingService {
   @APIWithToken()
-  static async applyQueue(): Promise<void> {
+  async applyQueue(): Promise<void> {
     await axiosAPI.auth().post('/game-matching/queue');
     matchingStore.setStep(MatchingStep.InQueue);
   }
 
   @APIWithToken()
-  static async cancelQueue(): Promise<void> {
+  async cancelQueue(): Promise<void> {
     await axiosAPI.auth().post('/game-matching/cancel-queue');
     matchingStore.setStep(MatchingStep.GameSetting);
   }
 
-  static get socket(): GameMatchingSocketService {
+  get socket(): GameMatchingSocketService {
     return new GameMatchingSocketService();
   }
 }

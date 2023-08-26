@@ -11,14 +11,14 @@ import InvitationConfirmModal from './components/invitation-components/modals/In
 import InvitationWaitingModal from './components/invitation-components/modals/InvitationWaitingModal.vue';
 import { InvitationStep, useInvitationStore } from './stores/invitation.store';
 import InvitationCancelModal from './components/invitation-components/modals/InvitationCancelModal.vue';
-import { GameInvitationService } from './services/gameInvitation.service';
+import { GameService } from './services/game.service';
 
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
 
 onMounted(() => {
   ChatSocketService.onChat();
-  GameInvitationService.socket.on();
+  GameService.invitation.socket.on();
 });
 </script>
 

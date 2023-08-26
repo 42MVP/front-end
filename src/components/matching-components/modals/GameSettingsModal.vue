@@ -31,7 +31,7 @@ import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
-import { GameMatchingService } from '@/services/gameMatching.service';
+import { GameService } from '@/services/game.service';
 
 const selectedOption = ref<number>(1);
 
@@ -45,7 +45,7 @@ const setActive = (index: number) => {
 
 const applyQueue = async () => {
   try {
-    await GameMatchingService.applyQueue();
+    await GameService.matching.applyQueue();
   } catch (e) {
     alert('큐 요청 실패');
     console.warn(e);

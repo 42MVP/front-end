@@ -23,17 +23,17 @@ import GameTimeoutModal from '@/components/matching-components/modals/GameTimeou
 
 import { useMatchingStore } from '@/stores/matching.store';
 import { MatchingStep } from '@/stores/matching.store';
-import { GameMatchingService } from '@/services/gameMatching.service';
+import { GameService } from '@/services/game.service';
 
 const matchingStore = useMatchingStore();
 
 onMounted(() => {
-  GameMatchingService.socket.on();
+  GameService.matching.socket.on();
 });
 
 onUnmounted(() => {
   if (matchingStore.isStep(MatchingStep.GameSetting) || matchingStore.isStep(MatchingStep.InGame))
-    GameMatchingService.socket.off();
+    GameService.matching.socket.off();
 });
 </script>
 

@@ -10,17 +10,17 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
  */
 export class GameInvitationService {
   @APIWithToken()
-  static async inviteMatching(userId: number): Promise<void> {
+  async inviteMatching(userId: number): Promise<void> {
     await axiosAPI.auth().post(`/game-invitation/invite/${userId}`);
   }
 
   @APIWithToken()
-  static async cancelInvite(invitationId: number): Promise<void> {
+  async cancelInvite(invitationId: number): Promise<void> {
     await axiosAPI.auth().post(`/game-invitation/cancel-invite/${invitationId}`);
     invitationStore.setStep(InvitationStep.None);
   }
 
-  static get socket(): GameInvitationSocketService {
+  get socket(): GameInvitationSocketService {
     return new GameInvitationSocketService();
   }
 }

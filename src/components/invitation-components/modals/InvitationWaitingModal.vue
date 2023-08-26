@@ -16,13 +16,13 @@ import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
-import { GameInvitationService } from '@/services/gameInvitation.service';
+import { GameService } from '@/services/game.service';
 
 const invitationStore = useInvitationStore();
 
 const cancelInvite = async () => {
   try {
-    await GameInvitationService.cancelInvite(invitationStore.id);
+    await GameService.invitation.cancelInvite(invitationStore.id);
   } catch (e) {
     alert('초대 취소 실패');
     invitationStore.setStep(InvitationStep.None);
