@@ -23,7 +23,7 @@ import GameTimeoutModal from '@/components/matching-components/modals/GameTimeou
 
 import { useMatchingStore } from '@/stores/matching.store';
 import { MatchingStep } from '@/stores/matching.store';
-import { GameMatchingService } from '@/services/GameMatching.service';
+import { GameMatchingService } from '@/services/gameMatching.service';
 
 const matchingStore = useMatchingStore();
 

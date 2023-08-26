@@ -16,7 +16,7 @@ import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
-import { GameInvitationService } from '@/services/GameInvitation.service';
+import { GameInvitationService } from '@/services/gameInvitation.service';
 
 const invitationStore = useInvitationStore();
 

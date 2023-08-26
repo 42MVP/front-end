@@ -100,7 +100,7 @@ import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
-import { GameInvitationService } from '@/services/GameInvitation.service';
+import { GameInvitationService } from '@/services/gameInvitation.service';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();

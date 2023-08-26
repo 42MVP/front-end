@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
-import { GameMatchingService } from '@/services/GameMatching.service';
+import { GameMatchingService } from '@/services/gameMatching.service';
 
 const cancelQueue = async () => {
   try {

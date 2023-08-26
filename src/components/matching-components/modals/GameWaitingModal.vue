@@ -12,7 +12,7 @@ import MatchingBox from '../MatchingBox.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
-import { GameMatchingService } from '@/services/GameMatching.service';
+import { GameMatchingService } from '@/services/gameMatching.service';
 
 const matchingStore = useMatchingStore();
 

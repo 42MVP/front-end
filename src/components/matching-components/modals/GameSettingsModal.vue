@@ -31,7 +31,7 @@ import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
-import { GameMatchingService } from '@/services/GameMatching.service';
+import { GameMatchingService } from '@/services/gameMatching.service';
 
 const selectedOption = ref<number>(1);
 

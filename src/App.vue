@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
@@ -11,7 +11,7 @@ import InvitationConfirmModal from './components/invitation-components/modals/In
 import InvitationWaitingModal from './components/invitation-components/modals/InvitationWaitingModal.vue';
 import { InvitationStep, useInvitationStore } from './stores/invitation.store';
 import InvitationCancelModal from './components/invitation-components/modals/InvitationCancelModal.vue';
-import { GameInvitationService } from './services/GameInvitation.service';
+import { GameInvitationService } from './services/gameInvitation.service';
 
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();

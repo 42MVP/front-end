@@ -16,7 +16,7 @@
 import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
-import { GameMatchingService } from '@/services/GameMatching.service';
+import { GameMatchingService } from '@/services/gameMatching.service';
 
 import { useMatchingStore } from '@/stores/matching.store';
 
