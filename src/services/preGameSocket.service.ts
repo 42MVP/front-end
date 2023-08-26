@@ -35,6 +35,7 @@ const GameInviteEvent = {
   inviteSuccess: 'invite-success',
   inviteConfirm: 'invite-confirm',
   inviteTimeout: 'invite-timeout',
+  inviteCancel: 'invite-cancel',
   inviteError: 'invite-error',
 };
 
@@ -121,8 +122,17 @@ export class PreGameSocketService {
     socket.on(GameInviteEvent.inviteSuccess, (d: EmitInviteSuccess) => {
       console.log('상대가 초대를 수신함');
       console.log(d);
-      invitationStore.setStep(InvitationStep.Waiting);
+      invitationStore.setId(d.invitationId);
       invitationStore.setEndTimeMs(d.endTimeMs);
+      invitationStore.setStep(InvitationStep.Waiting);
+    });
+
+    socket.on(GameInviteEvent.inviteCancel, (d: void) => {
+      console.log('상대가 초대를 취소함');
+      console.log(d);
+
+      invitationStore.setCancelMessage('상대가 초대를 취소함');
+      invitationStore.setStep(InvitationStep.Cancel);
     });
 
     socket.on(GameInviteEvent.inviteConfirm, (d: GameMatch) => {
@@ -132,14 +142,16 @@ export class PreGameSocketService {
         gameStore.setMatchInfo(d);
       } else {
         console.log('초대 게임 거절됨');
-        invitationStore.setStep(InvitationStep.Reject);
+        invitationStore.setCancelMessage('초대 거절 됨');
+        invitationStore.setStep(InvitationStep.Cancel);
       }
     });
 
     socket.on(GameInviteEvent.inviteTimeout, (d: void) => {
       console.log('상대가 초대를 받지 않음');
       console.log(d);
-      invitationStore.setStep(InvitationStep.Timeout);
+      invitationStore.setCancelMessage('상대가 초대를 받지 않음');
+      invitationStore.setStep(InvitationStep.Cancel);
     });
 
     socket.on(GameInviteEvent.inviteError, (d: EmitInviteError) => {
@@ -153,6 +165,7 @@ export class PreGameSocketService {
 
     socket.off(GameInviteEvent.invite);
     socket.off(GameInviteEvent.inviteSuccess);
+    socket.off(GameInviteEvent.inviteCancel);
     socket.off(GameInviteEvent.inviteConfirm);
     socket.off(GameInviteEvent.inviteTimeout);
     socket.off(GameInviteEvent.inviteError);

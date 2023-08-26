@@ -16,4 +16,9 @@ export class PreGameService {
   static async inviteMatching(userId: number): Promise<void> {
     await axiosAPI.auth().post(`/game-invitation/invite/${userId}`);
   }
+
+  @APIWithToken()
+  static async cancelInvite(invitationId: number): Promise<void> {
+    await axiosAPI.auth().post(`/game-invitation/cancel-invite/${invitationId}`);
+  }
 }

@@ -4,14 +4,28 @@
       <CountdownTimer :targetTime="new Date(invitationStore.endTimeMs)" />
       <slot />
     </template>
+    <template #footer>
+      <Button text="취소" style="margin: 0 10px" @response="cancelInvite" />
+    </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
+import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
-import { useInvitationStore } from '@/stores/invitation.store';
+import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
+import { PreGameService } from '@/services/preGame.service';
 
 const invitationStore = useInvitationStore();
+
+const cancelInvite = async () => {
+  try {
+    await PreGameService.cancelInvite(invitationStore.id);
+    invitationStore.setStep(InvitationStep.None);
+  } catch (e) {
+    console.warn('초대 취소 실패');
+  }
+};
 </script>

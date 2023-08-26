@@ -9,10 +9,9 @@ import { PreGameSocketService } from './services/preGameSocket.service';
 
 import InvitationAcceptedModal from './components/invitation-components/modals/InvitationAcceptedModal.vue';
 import InvitationConfirmModal from './components/invitation-components/modals/InvitationConfirmModal.vue';
-import InvitationRefusedModal from './components/invitation-components/modals/InvitationRefusedModal.vue';
-import InvitationTimeoutModal from './components/invitation-components/modals/InvitationTimeoutModal.vue';
 import InvitationWaitingModal from './components/invitation-components/modals/InvitationWaitingModal.vue';
 import { InvitationStep, useInvitationStore } from './stores/invitation.store';
+import InvitationCancelModal from './components/invitation-components/modals/InvitationCancelModal.vue';
 
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
@@ -24,11 +23,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <InvitationAcceptedModal v-if="invitationStore.isStep(InvitationStep.Accept)" />
-  <InvitationConfirmModal v-else-if="invitationStore.isStep(InvitationStep.Invited)" />
-  <InvitationRefusedModal v-else-if="invitationStore.isStep(InvitationStep.Reject)" />
-  <InvitationTimeoutModal v-else-if="invitationStore.isStep(InvitationStep.Timeout)" />
+  <InvitationConfirmModal v-if="invitationStore.isStep(InvitationStep.Invited)" />
   <InvitationWaitingModal v-else-if="invitationStore.isStep(InvitationStep.Waiting)" />
+  <InvitationAcceptedModal v-else-if="invitationStore.isStep(InvitationStep.Accept)" />
+  <InvitationCancelModal v-else-if="invitationStore.isStep(InvitationStep.Cancel)" />
   <main>
     <Modal :title="modalStore.title" :show="modalStore.isActive">
       <template #body>{{ modalStore.text }} </template>
