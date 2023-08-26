@@ -62,8 +62,7 @@ import { ChatService, RoomMode } from '@/services/chat.service';
 import { useChatStore } from '@/stores/chat.store';
 import { useModalStore } from '@/stores/modal.store';
 // interface
-import type { ChatRoom } from '@/interfaces/chat/ChatRoom.interface';
-import type { User } from '@/interfaces/user/User.interface';
+import type { ChatRoom, ChatRoomEnter } from '@/interfaces/chat/ChatRoom.interface';
 
 const EnterStatus = {
   CHOICE: 1,
@@ -115,9 +114,10 @@ const chooseRoom = (roomId: number) => {
   searchChatList.value = [];
 };
 
-const enterRoom = async (roomId: number, password: string | undefined) => {
+const enterRoom = async (roomId: number, password?: string) => {
   try {
-    const enter = await ChatService.enterRoom({ roomId: roomId, password: password });
+    const roomEnter: ChatRoomEnter = { roomId: roomId, password: password };
+    const enter = await ChatService.enterRoom(roomEnter);
     chatStore.addChatRoom(roomId, enter);
   } catch (e) {
     modalStore.on({

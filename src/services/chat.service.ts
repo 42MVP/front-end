@@ -21,16 +21,13 @@ export class ChatService {
   @APIWithToken()
   static async createRoom(body: ChatRoomCreate): Promise<ChatRoom> {
     const ret = await axiosAPI.auth().post('/chat/create-room', body);
-    const chatRoom: ChatRoom = ret.data;
+    const chatRoom: ChatInfo = ret.data;
     return chatRoom;
   }
 
   @APIWithToken()
   static async enterRoom(body: ChatRoomEnter): Promise<ChatInfo> {
-    const ret = await axiosAPI.auth().post('/chat/enter-room', {
-      roomId: body.roomId,
-      password: body.password,
-    });
+    const ret = await axiosAPI.auth().post('/chat/enter-room', body);
     const chatInfo: ChatInfo = ret.data;
     return chatInfo;
   }

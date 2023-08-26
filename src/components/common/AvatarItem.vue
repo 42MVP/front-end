@@ -23,7 +23,10 @@ const props = defineProps({
 });
 
 const avatarStyle = {
+  minWidth: `${props.imgSize}px`,
+  minHeight: `${props.imgSize}px`,
   width: `${props.imgSize}px`,
+  height: `${props.imgSize}px`,
 };
 </script>
 

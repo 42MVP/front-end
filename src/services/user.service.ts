@@ -32,7 +32,12 @@ export class UserService {
   static async getUserByName(name: string): Promise<UserInfo> {
     const ret = await axiosAPI.auth().get(`/user/${name}`);
     const userInfo: UserInfo = ret.data;
+    return userInfo;
+  }
 
+  static async getUserProfile(name: string): Promise<UserInfo> {
+    const ret = await axiosAPI.auth().get(`/user/name/${name}`);
+    const userInfo: UserInfo = ret.data;
     return userInfo;
   }
 
@@ -70,5 +75,10 @@ export class UserService {
   @APIWithToken()
   static async unblockUser(id: number): Promise<void> {
     // const ret = await axiosAPI.auth().delete('/block');
+  }
+
+  @APIWithToken()
+  static async setUserProfile(formData: FormData) {
+    return axiosAPI.auth().put(`/user`, formData);
   }
 }

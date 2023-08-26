@@ -20,15 +20,18 @@ import { useChatStore } from '@/stores/chat.store';
 
 const emits = defineEmits(['close', 'submit']);
 const props = defineProps<{
-  chatInfo: ChatInfo;
   isShow: boolean;
 }>();
 
 const chatStore = useChatStore();
 
 const changeRoomModePublic = async () => {
+  if (!chatStore.isSelected) {
+    console.log('채팅룸 선택 오류');
+    return;
+  }
   const roomMode: ChatRoomMode = {
-    roomId: props.chatInfo.id,
+    roomId: chatStore.selectedID,
     roomMode: 'PUBLIC',
   };
   console.log(roomMode);
