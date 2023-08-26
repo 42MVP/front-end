@@ -1,7 +1,8 @@
-import { gameStore, matchingStore } from '@/main';
+import { gameStore, invitationStore, matchingStore } from '@/main';
 import { MatchingStep } from '@/stores/matching.store';
 import { SocketService } from './socket.service';
 import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
+import { InvitationStep } from '@/stores/invitation.store';
 
 /**
  * matching
@@ -45,10 +46,12 @@ interface EmitInvite {
   inviterName: string;
   inviterAvatarUrl: string;
   invitationId: number;
+  endTimeMs: number;
 }
 
 interface EmitInviteSuccess {
   invitationId: number;
+  endTimeMs: number;
 }
 
 export class PreGameSocketService {
@@ -107,37 +110,40 @@ export class PreGameSocketService {
     const socket = SocketService.getInstance().getSocket();
 
     socket.on(GameInviteEvent.invite, (d: EmitInvite) => {
+      console.log('게임 초대됨');
       console.log(d);
-      const isConfirmed = confirm(`${d.inviterName}님의 게임 초대를 수락하시겠습니까?`);
-
-      if (isConfirmed === true) {
-        this.acceptInvitation(d.invitationId);
-      } else {
-        this.rejectInvitation(d.invitationId);
-      }
+      invitationStore.setId(d.invitationId);
+      invitationStore.setEndTimeMs(d.endTimeMs);
+      invitationStore.setInviter(d.inviterName, d.inviterAvatarUrl);
+      invitationStore.setStep(InvitationStep.Invited);
     });
 
     socket.on(GameInviteEvent.inviteSuccess, (d: EmitInviteSuccess) => {
       console.log('상대가 초대를 수신함');
       console.log(d);
+      invitationStore.setStep(InvitationStep.Waiting);
+      invitationStore.setEndTimeMs(d.endTimeMs);
     });
 
     socket.on(GameInviteEvent.inviteConfirm, (d: GameMatch) => {
       if (d.result === true) {
         console.log('게임 수락됨');
+        invitationStore.setStep(InvitationStep.Accept);
         gameStore.setMatchInfo(d);
       } else {
         console.log('초대 게임 거절됨');
+        invitationStore.setStep(InvitationStep.Reject);
       }
     });
 
     socket.on(GameInviteEvent.inviteTimeout, (d: void) => {
       console.log('상대가 초대를 받지 않음');
       console.log(d);
+      invitationStore.setStep(InvitationStep.Timeout);
     });
 
     socket.on(GameInviteEvent.inviteError, (d: EmitInviteError) => {
-      console.log(`error from server: ${d.msg}`);
+      alert(`error from server: ${d.msg}`);
       console.log(d);
     });
   }
@@ -156,12 +162,14 @@ export class PreGameSocketService {
   static acceptInvitation(invitationId: number) {
     const socket = SocketService.getInstance().getSocket();
 
+    invitationStore.setStep(InvitationStep.Waiting);
     socket.emit('accept-invite', { invitationId: invitationId });
   }
 
   static rejectInvitation(invitationId: number) {
     const socket = SocketService.getInstance().getSocket();
 
+    invitationStore.setStep(InvitationStep.None);
     socket.emit('reject-invite', { invitationId: invitationId });
   }
 }

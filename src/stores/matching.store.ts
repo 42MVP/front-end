@@ -26,7 +26,7 @@ export const useMatchingStore = defineStore('matching', {
     option: '',
   }),
   getters: {
-    isStep: state => {
+    isStep: (state: MatchingState) => {
       return (step: MatchingStep) => state.step === step;
     },
   },
