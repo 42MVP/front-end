@@ -31,8 +31,7 @@ import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
-import { PreGameService } from '@/services/preGame.service';
-import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
+import { GameMatchingService } from '@/services/GameMatching.service';
 
 const selectedOption = ref<number>(1);
 
@@ -44,16 +43,12 @@ const setActive = (index: number) => {
   return selectedOption.value === index;
 };
 
-const matchingStore = useMatchingStore();
-
 const applyQueue = async () => {
   try {
-    await PreGameService.applyQueue();
-    matchingStore.setStep(MatchingStep.InQueue);
+    await GameMatchingService.applyQueue();
   } catch (e) {
-    console.error('매칭 실패...');
-    console.error(e);
-    console.error('----------');
+    alert('큐 요청 실패');
+    console.warn(e);
   }
 };
 </script>

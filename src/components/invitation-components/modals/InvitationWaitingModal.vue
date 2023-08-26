@@ -16,16 +16,16 @@ import Button from '@/components/BasicButton.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
-import { PreGameService } from '@/services/preGame.service';
+import { GameInvitationService } from '@/services/GameInvitation.service';
 
 const invitationStore = useInvitationStore();
 
 const cancelInvite = async () => {
   try {
-    await PreGameService.cancelInvite(invitationStore.id);
-    invitationStore.setStep(InvitationStep.None);
+    await GameInvitationService.cancelInvite(invitationStore.id);
   } catch (e) {
-    console.warn('초대 취소 실패');
+    alert('초대 취소 실패');
+    invitationStore.setStep(InvitationStep.None);
   }
 };
 </script>

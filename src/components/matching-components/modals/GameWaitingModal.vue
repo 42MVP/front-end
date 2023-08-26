@@ -12,14 +12,13 @@ import MatchingBox from '../MatchingBox.vue';
 import CountdownTimer from '@/components/CountdownTimer.vue';
 
 import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
-import { PreGameService } from '@/services/preGame.service';
+import { GameMatchingService } from '@/services/GameMatching.service';
 
 const matchingStore = useMatchingStore();
 
 const timeout = async () => {
   try {
-    PreGameService.applyQueue();
-    matchingStore.setStep(MatchingStep.InQueue);
+    GameMatchingService.applyQueue();
   } catch (e) {
     matchingStore.setStep(MatchingStep.GameSetting);
   }

@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { useModalStore } from '@/stores/modal.store';
 import { ChatSocketService } from './services/chatSocket.service';
-import { PreGameSocketService } from './services/preGameSocket.service';
 
 import InvitationAcceptedModal from './components/invitation-components/modals/InvitationAcceptedModal.vue';
 import InvitationConfirmModal from './components/invitation-components/modals/InvitationConfirmModal.vue';
 import InvitationWaitingModal from './components/invitation-components/modals/InvitationWaitingModal.vue';
 import { InvitationStep, useInvitationStore } from './stores/invitation.store';
 import InvitationCancelModal from './components/invitation-components/modals/InvitationCancelModal.vue';
+import { GameInvitationService } from './services/GameInvitation.service';
 
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
 
 onMounted(() => {
   ChatSocketService.onChat();
-  PreGameSocketService.onGameInvitation();
+  GameInvitationService.socket.on();
 });
 </script>
 

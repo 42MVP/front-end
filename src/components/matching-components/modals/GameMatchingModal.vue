@@ -12,16 +12,11 @@
 <script setup lang="ts">
 import MatchingBox from '../MatchingBox.vue';
 import Button from '@/components/BasicButton.vue';
-
-import { PreGameService } from '@/services/preGame.service';
-import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
-
-const matchingStore = useMatchingStore();
+import { GameMatchingService } from '@/services/GameMatching.service';
 
 const cancelQueue = async () => {
   try {
-    await PreGameService.cancelQueue();
-    matchingStore.setStep(MatchingStep.GameSetting);
+    await GameMatchingService.cancelQueue();
   } catch (e) {
     console.log('cancel queue error...', e);
   }

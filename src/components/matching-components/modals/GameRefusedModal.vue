@@ -10,15 +10,14 @@ import { onMounted } from 'vue';
 import MatchingBox from '../MatchingBox.vue';
 
 import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
-import { PreGameService } from '@/services/preGame.service';
+import { GameMatchingService } from '@/services/GameMatching.service';
 
 const matchingStore = useMatchingStore();
 
 onMounted(() => {
   setTimeout(async () => {
     try {
-      await PreGameService.applyQueue();
-      matchingStore.setStep(MatchingStep.InQueue);
+      await GameMatchingService.applyQueue();
     } catch (e) {
       matchingStore.setStep(MatchingStep.GameSetting);
     }
