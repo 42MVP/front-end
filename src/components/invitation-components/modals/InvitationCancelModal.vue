@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
 import Modal from '@/components/Modal.vue';
 
@@ -13,9 +13,15 @@ import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
 
 const invitationStore = useInvitationStore();
 
+let timeout: number | undefined;
+
 onMounted(() => {
-  setTimeout(() => {
-    if (invitationStore.isStep(InvitationStep.Cancel)) invitationStore.setStep(InvitationStep.None);
+  timeout = setTimeout(() => {
+    invitationStore.setStep(InvitationStep.None);
   }, 3000);
+});
+
+onUnmounted(() => {
+  clearTimeout(timeout);
 });
 </script>
