@@ -16,37 +16,62 @@
 import { ref } from 'vue';
 import BasicButton from '@/components/BasicButton.vue';
 import router from '@/router';
+//stores
+import { useUsersStore } from '@/stores/users.store';
+
+// services
+import { UserService } from '@/services/user.service';
+// interfaces
+import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
+
+const userStore = useUsersStore();
 
 const props = defineProps({
   isLoginUser: { type: Boolean, default: false },
-  isFollow: { type: Boolean, default: false },
-  isBlock: { type: Boolean, default: false },
+  profileUser: { type: UserInfo, default: '' },
 });
 
-const isFollow = ref<Boolean>(props.isFollow);
-const isBlock = ref<Boolean>(props.isBlock);
+const isFollow = ref<Boolean>(props.profileUser.isFollow);
+const isBlock = ref<Boolean>(props.profileUser.isBlock);
 
 const editButton = () => {
   router.push('/users');
 };
-const followButton = () => {
-  isFollow.value = true;
-  console.log(isFollow.value);
+const followButton = async () => {
+  try {
+    isFollow.value = true;
+    await UserService.followUser(props.profileUser.id);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-const unFollowButton = () => {
-  isFollow.value = false;
-  console.log(isFollow.value);
+const unFollowButton = async () => {
+  try {
+    isFollow.value = false;
+    await UserService.unfollowUser(props.profileUser.id);
+    userStore.friends.filter(u => u !== props.profileUser);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-const blockButton = () => {
-  isBlock.value = true;
-  isFollow.value = false;
+const blockButton = async () => {
+  try {
+    isBlock.value = true;
+    await UserService.blockUser(props.profileUser.id);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-const unBlockButton = () => {
-  if (isBlock.value) {
+const unBlockButton = async () => {
+  try {
     isBlock.value = false;
+    await UserService.unblockUser(props.profileUser.id);
+    userStore.blocks.filter(u => u !== props.profileUser);
+  } catch (e) {
+    console.log(e);
   }
 };
 </script>

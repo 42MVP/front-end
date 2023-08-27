@@ -1,9 +1,6 @@
 <template>
   <div class="wrap">
-    <div v-if="!selectedUser">
-      <!-- {{ selectedUser.name }} -->
-      🫥
-    </div>
+    <div v-if="!selectedUser">🫥</div>
     <div v-else class="p-container">
       <div class="top">
         <AvatarItem class="p-info" :username="selectedUser?.name" :avartarUrl="selectedUser.avatarURL" />
@@ -22,9 +19,9 @@ import AvatarItem from '@/components/common/AvatarItem.vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
-import { useUsersSotre } from '@/stores/users.store';
+import { useUsersStore } from '@/stores/users.store';
 
-const userStore = useUsersSotre();
+const userStore = useUsersStore();
 
 const selectedUser = ref<OthersInfo>();
 

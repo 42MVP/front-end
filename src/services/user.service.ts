@@ -60,8 +60,13 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async unfollowUser(id: number): Promise<void> {
-    // const ret = await axiosAPI.auth().post('/friend');
+  static async followUser(userId: number): Promise<void> {
+    await axiosAPI.auth().post(`/follow/${userId}`);
+  }
+
+  @APIWithToken()
+  static async unfollowUser(userId: number): Promise<void> {
+    await axiosAPI.auth().delete(`/follow/${userId}`);
   }
 
   @APIWithToken()
@@ -73,8 +78,13 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async unblockUser(id: number): Promise<void> {
-    // const ret = await axiosAPI.auth().delete('/block');
+  static async blockUser(userId: number): Promise<void> {
+    await axiosAPI.auth().post(`/block/${userId}`);
+  }
+
+  @APIWithToken()
+  static async unblockUser(userId: number): Promise<void> {
+    await axiosAPI.auth().delete(`/block/${userId}`);
   }
 
   @APIWithToken()
