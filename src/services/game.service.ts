@@ -2,10 +2,17 @@ import { GameInvitationService } from '@/services/gameInvitation.service';
 import { GameMatchingService } from '@/services/gameMatching.service';
 
 export class GameService {
+  private static gameMatchingService: GameMatchingService | undefined = undefined;
+  private static gameInvitationService: GameInvitationService | undefined = undefined;
+
   static get matching(): GameMatchingService {
-    return new GameMatchingService();
+    if (this.gameMatchingService === undefined) this.gameMatchingService = new GameMatchingService();
+
+    return this.gameMatchingService;
   }
   static get invitation(): GameInvitationService {
-    return new GameInvitationService();
+    if (this.gameInvitationService === undefined) this.gameInvitationService = new GameInvitationService();
+
+    return this.gameInvitationService;
   }
 }
