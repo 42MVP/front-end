@@ -37,7 +37,7 @@ const tmp = () => {
       avatarURL: 'https://ca.slack-edge.com/T039P7U66-U035MTQ4U4T-9333cd362cf2-512',
       rating: 1899,
     },
-    gameroomID: 'roomidhash',
+    gameRoomId: 1,
   });
   gameStore.setStatus('게임시작');
 };
