@@ -71,7 +71,7 @@ export class UserService {
     // const ret = await axiosAPI.auth().delete('/block');
   }
 
-  static async setUserProfile(formData: FormData) {
-    return axiosAPI.auth().put(`/user`, formData);
+  static async setUserProfile(formData: FormData): Promise<void> {
+    const ret = await axiosAPI.auth().put(`/user`, formData);
   }
 }

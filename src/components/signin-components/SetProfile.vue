@@ -38,6 +38,8 @@ import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
 // services
 import { UserService } from '@/services/user.service';
+import { LoginService } from '@/services/login.service';
+
 const username = ref<string>('');
 const uploadedFile = ref<File | undefined>(undefined);
 const isCheckAuth = ref<boolean>(false);
@@ -73,8 +75,8 @@ const submitFrom = async (): Promise<void> => {
   try {
     const formData = createFormData();
     await UserService.setUserProfile(formData);
-    loginStore.isLogin = true;
-    loginStore.name = username.value;
+    const loginInfo = await LoginService.getUserInfo();
+    loginStore.setLogin(loginInfo);
     if (username.value.length === 0) {
       modalStore.on({
         title: '알림',
