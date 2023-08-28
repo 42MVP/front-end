@@ -3,7 +3,7 @@
     <img :src="previewImage" />
     <label>
       <BasicButton class="buttonStyle" text="Upload New Avatar" />
-      <input :value="props.uploadedFile" type="file" @change="updateImg" accept="image/*" />
+      <input :value="props.uploadedFile" type="file" @change="updateImg" accept="image/jpg, image/jpeg, image/png" />
     </label>
   </div>
 </template>
