@@ -1,6 +1,6 @@
 <template>
   <div class="getInfoWrap">
-    <UploadImage @image="getimage" />
+    <UploadImage v-model="uploadedFile" />
     <div class="setProfile">
       <a>닉네임 설정</a>
       <TextInputBox
@@ -38,16 +38,11 @@ import UploadImage from '../common/UploadImage.vue';
 import { UserService } from '@/services/user.service';
 
 const username = ref<string>('');
-const file = ref<File | undefined>(undefined);
+const uploadedFile = ref<File | undefined>(undefined);
 const isCheckAuth = ref<boolean>(false);
 const router = useRouter();
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
-
-const getimage = (image: File): void => {
-  file.value = image;
-  loginStore.avatarURL = URL.createObjectURL(image);
-};
 
 const submitNickname: Function = async (): Promise<void> => {
   if (username.value.length === 0) {
@@ -72,8 +67,8 @@ const submitNickname: Function = async (): Promise<void> => {
       const formData = new FormData();
       formData.append('name', username.value);
       formData.append('isAuth', String(isCheckAuth.value));
-      if (file.value) {
-        formData.append('avatar', file.value);
+      if (uploadedFile.value) {
+        formData.append('avatar', uploadedFile.value);
       }
       await UserService.setUserProfile(formData);
       loginStore.isLogin = true;

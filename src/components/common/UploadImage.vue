@@ -1,25 +1,37 @@
 <template>
   <div class="wrap">
-    <img :src="loginStore.avatarURL" />
+    <img :src="previewImage" />
     <label>
       <BasicButton class="buttonStyle" text="Upload New Avatar" />
-      <input type="file" @change="addImage" accept="image/*" />
+      <input :value="props.uploadedFile" type="file" @change="updateImg" accept="image/*" />
     </label>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useLoginStore } from '@/stores/login.store';
 import BasicButton from '@/components/BasicButton.vue';
 
+const props = defineProps({
+  uploadedFile: { type: File, default: undefined },
+});
+
 const loginStore = useLoginStore();
 
-const emits = defineEmits<{ (e: 'image', image: File): void }>();
+const previewImage = ref<string>(loginStore.avatarURL);
 
-const addImage = (e: Event) => {
-  const file = (e.target as HTMLInputElement).files;
+const emits = defineEmits<{
+  (e: 'update:modelValue', image: File): void;
+}>();
 
-  if (file) emits('image', file[0]);
+const updateImg = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0];
+
+  if (file) {
+    emits('update:modelValue', file);
+    previewImage.value = URL.createObjectURL(file);
+  }
 };
 </script>
 

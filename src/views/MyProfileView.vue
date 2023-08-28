@@ -22,7 +22,7 @@
     </div>
   </div> -->
   <div class="wrap">
-    <UploadImage />
+    <UploadImage v-model="uploadedFile"/>
     <div class="p-info">
       <div class="name">
         <h3>닉네임 설정</h3>
@@ -58,7 +58,7 @@ import { ref } from 'vue';
 
 const user = { _id: '1', name: 'chaejkim', img: '1.png', email: 'chaejkim@student.42seoul.kr', isAuth: false };
 const tmp_user = { _id: '1', name: 'chaejkim', img: '1.png', email: 'chaejkim@student.42seoul.kr', isAuth: false };
-const uploadedFile = ref<File | null>(null);
+const uploadedFile = ref<File | undefined>(undefined);
 
 // const emit = defineEmits(['fileSelected']);
 
