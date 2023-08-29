@@ -151,7 +151,7 @@ const roomModeIcon: Record<string, RoomModeIcon[]> = {
 const emits = defineEmits(['response']);
 
 const inviteGame = (iconEmitResponse: IconEmitResponse) => {
-  GameService.inviteMatching(iconEmitResponse.id);
+  GameService.invitation.inviteMatching(iconEmitResponse.id);
 };
 </script>
 

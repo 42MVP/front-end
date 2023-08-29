@@ -21,13 +21,30 @@
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
+import type { GameUser } from '@/interfaces/game/GameUser.interface';
 
 import { useGameStore } from '@/stores/game.store';
+import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
+import { onMounted } from 'vue';
 
 const gameStore = useGameStore();
+const invitationStore = useInvitationStore();
 
-const leftUser = gameStore.matchInfo?.leftUser;
-const rightUser = gameStore.matchInfo?.rightUser;
+const UnknownPlayer: GameUser = {
+  name: 'Unknown',
+  avatarURL: '',
+  rating: '0',
+};
+
+const leftUser = gameStore.matchInfo?.leftUser ? gameStore.matchInfo.leftUser : UnknownPlayer;
+const rightUser = gameStore.matchInfo?.rightUser ? gameStore.matchInfo.rightUser : UnknownPlayer;
+
+onMounted(() => {
+  setTimeout(() => {
+    invitationStore.setStep(InvitationStep.InGame);
+    console.log('move to game!');
+  }, 5000);
+});
 </script>
 
 <style>

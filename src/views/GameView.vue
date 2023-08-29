@@ -1,23 +1,12 @@
 <template>
-  <GameMatching v-if="!isMatched" />
-  <div v-else class="game-screen-div">
-    <GameScreen />
+  <div class="game-screen-div">
+    <!--<GameScreen />-->
+    <GameTest />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-
-import GameMatching from '@/components/gameview-components/GameMatching.vue';
-import GameScreen from '@/components/gameview-components/GameScreen.vue';
-
-import { useGameStore } from '@/stores/game.store';
-
-const gameStore = useGameStore();
-
-const isMatched = computed(() => {
-  return gameStore.isMatched;
-});
+import GameTest from '@/views/GameTest.vue';
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
-  targetTime: { type: Date, default: new Date(new Date().getTime() + 5000) },
+  targetTime: { type: Date, default: new Date() },
   timeoutMessage: { type: String },
 });
 
@@ -30,7 +30,7 @@ const formatTime = (time: number) => {
 const updateFormattedTime = (targetTime: Date) => {
   const timeDifference = getTimeDifference(targetTime);
   timeDifference < 1 ? emits('timeout', props.timeoutMessage) : (formattedTime.value = formatTime(timeDifference + 1));
-  console.log('updateTimer', targetTime.getUTCMinutes(), ':', targetTime.getUTCSeconds());
+  // console.log('updateTimer', targetTime.getUTCMinutes(), ':', targetTime.getUTCSeconds());
 };
 
 onMounted(() => {
