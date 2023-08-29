@@ -1,4 +1,5 @@
 <template>
+  <GameResultModal v-if="isDone === true" :isShow="isDone === true" />
   <div class="gameContainer">
     <!-- <div class="game-ui-continer">
       <div class="user-info-div">
@@ -27,6 +28,7 @@ import { useGameStore } from '@/stores/game.store';
 import { GameSocketService } from '@/services/gameSocket.service';
 import type { Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
 import { SocketService } from '@/services/socket.service';
+import { GameResultModal } from '@/components/gameview-components/GameResultModal.vue';
 
 const gameStore = useGameStore();
 
@@ -38,6 +40,8 @@ const ctx = ref<null | CanvasRenderingContext2D>(null);
 
 const lPlayerScore = ref<number>(GameSocketService.leftScore);
 const rPlayerScore = ref<number>(GameSocketService.rightScore);
+
+const isDone = ref<boolean>(false);
 
 const gameSettings = {
   gameWidth: 1100,
@@ -108,6 +112,9 @@ watchEffect(() => {
     requestAnimationFrame(renderTable);
   } else {
     GameSocketService.offPlay();
+  }
+  if (GameSocketService.isCompleted) {
+    isDone.value = true;
   }
 });
 

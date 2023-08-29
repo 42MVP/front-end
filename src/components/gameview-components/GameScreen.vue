@@ -10,12 +10,12 @@
   </div>
   <div class="table-div">
     <div class="stick-div" />
-    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
+    <!-- <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
       {{ 'Lose🍂' }} <br />
       {{ (leftUser?.rating as number) - 12 }} ({{ -12 }})
     </div>
     <div class="net-div" />
-    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
+    <div v-if="!gameStore.isGameConnected" class="user-info-div bold"> -->
       {{ 'Win👑' }} <br />{{ (rightUser?.rating as number) + 12 }} (+{{ 12 }})
     </div>
     <div class="stick-div" />

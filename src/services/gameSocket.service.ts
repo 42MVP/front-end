@@ -34,6 +34,7 @@ export class GameSocketService {
   private static _leftScore: number;
   private static _rightScore: number;
   private static _tableInfo: GameTable;
+  private static _isCompleted: boolean;
 
   static onPlay(): void {
     console.log('onPlay==============');
@@ -47,7 +48,9 @@ export class GameSocketService {
       console.log('cur:', this._tableInfo);
       console.log('game-render', table);
     });
-    socket.on('finish');
+    socket.on('finish', () => {
+      this._isCompleted = true;
+    });
     window.addEventListener('keydown', GameSocketService.keyDown);
   }
 
@@ -88,5 +91,9 @@ export class GameSocketService {
 
   static get backGround() {
     return this._background;
+  }
+
+  static get isCompleted() {
+    return this._isCompleted;
   }
 }
