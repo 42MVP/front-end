@@ -1,3 +1,4 @@
+import { gameStore } from '@/main';
 import { SocketService } from './socket.service';
 import type { GameInfo, GameTable } from '@/interfaces/game/GamePlay.interface';
 
@@ -41,6 +42,7 @@ export class GameSocketService {
     const socket = SocketService.getInstance().getSocket();
     socket.on('init', (gameInfo: GameInfo) => {
       console.log('game-init', gameInfo);
+      gameStore.isCompleted = true;
       this.initGame(gameInfo);
     });
     socket.on('render', (table: GameTable) => {
@@ -50,6 +52,7 @@ export class GameSocketService {
     });
     socket.on('finish', () => {
       this._isCompleted = true;
+      gameStore.isCompleted = true;
     });
     window.addEventListener('keydown', GameSocketService.keyDown);
   }

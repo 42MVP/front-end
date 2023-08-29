@@ -1,24 +1,7 @@
 <template>
   <GameResultModal v-if="isDone === true" :isShow="isDone === true" />
   <div class="gameContainer">
-    <!-- <div class="game-ui-continer">
-      <div class="user-info-div">
-        <AvatarItem :username="leftPlayer?.name" :avartarUrl="leftPlayer?.avatarURL" imgSize="100" />
-      </div>
-      <span class="score-div">{{ lPlayerScore }} : {{ rPlayerScore }}</span>
-      <div class="user-info-div">
-        <AvatarItem :username="rightPlayer?.name" :avartarUrl="rightPlayer?.avatarURL" imgSize="100" />
-      </div>
-    </div> -->
     <canvas class="gameBoard" ref="gameBoard" width="1100" height="700"></canvas>
-    <!-- <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
-      {{ 'Lose🍂' }} <br />
-      {{ (leftPlayer?.rating as number) - 12 }} ({{ -12 }})
-    </div>
-    <div class="net-div" />
-    <div v-if="!gameStore.isGameConnected" class="user-info-div bold">
-      {{ 'Win👑' }} <br />{{ (rightPlayer?.rating as number) + 12 }} (+{{ 12 }})
-    </div> -->
   </div>
 </template>
 
@@ -28,7 +11,7 @@ import { useGameStore } from '@/stores/game.store';
 import { GameSocketService } from '@/services/gameSocket.service';
 import type { Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
 import { SocketService } from '@/services/socket.service';
-import { GameResultModal } from '@/components/gameview-components/GameResultModal.vue';
+import GameResultModal from '@/components/gameview-components/GameResultModal.vue';
 
 const gameStore = useGameStore();
 
@@ -113,7 +96,7 @@ watchEffect(() => {
   } else {
     GameSocketService.offPlay();
   }
-  if (GameSocketService.isCompleted) {
+  if (gameStore.isCompleted) {
     isDone.value = true;
   }
 });

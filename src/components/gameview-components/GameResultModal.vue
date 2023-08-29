@@ -3,13 +3,13 @@
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
-          <span class="bold">Lose🍂</span>
+          <span class="bold">Win👑</span>
           <AvatarItem :username="gameResult?.winner" :avartarUrl="gameResult?.winnerAvatarUrl" imgSize="100">
             <span class="bold">{{ gameResult?.winnerScore }}</span>
           </AvatarItem>
         </div>
         <div class="user-info-div">
-          <span class="bold">Win👑</span>
+          <span class="bold">Lose🍂</span>
           <AvatarItem :username="gameResult?.loser" :avartarUrl="gameResult?.loserAvatarUrl" imgSize="100">
             <span class="bold">{{ gameResult?.loserScore }}</span>
           </AvatarItem>
@@ -37,7 +37,17 @@ const props = defineProps<{
 
 onMounted(async () => {
   try {
-    gameResult.value = await GameService.getGameResult(gameStore.matchInfo!.gameRoomId);
+    gameResult.value = {
+      id: 1,
+      winnerScore: 5,
+      loserScore: 2,
+      winner: 'winnerNaMe',
+      loser: 'loserName',
+      winnerAvatarUrl: '1234',
+      loserAvatarUrl: '1234',
+      createAt: '2023.08.29',
+    };
+    // gameResult.value = await GameService.getGameResult(gameStore.matchInfo!.gameRoomId!);
   } catch (e) {
     console.log(e);
   }

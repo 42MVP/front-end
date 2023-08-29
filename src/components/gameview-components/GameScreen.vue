@@ -36,19 +36,19 @@ const leftUser = gameStore.matchInfo?.leftUser;
 const rightUser = gameStore.matchInfo?.rightUser;
 
 // endGame - result
-const tmp1 = () => {
-  gameStore.isGameConnected = false;
-};
-// endGame - 처음으로
-const tmp2 = () => {
-  gameStore.endGame();
-};
-// endGame - 다시
-const tmp3 = () => {
-  gameStore.setStatus('상대방대기');
-  gameStore.setReadyTime();
-  gameStore.isMatched = false;
-};
+// const tmp1 = () => {
+//   gameStore.isGameConnected = false;
+// };
+// // endGame - 처음으로
+// const tmp2 = () => {
+//   gameStore.endGame();
+// };
+// // endGame - 다시
+// const tmp3 = () => {
+//   gameStore.setStatus('상대방대기');
+//   gameStore.setReadyTime();
+//   gameStore.isMatched = false;
+// };
 </script>
 
 <style scoped>
