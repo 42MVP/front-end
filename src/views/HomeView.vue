@@ -2,7 +2,7 @@
   <main class="wrap">
     <Logo />
     <div class="mainNav">
-      <RouterLink to="/game">GAME -></RouterLink>
+      <RouterLink to="/matching">GAME -></RouterLink>
       <RouterLink to="/chats">CHATS -></RouterLink>
       <RouterLink to="/friends">FRIENDS -></RouterLink>
     </div>

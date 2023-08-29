@@ -1,14 +1,12 @@
 <template>
   <Transition name="modal">
-    <div v-if="props.show" class="modal-mask">
-      <div class="modal-container">
-        <div class="modal-header">{{ props.title }}</div>
-        <div class="modal-body">
-          <slot name="body"></slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer"></slot>
-        </div>
+    <div class="box-container">
+      <div class="box-header">{{ props.title }}</div>
+      <div class="box-body">
+        <slot name="body"></slot>
+      </div>
+      <div class="box-footer">
+        <slot name="footer"></slot>
       </div>
     </div>
   </Transition>
@@ -26,19 +24,7 @@ const props = defineProps({
 </script>
 
 <style scoped>
-.modal-mask {
-  position: fixed;
-  z-index: 9997;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  transition: opacity 0.3s ease;
-}
-
-.modal-container {
+.box-container {
   border-radius: 15px;
   border: 1px solid #463f3a;
   background: #f4f3ee;
@@ -48,18 +34,18 @@ const props = defineProps({
   transition: all 0.3s ease;
 }
 
-.modal-header {
+.box-header {
   color: var(--brown, #463f3a);
   font: var(--large);
   font-weight: 700;
 }
-.modal-body {
+.box-body {
   margin: 20px 0;
   white-space: pre-wrap;
   color: var(--brown, #463f3a);
 }
 
-.modal-footer {
+.box-footer {
   display: flex;
   align-items: center;
   justify-content: right;
@@ -83,8 +69,8 @@ const props = defineProps({
   opacity: 0;
 }
 
-.modal-enter-from .modal-container,
-.modal-leave-to .modal-container {
+.modal-enter-from .box-container,
+.modal-leave-to .box-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }

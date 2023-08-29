@@ -47,6 +47,14 @@ const router = createRouter({
       ],
     },
     {
+      path: '/matching',
+      name: 'matching',
+      component: () => import('@/views/MatchingView.vue'),
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
       path: '/game',
       name: 'game',
       component: () => import('@/views/GameView.vue'),
