@@ -3,6 +3,7 @@ import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+import { useRoute } from 'vue-router';
 
 export class UserService {
   @APIWithToken()
@@ -46,27 +47,19 @@ export class UserService {
     const ret = await axiosAPI.auth().get(`/friend`);
     const friendsList: OthersInfo[] = ret.data;
 
-    friendsList.push({
-      id: 1,
-      name: 'test',
-      avatarURL: 'asdf',
-      rate: 1234,
-      achievements: [0, 1, 2],
-      loseNum: 1,
-      winNum: 3,
-    });
-
     return friendsList;
   }
 
   @APIWithToken()
   static async followUser(userId: number): Promise<void> {
-    await axiosAPI.auth().post(`/follow/${userId}`);
+    console.log(userId);
+    console.log('follow');
+    await axiosAPI.auth().post(`/friend/${userId}`);
   }
 
   @APIWithToken()
   static async unfollowUser(userId: number): Promise<void> {
-    await axiosAPI.auth().delete(`/follow/${userId}`);
+    await axiosAPI.auth().delete(`/friend/${userId}`);
   }
 
   @APIWithToken()

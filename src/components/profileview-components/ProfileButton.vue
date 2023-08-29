@@ -23,12 +23,13 @@ import { useUsersStore } from '@/stores/users.store';
 import { UserService } from '@/services/user.service';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
+// import { usUserInfoerInfo } from 'os';
 
 const userStore = useUsersStore();
 
 const props = defineProps({
   isLoginUser: { type: Boolean, default: false },
-  profileUser: { type: UserInfo, default: '' },
+  profileUser: { type: Object as () => UserInfo, default: {} as UserInfo },
 });
 
 const isFollow = ref<Boolean>(props.profileUser.isFollow);
@@ -50,7 +51,7 @@ const unFollowButton = async () => {
   try {
     isFollow.value = false;
     await UserService.unfollowUser(props.profileUser.id);
-    userStore.friends.filter(u => u !== props.profileUser);
+    userStore.friends.filter(u => u.id !== props.profileUser.id);
   } catch (e) {
     console.log(e);
   }
@@ -69,7 +70,7 @@ const unBlockButton = async () => {
   try {
     isBlock.value = false;
     await UserService.unblockUser(props.profileUser.id);
-    userStore.blocks.filter(u => u !== props.profileUser);
+    userStore.blocks.filter(u => u.id !== props.profileUser.id);
   } catch (e) {
     console.log(e);
   }

@@ -5,8 +5,8 @@
       <div class="top">
         <AvatarItem class="p-info" :username="selectedUser?.name" :avartarUrl="selectedUser.avatarURL" />
         <div class="g-info">
-          <GBox :rate="1000" />
-          <Achieve class="achieve"></Achieve>
+          <GBox :rate="selectedUser.rate" />
+          <!-- <Achieve class="achieve"></Achieve> -->
         </div>
       </div>
     </div>
