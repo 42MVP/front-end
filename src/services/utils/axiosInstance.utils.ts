@@ -12,6 +12,14 @@ class Axios {
     return tokenInstance;
   }
 
+  twoFaAuth(token: String) {
+    const tokenInstance = axios.create({
+      baseURL: endpoint,
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    return tokenInstance;
+  }
+
   noAuth() {
     return instance;
   }
