@@ -65,6 +65,7 @@ class GamePlaySocketService {
     this.socket.on(event.finish, (data: FinishEventData) => {
       // console.log('finish:', data);
       // TODO : data.gameId
+      gameStore.isStarted = false;
     });
   }
 

@@ -30,6 +30,7 @@ import type { Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
 
 const timeout = () => {
   gameStore.isStarted = true;
+  gameStore.startTimeMs = 0;
   requestAnimationFrame(renderTable);
 };
 
@@ -60,7 +61,6 @@ const renderTable = () => {
     drawBall(tableInfo.ball);
     drawPaddles(tableInfo.leftPaddle, tableInfo.rightPaddle);
     requestAnimationFrame(renderTable);
-    console.log(tableInfo);
   } else {
     console.warn('renderTable fail - check gameStore.tableInfo');
   }
