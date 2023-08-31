@@ -2,7 +2,7 @@
   <li class="list-element-container">
     <div class="list-element-info-container">
       <div v-if="'avatarURL' in props.item" class="list-element-avatar profileText">
-        <img :src="props.item.avatarURL !== '' ? props.item.avatarURL : ''" />
+        <img :src="props.item.avatarURL || avatarURL" />
       </div>
       <div>
         <span>{{ props.item?.name }}</span>
@@ -37,6 +37,8 @@ const props = defineProps({
   clickEvent: { type: String, default: '' },
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
+
+const avatarURL = import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
 
 const emits = defineEmits<{
   (e: 'onMousePosition', event: MouseEvent): void;

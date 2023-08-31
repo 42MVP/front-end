@@ -43,7 +43,7 @@ export const useLoginStore = defineStore('login', {
     setLogin(user: LoginInfo) {
       this.isLogin = true;
       this.name = user.name;
-      this.avatarURL = user.avatarURL;
+      this.avatarURL = user.avatarURL || import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
       this.email = user.email;
       this.isAuth = user.isAuth;
     },

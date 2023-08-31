@@ -2,7 +2,7 @@
   <div class="chat-box">
     <div class="chat-info-line">
       <div class="chat-info-line-box">
-        <img :src="props.chat.avatarURL !== '' ? props.chat.avatarURL : ''" class="user-avatar" />
+        <img :src="props.chat.avatarURL || avatarURL" class="user-avatar" />
       </div>
       <div class="chat-info-line-text">
         <p
@@ -31,6 +31,7 @@ import type { Chat } from '@/interfaces/chat/Chat.interface';
 
 const loginStore = useLoginStore();
 const loginUsername = ref(loginStore?.name);
+const avatarURL = import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
 
 const props = defineProps<{ chat: Chat }>();
 
