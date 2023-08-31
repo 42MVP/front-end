@@ -38,7 +38,7 @@ const props = defineProps({
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
 
-const avatarURL = import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
+const avatarURL = import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
 
 const emits = defineEmits<{
   (e: 'onMousePosition', event: MouseEvent): void;

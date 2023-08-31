@@ -18,7 +18,7 @@ const props = defineProps({
 });
 
 const loginStore = useLoginStore();
-const avatarURL = loginStore.avatarURL || import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
+const avatarURL = loginStore.avatarURL || import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
 const previewImage = ref<string>(avatarURL);
 
 const emits = defineEmits<{

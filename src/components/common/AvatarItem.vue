@@ -22,7 +22,7 @@ const props = defineProps({
   },
 });
 
-const avatarURL = import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
+const avatarURL = import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
 
 const avatarStyle = {
   minWidth: `${props.imgSize}px`,
