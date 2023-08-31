@@ -9,7 +9,7 @@
             username = e;
           }
         "
-        :placeholderText="loginStore?.name"
+        :placeholderText="defaultName"
         type="name"
         :maxLength="15"
         required
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import TextInputBox from '@/components/TextInputBox.vue';
 import BasicButton from '@/components/BasicButton.vue';
@@ -43,9 +43,13 @@ import { LoginService } from '@/services/login.service';
 const username = ref<string>('');
 const uploadedFile = ref<File | undefined>(undefined);
 const isCheckAuth = ref<boolean>(false);
+
+const route = useRoute();
 const router = useRouter();
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
+
+const defaultName = String(route.query.name);
 
 const isValidFrom = (): boolean => {
   if (username.value.length && username.value.length < 5) {
@@ -62,7 +66,7 @@ const isValidFrom = (): boolean => {
 
 const createFormData = (): FormData => {
   const formData = new FormData();
-  formData.append('name', username.value || loginStore.name);
+  formData.append('name', username.value || defaultName);
   formData.append('isAuth', String(isCheckAuth.value));
   if (uploadedFile.value) {
     formData.append('avatar', uploadedFile.value);

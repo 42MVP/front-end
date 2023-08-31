@@ -18,8 +18,8 @@ const props = defineProps({
 });
 
 const loginStore = useLoginStore();
-
-const previewImage = ref<string>(loginStore.avatarURL);
+const avatarURL = loginStore.avatarURL || import.meta.env.VITE_APP_DEFULT_AVATAR_URL;
+const previewImage = ref<string>(avatarURL);
 
 const emits = defineEmits<{
   (e: 'update:modelValue', image: File): void;
