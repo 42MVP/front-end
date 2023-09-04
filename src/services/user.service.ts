@@ -4,7 +4,6 @@ import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import { useUsersStore } from '@/stores/users.store';
-import { useRoute } from 'vue-router';
 
 const userStore = useUsersStore();
 
