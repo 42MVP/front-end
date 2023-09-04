@@ -5,18 +5,21 @@
         <div class="user-info-div">
           <span class="bold">Win👑</span>
           <AvatarItem :username="gameResult?.winner" :avartarUrl="gameResult?.winnerAvatarUrl" imgSize="100">
-            <span class="rate">{{ (gameResult?.winnerRate as number)}} ({{ +12 }})</span>
+            <span class="rate">{{ gameResult?.winnerRate as number }} +12</span>
             <span class="bold">{{ gameResult?.winnerScore }}</span>
           </AvatarItem>
         </div>
         <div class="user-info-div">
           <span class="bold">Lose🍂</span>
           <AvatarItem :username="gameResult?.loser" :avartarUrl="gameResult?.loserAvatarUrl" imgSize="100">
-            <span class="rate">{{ (gameResult?.loserRate as number)}} ({{ -12 }})</span>
+            <span class="rate">{{ gameResult?.loserRate as number }} -12</span>
             <span class="bold">{{ gameResult?.loserScore }}</span>
           </AvatarItem>
         </div>
       </div>
+    </template>
+    <template #footer>
+      <BasicButton text="확인" @click="moveToProfile()" />
     </template>
   </Modal>
 </template>
@@ -25,17 +28,27 @@
 import { onMounted, ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
+import BasicButton from '../BasicButton.vue';
 
 import { useGameStore } from '@/stores/game.store';
 import { GameService } from '@/services/game.service';
 import type { GameHistory } from '@/interfaces/game/GameHistory.interface';
+import { useRouter } from 'vue-router';
+import { useLoginStore } from '@/stores/login.store';
 
+const loginStore = useLoginStore();
 const gameStore = useGameStore();
 const gameResult = ref<GameHistory>();
+
+const router = useRouter();
 
 const props = defineProps<{
   isShow: boolean;
 }>();
+
+const moveToProfile = () => {
+  router.push(`/users/${loginStore?.name}`);
+}
 
 onMounted(async () => {
   try {
