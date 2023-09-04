@@ -1,6 +1,6 @@
 <template>
   <div class="getInfoWrap">
-    <UploadImage @image="getimage" />
+    <UploadImage v-model="uploadedFile" />
     <div class="setProfile">
       <a>닉네임 설정</a>
       <TextInputBox
@@ -9,7 +9,7 @@
             username = e;
           }
         "
-        :placeholderText="loginStore?.name"
+        :placeholderText="defaultName"
         type="name"
         :maxLength="15"
         required
@@ -21,75 +21,74 @@
       <span class="checkmark"></span>
     </label>
     <div class="submitButton">
-      <BasicButton @click="submitNickname()" text="완료" />
+      <BasicButton @click="submitFrom()" text="완료" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { useLoginStore } from '@/stores/login.store';
-import { useModalStore } from '@/stores/modal.store';
 import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import TextInputBox from '@/components/TextInputBox.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import UploadImage from '../common/UploadImage.vue';
+// stores
+import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
+// services
 import { UserService } from '@/services/user.service';
+import { LoginService } from '@/services/login.service';
 
 const username = ref<string>('');
-const file = ref<File | undefined>(undefined);
+const uploadedFile = ref<File | undefined>(undefined);
 const isCheckAuth = ref<boolean>(false);
+
+const route = useRoute();
 const router = useRouter();
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
 
-const getimage = (image: File): void => {
-  file.value = image;
-  loginStore.avatarURL = URL.createObjectURL(image);
+const defaultName = String(route.query.name);
+
+
+const createFormData = (): FormData => {
+  const formData = new FormData();
+  formData.append('name', username.value || defaultName);
+  formData.append('isAuth', String(isCheckAuth.value));
+  if (uploadedFile.value) {
+    formData.append('avatar', uploadedFile.value);
+  }
+  return formData;
 };
 
-const submitNickname: Function = async (): Promise<void> => {
-  if (username.value.length === 0) {
-    modalStore.on({
-      title: '알림',
-      text: '기본 닉네임이 유지됩니다.\n언제든 [유저 - 내 프로필] 에서 변경이 가능합니다.\
-      ',
-      buttonText: '홈으로',
-      buttonFunc: () => {
-        router.push('/');
-      },
-    });
-  } else if (username.value.length < 4) {
-    modalStore.on({
-      title: '알림',
-      text: '최소 5글자 이상 닉네임을 설정할 수 있습니다.',
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  } else {
-    try {
-      const formData = new FormData();
-      formData.append('name', username.value);
-      formData.append('isAuth', String(isCheckAuth.value));
-      if (file.value) {
-        formData.append('avatar', file.value);
-      }
-      await UserService.setUserProfile(formData);
-      loginStore.isLogin = true;
-      loginStore.name = username.value;
-      router.push('/');
-    } catch (e) {
+const submitFrom = async (): Promise<void> => {
+  try {
+    const formData = createFormData();
+    await UserService.setUserProfile(formData);
+    const loginInfo = await LoginService.getUserInfo();
+    loginStore.setLogin(loginInfo);
+    if (username.value.length === 0) {
       modalStore.on({
-        title: '오류',
-        text: '프로필 수정 중 에러 발생!',
-        buttonText: '닫기',
+        title: '알림',
+        text: '기본 닉네임이 유지됩니다.\n언제든 [유저 - 내 프로필] 에서 변경이 가능합니다.\
+      ',
+        buttonText: '홈으로',
         buttonFunc: () => {
-          loginStore.resetAll();
           router.push('/');
         },
       });
-    }
+    } else router.push('/');
+  } catch (e) {
+    modalStore.on({
+      title: '오류',
+      text: String(e),
+      buttonText: '닫기',
+      buttonFunc: () => {
+        loginStore.resetAll();
+        router.push('/');
+      },
+    });
   }
 };
 </script>

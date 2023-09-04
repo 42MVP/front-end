@@ -11,7 +11,7 @@
       <p>비로그인</p>
     </div>
     <div v-else class="userInfo" @mouseleave="isUserDropdownMenu = false" @mouseenter="isUserDropdownMenu = true">
-      <img :src="loginStore?.avatarURL" class="profileImage" />
+      <AvatarItem class="userInfo-img" :avartarUrl="loginStore?.avatarURL" imgSize="55" />
       <p>
         {{ loginStore?.name }}
         <DropdownMenu v-if="isUserDropdownMenu" style="width: 100%">
@@ -43,8 +43,9 @@
 </template>
 
 <script setup lang="ts">
-import DropdownMenu from './dropdown-component/DropdownMenu.vue';
-import DropdownMenuItem from './dropdown-component/DropdownMenuItem.vue';
+import AvatarItem from '@/components/common/AvatarItem.vue';
+import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
+import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
 
 const isUserDropdownMenu = ref<boolean>(false);
 import { useLoginStore } from '@/stores/login.store';
@@ -144,7 +145,7 @@ const links = [
   text-decoration: none;
 }
 
-.userInfo img {
+.userInfo-img {
   height: 55px;
   width: 55px;
   border-radius: 50%;
