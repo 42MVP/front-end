@@ -93,4 +93,9 @@ class GamePlaySocketService {
     if (event.key === 'ArrowUp') socket.emit('arrowUp');
     else if (event.key === 'ArrowDown') socket.emit('arrowDown');
   }
+
+  forceQuitGame(): void {
+    console.log('forceQuit');
+    this.socket.emit('forceQuit');
+  }
 }
