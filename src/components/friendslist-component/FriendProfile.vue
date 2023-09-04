@@ -5,7 +5,7 @@
       <div class="top">
         <AvatarItem class="p-info" :username="selectedUser?.name" :avartarUrl="selectedUser.avatarURL" />
         <div class="g-info">
-          <GBox :rate="selectedUser.rate" />
+          <GBox :record="userRecord" />
           <!-- <Achieve class="achieve"></Achieve> -->
         </div>
       </div>
@@ -18,19 +18,34 @@ import { onMounted, ref, watch } from 'vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import Achieve from '@/components/profileview-components/UserAchievement.vue';
-import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import { useUsersStore } from '@/stores/users.store';
+
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+import type { UserGameRecord } from '@/interfaces/user/UserGameRecord.interface';
 
 const userStore = useUsersStore();
 
 const selectedUser = ref<OthersInfo>();
 
+const userRecord = ref<UserGameRecord>();
+
 watch(
   () => userStore.selectedUserId,
   () => {
     selectedUser.value = userStore.friends.find(u => u.id === userStore.selectedUserId);
+    setUserRecord();
   },
 );
+
+const setUserRecord = () => {
+  const record = {
+    rate: selectedUser.value?.rate ?? 0,
+    totalGame: 0,
+    winNum: selectedUser.value?.winNum ?? 0,
+    loseNum: selectedUser.value?.loseNum ?? 0,
+  };
+  userRecord.value = record;
+};
 
 onMounted(() => {
   selectedUser.value = userStore.friends.find(u => u.id === userStore.selectedUserId);
