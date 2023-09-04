@@ -8,6 +8,40 @@ enum RemovedRoomMode {
   KICKED = 2,
 }
 
+class TimeoutManager {
+  private static instance: TimeoutManager | undefined;
+  private timeoutIds: { [id: number]: number } = [];
+
+  private constructor() {}
+
+  static getInstance(): TimeoutManager {
+    if (this.instance === undefined) this.instance = new TimeoutManager();
+
+    return this.instance;
+  }
+
+  private isAlreadySet(id: number) {
+    const timeoutId = this.timeoutIds[id];
+    if (timeoutId) return true;
+    return false;
+  }
+
+  public setTimeout(id: number, time: Date, fn: () => void) {
+    if (this.isAlreadySet(id)) this.deleteTimeout(id);
+
+    const nowTime: number = new Date().getTime();
+    const endTime: number = time.getTime();
+    if (nowTime < endTime) this.timeoutIds[id] = setTimeout(fn, endTime - nowTime);
+  }
+
+  public deleteTimeout(id: number) {
+    const timeoutId = this.timeoutIds[id];
+
+    clearTimeout(timeoutId);
+    delete this.timeoutIds[id];
+  }
+}
+
 interface ChatState {
   rooms: { [id: number]: ChatInfo };
   chats: { [id: number]: Chat[] };
@@ -38,6 +72,12 @@ export const useChatStore = defineStore('chat', {
   actions: {
     addChatRoom(id: number, room: ChatInfo) {
       this.rooms[id] = room;
+      if (room.self.abongTime) {
+        // TODO: remove
+        TimeoutManager.getInstance().setTimeout(id, new Date(room.self.abongTime), () => {
+          this.rooms[id].self.abongTime = new Date(0);
+        });
+      }
       if (!this.chats[id]) this.chats[id] = [];
     },
     setRoomMode(id: number, roomMode: string) {
@@ -104,6 +144,9 @@ export const useChatStore = defineStore('chat', {
       const isSelf = this.rooms[roomId].self.id === userId;
       if (isSelf) {
         this.rooms[roomId].self.abongTime = abongTime;
+        TimeoutManager.getInstance().setTimeout(roomId, new Date(abongTime), () => {
+          this.rooms[roomId].self.abongTime = new Date(0);
+        });
       } else {
         const selectedUser = this.rooms[roomId].users.find(user => user.id === userId);
         if (selectedUser) selectedUser.abongTime = abongTime;
