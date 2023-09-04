@@ -6,6 +6,7 @@ interface GameState {
   matchInfo: GameMatch | null;
   startTimeMs: number | undefined;
   isStarted: boolean;
+  isFinished: boolean;
   background: string;
   leftScore: number;
   rightScore: number;
@@ -27,6 +28,7 @@ export const useGameStore = defineStore('game', {
     matchInfo: null,
     startTimeMs: undefined,
     isStarted: false,
+    isFinished: false,
     background: 'white',
     leftScore: 0,
     rightScore: 0,

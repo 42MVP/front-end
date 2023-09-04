@@ -66,6 +66,8 @@ class GamePlaySocketService {
       // console.log('finish:', data);
       // TODO : data.gameId
       gameStore.isStarted = false;
+      gameStore.isFinished = true;
+      console.log('gamefinish data', data)
     });
   }
 
