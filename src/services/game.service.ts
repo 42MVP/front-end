@@ -28,7 +28,6 @@ export class GameService {
 
   @APIWithToken()
   static async getGameResult(gameId: number): Promise<GameHistory> {
-    console.log('gameId', gameId);
     const ret = await axiosAPI.auth().get(`/game/game-history/${gameId}`);
     const gameResult: GameHistory = ret.data;
 

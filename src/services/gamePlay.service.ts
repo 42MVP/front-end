@@ -63,11 +63,11 @@ class GamePlaySocketService {
     });
 
     this.socket.on(event.finish, (data: FinishEventData) => {
-      // console.log('finish:', data);
+      gameStore.setGameHistoryId(data.gameId);
+      console.log('finish:', data);
       // TODO : data.gameId
       gameStore.isStarted = false;
       gameStore.isFinished = true;
-      console.log('gamefinish data', data)
     });
   }
 

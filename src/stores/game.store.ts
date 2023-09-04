@@ -11,6 +11,7 @@ interface GameState {
   leftScore: number;
   rightScore: number;
   tableInfo: GameTable;
+  gameHistoryId: number;
 }
 
 const gameSettings = {
@@ -52,6 +53,7 @@ export const useGameStore = defineStore('game', {
         dy: 1,
       },
     },
+    gameHistoryId: 0,
   }),
   getters: {
     isGameStart(): boolean {
@@ -77,6 +79,10 @@ export const useGameStore = defineStore('game', {
     setTableInfo(newInfo: GameTable) {
       console.log('gameStore - setTableInfo');
       this.tableInfo = newInfo;
+    },
+
+    setGameHistoryId(id: number) {
+      this.gameHistoryId = id;
     },
   },
 });
