@@ -35,7 +35,6 @@ class TimeoutManager {
   }
 
   public deleteTimeout(id: number) {
-    console.log('delete');
     const timeoutId = this.timeoutIds[id];
 
     clearTimeout(timeoutId);
