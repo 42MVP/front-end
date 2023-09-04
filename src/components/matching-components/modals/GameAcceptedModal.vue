@@ -40,12 +40,12 @@ const UnknownPlayer: GameUser = {
 const leftUser = gameStore.matchInfo?.leftUser ? gameStore.matchInfo.leftUser : UnknownPlayer;
 const rightUser = gameStore.matchInfo?.rightUser ? gameStore.matchInfo.rightUser : UnknownPlayer;
 
-const router = useRouter()
+const router = useRouter();
 
 onMounted(() => {
   setTimeout(() => {
-    matchingStore.setStep(MatchingStep.InGame);
-    router.push('/game')
+    matchingStore.setStep(MatchingStep.GameSetting);
+    router.push('/game');
   }, 5000);
 });
 </script>

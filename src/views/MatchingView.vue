@@ -32,8 +32,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (matchingStore.isStep(MatchingStep.GameSetting) || matchingStore.isStep(MatchingStep.InGame))
-    GameService.matching.socket.off();
+  if (matchingStore.isStep(MatchingStep.GameSetting)) GameService.matching.socket.off();
 });
 </script>
 
