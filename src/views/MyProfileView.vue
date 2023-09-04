@@ -54,19 +54,6 @@ const isCheckAuth = ref<boolean>(false);
 const loginStore = useLoginStore();
 const modalStore = useModalStore();
 
-const isValidFrom = (): boolean => {
-  if (username.value.length && username.value.length < 5) {
-    modalStore.on({
-      title: '알림',
-      text: '최소 5글자 이상 닉네임을 설정할 수 있습니다.',
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-    return false;
-  }
-  return true;
-};
-
 const createFormData = (): FormData => {
   const formData = new FormData();
   formData.append('name', username.value || loginStore.name);
@@ -78,7 +65,6 @@ const createFormData = (): FormData => {
 };
 
 const submitFrom = async (): Promise<void> => {
-  if (!isValidFrom()) return;
   try {
     const formData = createFormData();
     await UserService.setUserProfile(formData);
@@ -87,7 +73,7 @@ const submitFrom = async (): Promise<void> => {
   } catch (e) {
     modalStore.on({
       title: '오류',
-      text: '프로필 수정 중 에러 발생!',
+      text: String(e),
       buttonText: '닫기',
       buttonFunc: () => {
         modalStore.off();
