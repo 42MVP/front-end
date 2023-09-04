@@ -142,13 +142,6 @@ const showUserProfile = (userId: number) => {
   console.log(userId);
 };
 
-// const filterChat = (): Chat[] => {
-//   const filteredChat = chatStore.chat.filter(chat => {
-//     const blocksChat = usersStore.blocks.find(block => block.name === chat.username);
-//   });
-//   return filteredChat;
-// }
-
 const setModal: Function = (name: string) => {
   modalName.value = name;
   console.log(name);

@@ -2,7 +2,7 @@
   <div class="chat-box">
     <div class="chat-info-line">
       <div class="chat-info-line-box">
-        <img :src="props.chat.avatarURL !== '' ? props.chat.avatarURL : ''" class="user-avatar" />
+        <AvatarItem class="user-avatar" :avartarUrl="props.chat.avatarURL" imgSize="50" />
       </div>
       <div class="chat-info-line-text">
         <p
@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import AvatarItem from '../common/AvatarItem.vue';
 import { useLoginStore } from '@/stores/login.store';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
 

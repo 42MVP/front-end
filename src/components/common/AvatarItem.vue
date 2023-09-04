@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img class="avatar-img" :src="props.avartarUrl" :style="avatarStyle" />
+    <img class="avatar-img" :src="props.avartarUrl || avatarURL" :style="avatarStyle" />
     <div class="nickname-div">{{ props.username }}</div>
     <slot />
   </div>
@@ -21,6 +21,8 @@ const props = defineProps({
     default: '300',
   },
 });
+
+const avatarURL = import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
 
 const avatarStyle = {
   minWidth: `${props.imgSize}px`,

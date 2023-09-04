@@ -4,8 +4,7 @@ import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import { useUsersStore } from '@/stores/users.store';
-import {usersStore} from '@/main'
-
+import { useRoute } from 'vue-router';
 
 export class UserService {
   
@@ -86,8 +85,8 @@ export class UserService {
     useUsersStore().blocks.filter(u => u.id !== userId);
   }
 
-  @APIWithToken()
-  static async setUserProfile(formData: FormData) {
-    return axiosAPI.auth().put(`/user`, formData);
+
+  static async setUserProfile(formData: FormData): Promise<void> {
+    const ret = await axiosAPI.auth().put(`/user`, formData);
   }
 }

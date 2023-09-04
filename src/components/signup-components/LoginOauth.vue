@@ -17,12 +17,8 @@ const modalStore = useModalStore();
 
 onMounted(async () => {
   try {
-    const ret = await LoginService.getUserInfo();
-    const data = ret.data;
-    console.log(data);
-    loginStore.name = data.name;
-    loginStore.id = data.id;
-    loginStore.isLogin = true;
+    const data = await LoginService.getUserInfo();
+    loginStore.setLogin(data);
     router.push('/');
   } catch (e) {
     modalStore.on({

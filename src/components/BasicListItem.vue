@@ -2,7 +2,7 @@
   <li class="list-element-container">
     <div class="list-element-info-container">
       <div v-if="'avatarURL' in props.item" class="list-element-avatar profileText">
-        <img :src="props.item.avatarURL !== '' ? props.item.avatarURL : ''" />
+        <AvatarItem :avartarUrl="props.item.avatarURL" imgSize="40" />
       </div>
       <div>
         <span>{{ props.item?.name }}</span>
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import AvatarItem from '@/components/common/AvatarItem.vue';
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';

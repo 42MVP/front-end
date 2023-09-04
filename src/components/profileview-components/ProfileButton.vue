@@ -24,6 +24,7 @@ import { UserService } from '@/services/user.service';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+
 // import { usUserInfoerInfo } from 'os';
 
 const userStore = useUsersStore();
