@@ -6,11 +6,7 @@
   <div v-else class="p-container">
     <div class="top">
       <AvatarItem class="avatar-item" :username="profileUser.name" :avartarUrl="profileUser.avatarURL">
-        <ProfileButton
-          :isLoginUser="username === getLoginName"
-          :isFollow="profileUser.isFollow"
-          :isBlock="profileUser.isBlock"
-        />
+        <ProfileButton :isLoginUser="username === getLoginName" :profileUser="profileUser" />
       </AvatarItem>
       <div class="g-info-div">
         <GBox class="g-box" :record="gameRecord" />

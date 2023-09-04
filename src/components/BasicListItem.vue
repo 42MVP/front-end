@@ -6,7 +6,7 @@
       </div>
       <div>
         <span>{{ props.item?.name }}</span>
-        <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
+        <p v-if="'level' in props.item">[{{ props.item?.level }}]</p>
       </div>
     </div>
     <div class="list-element-icon-container">
@@ -25,12 +25,12 @@
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
-import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import type { User } from '@/interfaces/user/User.interface';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom } from '@/interfaces/chat/ChatRoom.interface';
 
-type ItemInfo = User | ChatInfo | FriendInfo | ChatRoom;
+type ItemInfo = User | ChatInfo | OthersInfo | ChatRoom;
 
 const props = defineProps({
   itemKey: { type: Number, default: -1 },

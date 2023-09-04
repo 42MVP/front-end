@@ -41,6 +41,7 @@
             <template #dropdown-item>
               <BasicList
                 :items="chatStore.chatRoom?.users"
+                @chooseItem="showUserProfile"
                 :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
                 @clickIconButton="inviteGame"
               />
@@ -101,6 +102,9 @@ import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
 import { GameService } from '@/services/game.service';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
@@ -126,6 +130,13 @@ const addChat = (newMessage: string): void => {
       loginStore.avatarURL,
       newMessage,
     );
+};
+
+const showUserProfile = (userId: number) => {
+  const selectedUser = chatStore.chatRoom?.users.find(u => u.id === userId);
+  router.push(`/users/${selectedUser?.name}`);
+  console.log('된다아');
+  console.log(userId);
 };
 
 const setModal: Function = (name: string) => {

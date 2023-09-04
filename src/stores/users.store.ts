@@ -7,7 +7,7 @@ interface UsersState {
   selectedUserId: number;
 }
 
-export const useUsersSotre = defineStore('users', {
+export const useUsersStore = defineStore('users', {
   state: (): UsersState => ({
     friends: [],
     blocks: [],

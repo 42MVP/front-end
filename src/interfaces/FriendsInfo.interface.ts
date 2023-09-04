@@ -3,7 +3,6 @@ export interface OthersInfo {
   name: string;
   avatarURL: string;
   rate: number;
-  achievements: number[];
   loseNum: number;
   winNum: number;
 }

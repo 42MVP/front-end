@@ -31,10 +31,10 @@ import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.v
 import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { UserService } from '@/services/user.service';
-import { useUsersSotre } from '@/stores/users.store';
+import { useUsersStore } from '@/stores/users.store';
 
 const isMenu = ref(false);
-const userStore = useUsersSotre();
+const userStore = useUsersStore();
 
 const listType = ref<string>('Friends');
 const users = ref<OthersInfo[]>([]);
@@ -65,12 +65,13 @@ onMounted(async () => {
     friends.forEach(e => {
       userStore.addFriends(e);
     });
-    console.log(friends);
+    console.log("friends",friends);
     users.value = friends;
     const blocks: OthersInfo[] = await UserService.getBlocksList();
     blocks.forEach(e => {
       userStore.addBlocks(e);
     });
+    console.log("blocks", blocks);
   } catch (e) {
     console.log(e);
   }

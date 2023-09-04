@@ -3,6 +3,7 @@ import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+import { useRoute } from 'vue-router';
 
 export class UserService {
   @APIWithToken()
@@ -29,6 +30,12 @@ export class UserService {
   }
 
   @APIWithToken()
+  static async getUserByName(name: string): Promise<UserInfo> {
+    const ret = await axiosAPI.auth().get(`/user/${name}`);
+    const userInfo: UserInfo = ret.data;
+    return userInfo;
+  }
+
   static async getUserProfile(name: string): Promise<UserInfo> {
     const ret = await axiosAPI.auth().get(`/user/name/${name}`);
     const userInfo: UserInfo = ret.data;
@@ -40,22 +47,19 @@ export class UserService {
     const ret = await axiosAPI.auth().get(`/friend`);
     const friendsList: OthersInfo[] = ret.data;
 
-    friendsList.push({
-      id: 1,
-      name: 'test',
-      avatarURL: 'asdf',
-      rate: 1234,
-      achievements: [0, 1, 2],
-      loseNum: 1,
-      winNum: 3,
-    });
-
     return friendsList;
   }
 
   @APIWithToken()
-  static async unfollowUser(id: number): Promise<void> {
-    // const ret = await axiosAPI.auth().post('/friend');
+  static async followUser(userId: number): Promise<void> {
+    console.log(userId);
+    console.log('follow');
+    await axiosAPI.auth().post(`/friend/${userId}`);
+  }
+
+  @APIWithToken()
+  static async unfollowUser(userId: number): Promise<void> {
+    await axiosAPI.auth().delete(`/friend/${userId}`);
   }
 
   @APIWithToken()
@@ -67,9 +71,13 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async unblockUser(id: number): Promise<void> {
-    // const ret = await axiosAPI.auth().delete('/block');
+  static async blockUser(userId: number): Promise<void> {
+    await axiosAPI.auth().post(`/block/${userId}`);
   }
+
+  @APIWithToken()
+  static async unblockUser(userId: number): Promise<void> {
+    await axiosAPI.auth().delete(`/block/${userId}`);
 
   static async setUserProfile(formData: FormData): Promise<void> {
     const ret = await axiosAPI.auth().put(`/user`, formData);
