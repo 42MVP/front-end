@@ -5,14 +5,14 @@
         <div class="user-info-div">
           <span class="bold">Win👑</span>
           <AvatarItem :username="gameResult?.winner" :avartarUrl="gameResult?.winnerAvatarUrl" imgSize="100">
-            <span class="rate">{{ (gameResult?.winnerRate as number) + 12 }} ({{ +12 }})</span>
+            <span class="rate">{{ (gameResult?.winnerRate as number)}} ({{ +12 }})</span>
             <span class="bold">{{ gameResult?.winnerScore }}</span>
           </AvatarItem>
         </div>
         <div class="user-info-div">
           <span class="bold">Lose🍂</span>
           <AvatarItem :username="gameResult?.loser" :avartarUrl="gameResult?.loserAvatarUrl" imgSize="100">
-            <span class="rate">{{ (gameResult?.loserRate as number) - 12 }} ({{ -12 }})</span>
+            <span class="rate">{{ (gameResult?.loserRate as number)}} ({{ -12 }})</span>
             <span class="bold">{{ gameResult?.loserScore }}</span>
           </AvatarItem>
         </div>
@@ -39,10 +39,8 @@ const props = defineProps<{
 
 onMounted(async () => {
   try {
-    console.log('gamehistory: ', gameStore.gameHistoryId);
     gameResult.value = await GameService.getGameResult(gameStore.gameHistoryId);
     // gameResult.value = await GameService.getGameResult(gameStore.matchInfo!.gameRoomId!);
-    console.log('game finished ! result : ', gameResult.value);
   } catch (e) {
     console.log(e);
   }
