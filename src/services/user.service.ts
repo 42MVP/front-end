@@ -3,9 +3,12 @@ import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
-import { useRoute } from 'vue-router';
+
+import { useRoute } from 'vue-router';import { useUsersStore } from '@/stores/users.store';
+;
 
 export class UserService {
+  
   @APIWithToken()
   static async getAllUser(): Promise<User> {
     const ret = await axiosAPI.auth().get('/user');
@@ -51,15 +54,15 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async followUser(userId: number): Promise<void> {
-    console.log(userId);
-    console.log('follow');
-    await axiosAPI.auth().post(`/friend/${userId}`);
+  static async followUser(user: OthersInfo): Promise<void> {
+    await axiosAPI.auth().post(`/friend/${user.id}`);
+    useUsersStore().addFriends(user);
   }
 
   @APIWithToken()
   static async unfollowUser(userId: number): Promise<void> {
     await axiosAPI.auth().delete(`/friend/${userId}`);
+    useUsersStore().friends.filter(u => u.id !== userId);
   }
 
   @APIWithToken()
@@ -71,13 +74,15 @@ export class UserService {
   }
 
   @APIWithToken()
-  static async blockUser(userId: number): Promise<void> {
-    await axiosAPI.auth().post(`/block/${userId}`);
+  static async blockUser(user: OthersInfo): Promise<void> {
+    await axiosAPI.auth().post(`/block/${user.id}`);
+    useUsersStore().addBlocks(user);
   }
 
   @APIWithToken()
   static async unblockUser(userId: number): Promise<void> {
     await axiosAPI.auth().delete(`/block/${userId}`);
+    useUsersStore().blocks.filter(u => u.id !== userId);
   }
 
   @APIWithToken()

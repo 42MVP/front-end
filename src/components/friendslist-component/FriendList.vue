@@ -43,10 +43,8 @@ const removeFromList = async (id: number) => {
   try {
     users.value = users.value.filter(u => u.id !== id);
     if (listType.value === 'Friends') {
-      userStore.friends.filter(u => u.id !== id);
       await UserService.unfollowUser(id);
     } else if (listType.value === 'Blocks') {
-      userStore.blocks.filter(u => u.id !== id);
       await UserService.unblockUser(id);
     }
     userStore.selectedUserId = -1;
