@@ -1,13 +1,18 @@
 <template>
   <div class="chat-box-container" ref="chatref">
-    <MessageBox v-for="chat in chats" :key="chat.id" :chat="chat" />
+    <div v-for="chat in chats">
+    <MessageBox v-if="isBlockUser(chat.username)" :key="chat.id" :chat="chat" />
   </div>
+ </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, watch, nextTick, ref } from 'vue';
 import MessageBox from './MessageBox.vue';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
+import { useUsersStore } from '@/stores/users.store';
+
+const usersStore = useUsersStore();
 
 let chatref = ref(null);
 
@@ -29,6 +34,14 @@ const scrollToLatestMsg: Function = () => {
     chatref.value.scrollTo({ top: chatref.value.scrollHeight, behavior: 'smooth' });
   });
 };
+
+const isBlockUser = (name: string) : boolean => {
+  const res =  usersStore.blocks.find(block => block.name === name)
+  console.log("blocks", usersStore.blocks);
+  console.log(res);
+  return  usersStore.blocks.find(block => block.name === name) ? false : true;
+}
+
 </script>
 
 <style>
