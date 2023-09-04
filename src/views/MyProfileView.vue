@@ -1,44 +1,31 @@
 <template>
-  <!-- {{ console.log(user) }}
-  <div class="p-container">
-    <Card class="p-info" :img="user.img">
-      <div class="button-slot">
-        <input type="file" class="input-file" ref="uploadedFile" @click="handleImgChange" />
-        <DButton class="upload-button" label="Upload new photo" />
-      </div>
-    </Card>
-    <div class="e-info">
-      <div class="end-align">닉네임 설정</div>
-      <span>kanghyki 만든 input box 자리 <br />글자수 제한 <br />글자수 제한 <br /> </span>
-      <div class="end-align">2차 인증</div>
-      <TButton :value="user.isAuth" />
-      <div class="end-align">인증 메일</div>
-      <div>{{ user.email }}</div>
-
-      <div class="two-buttons">
-        <DButton class="edit-button" label="완료" @click="editButton()" />
-        <DButton class="cancle-button" label="취소" @click="editButton()" />
-      </div>
-    </div>
-  </div> -->
   <div class="wrap">
-    <UploadImage />
+    <UploadImage v-model="uploadedFile" />
     <div class="p-info">
       <div class="name">
         <h3>닉네임 설정</h3>
-        <TextInputBox placeholderText="닉네임입력" type="name" :maxLength="15" required />
+        <TextInputBox
+          @response="
+            e => {
+              username = e;
+            }
+          "
+          :placeholderText="loginStore?.name"
+          type="name"
+          :maxLength="15"
+          required
+        />
       </div>
       <div class="auth">
         <h3>2차인증</h3>
-        <TButton />
+        <TButton :value="isCheckAuth" />
       </div>
       <div class="mail">
         <h3>인증메일</h3>
-        <a>hejang@student.42seoul.kr</a>
+        <a>{{ loginStore?.email }}</a>
       </div>
       <div class="two-buttons">
-        <!-- <button type="button" :disabled="src" class="test">완료</button> -->
-        <BasicButton text="완료" />
+        <BasicButton text="완료" @click="submitFrom()" />
         <BasicButton text="취소" :type="false" />
       </div>
     </div>
@@ -46,36 +33,53 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
 import TButton from '@/components/common/ToggleButton.vue';
 import UploadImage from '@/components/common/UploadImage.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 import BasicButton from '@/components/BasicButton.vue';
-import { ref } from 'vue';
 
-// const props = defineProps({
-//   user_id: String,
-// });
+// stores
+import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
+// services
+import { UserService } from '@/services/user.service';
+import { LoginService } from '@/services/login.service';
 
-const user = { _id: '1', name: 'chaejkim', img: '1.png', email: 'chaejkim@student.42seoul.kr', isAuth: false };
-const tmp_user = { _id: '1', name: 'chaejkim', img: '1.png', email: 'chaejkim@student.42seoul.kr', isAuth: false };
-const uploadedFile = ref<File | null>(null);
+const uploadedFile = ref<File | undefined>(undefined);
+const username = ref<string>('');
+const isCheckAuth = ref<boolean>(false);
 
-// const emit = defineEmits(['fileSelected']);
+const loginStore = useLoginStore();
+const modalStore = useModalStore();
 
-const handleImgChange = (event: Event) => {
-  // this.user.img = 'profile_0.png';
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files.length) {
-    uploadedFile.value = input.files[0];
-    // emit('fileSelected', input.files[0]);
+const createFormData = (): FormData => {
+  const formData = new FormData();
+  formData.append('name', username.value || loginStore.name);
+  formData.append('isAuth', String(isCheckAuth.value));
+  if (uploadedFile.value) {
+    formData.append('avatar', uploadedFile.value);
   }
-  console.log(uploadedFile.value);
+  return formData;
 };
 
-const editButton = () => {
-  user.name = tmp_user.name; // TODO : name check
-  user.isAuth = tmp_user.isAuth;
-  user.img = tmp_user.img;
+const submitFrom = async (): Promise<void> => {
+  try {
+    const formData = createFormData();
+    await UserService.setUserProfile(formData);
+    const loginInfo = await LoginService.getUserInfo();
+    loginStore.updateLoginInfo(loginInfo);
+  } catch (e) {
+    modalStore.on({
+      title: '오류',
+      text: String(e),
+      buttonText: '닫기',
+      buttonFunc: () => {
+        modalStore.off();
+      },
+    });
+  }
 };
 </script>
 

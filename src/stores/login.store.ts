@@ -1,12 +1,24 @@
 import { defineStore } from 'pinia';
 import type { User } from '@/interfaces/user/User.interface';
+import type { LoginInfo } from '@/interfaces/login/login.interface';
+
+interface LoginState {
+  isLogin: boolean;
+  id: number;
+  name: string;
+  avatarURL: string;
+  isAuth: boolean;
+  email: string;
+}
 
 export const useLoginStore = defineStore('login', {
-  state: () => ({
+  state: (): LoginState => ({
     isLogin: false,
     id: -1,
     name: '',
     avatarURL: '',
+    isAuth: false,
+    email: '',
   }),
   getters: {
     owner(): User {
@@ -25,6 +37,21 @@ export const useLoginStore = defineStore('login', {
       this.id = -1;
       this.name = '';
       this.avatarURL = '';
+      this.isAuth = false;
+      this.email = '';
+    },
+    setLogin(user: LoginInfo) {
+      this.isLogin = true;
+      this.id = user.id;
+      this.name = user.name;
+      this.avatarURL = user.avatarURL;
+      this.email = user.email;
+      this.isAuth = user.isAuth;
+    },
+    updateLoginInfo(user: LoginInfo) {
+      this.name = user.name;
+      this.avatarURL = user.avatarURL;
+      this.isAuth = user.isAuth;
     },
   },
   persist: true,

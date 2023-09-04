@@ -78,10 +78,8 @@ export class UserService {
   @APIWithToken()
   static async unblockUser(userId: number): Promise<void> {
     await axiosAPI.auth().delete(`/block/${userId}`);
-  }
 
-  @APIWithToken()
-  static async setUserProfile(formData: FormData) {
-    return axiosAPI.auth().put(`/user`, formData);
+  static async setUserProfile(formData: FormData): Promise<void> {
+    const ret = await axiosAPI.auth().put(`/user`, formData);
   }
 }
