@@ -61,7 +61,6 @@ const blockButton = async () => {
   try {
     isBlock.value = true;
     await UserService.blockUser(props.profileUser.id);
-    unFollowButton();
   } catch (e) {
     console.log(e);
   }
