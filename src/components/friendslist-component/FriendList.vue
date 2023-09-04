@@ -61,16 +61,17 @@ const getButtonTitle = () => {
 
 onMounted(async () => {
   try {
-    // const friends: OthersInfo[] = await UserService.getFriendsList();
-    // friends.forEach(e => {
-    //   userStore.addFriends(e);
-    // });
-    // console.log(friends);
-    // users.value = friends;
+    const friends: OthersInfo[] = await UserService.getFriendsList();
+    friends.forEach(e => {
+      userStore.addFriends(e);
+    });
+    console.log("friends",friends);
+    users.value = friends;
     const blocks: OthersInfo[] = await UserService.getBlocksList();
     blocks.forEach(e => {
       userStore.addBlocks(e);
     });
+    console.log("blocks", blocks);
   } catch (e) {
     console.log(e);
   }
