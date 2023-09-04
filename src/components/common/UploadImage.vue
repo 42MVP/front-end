@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useLoginStore } from '@/stores/login.store';
 import BasicButton from '@/components/BasicButton.vue';
 
@@ -18,8 +18,11 @@ const props = defineProps({
 });
 
 const loginStore = useLoginStore();
-const avatarURL = loginStore.avatarURL || import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
-const previewImage = ref<string>(avatarURL);
+const previewImage = ref<string>('');
+
+onMounted(() => {
+  previewImage.value = loginStore.avatarURL || import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
+});
 
 const emits = defineEmits<{
   (e: 'update:modelValue', image: File): void;
