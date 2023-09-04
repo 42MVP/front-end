@@ -3,9 +3,9 @@ import { axiosAPI } from '@/services/utils/axiosInstance.utils';
 import type { User } from '@/interfaces/user/User.interface';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+import { useUsersStore } from '@/stores/users.store';
+import {usersStore} from '@/main'
 
-import { useRoute } from 'vue-router';import { useUsersStore } from '@/stores/users.store';
-;
 
 export class UserService {
   
@@ -20,6 +20,7 @@ export class UserService {
     const ret = await axiosAPI.auth().get('/user', {
       params: { username: username },
     });
+    userStore.
     return ret.data;
   }
 
