@@ -1,9 +1,11 @@
 import { GameInvitationService } from '@/services/gameInvitation.service';
 import { GameMatchingService } from '@/services/gameMatching.service';
+import { GamePlayService } from '@/services/gamePlay.service';
 
 export class GameService {
   private static gameMatchingService: GameMatchingService | undefined = undefined;
   private static gameInvitationService: GameInvitationService | undefined = undefined;
+  private static gamePlayService: GamePlayService | undefined = undefined;
 
   static get matching(): GameMatchingService {
     if (this.gameMatchingService === undefined) this.gameMatchingService = new GameMatchingService();
@@ -14,5 +16,10 @@ export class GameService {
     if (this.gameInvitationService === undefined) this.gameInvitationService = new GameInvitationService();
 
     return this.gameInvitationService;
+  }
+  static get play(): GamePlayService {
+    if (this.gamePlayService === undefined) this.gamePlayService = new GamePlayService();
+
+    return this.gamePlayService;
   }
 }
