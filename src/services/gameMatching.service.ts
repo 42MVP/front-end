@@ -11,7 +11,7 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
 export class GameMatchingService {
   @APIWithToken()
   async applyQueue(): Promise<void> {
-    await axiosAPI.auth().post('/game-matching/queue/1');
+    await axiosAPI.auth().post('/game-matching/queue/');
     matchingStore.setStep(MatchingStep.InQueue);
   }
 
