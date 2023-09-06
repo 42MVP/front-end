@@ -14,15 +14,24 @@
       />
     </div>
     <div class="submitButton">
+      <div class="timer">
+        ⏱
+        <CountdownTimer
+          :targetTime="new Date(new Date().getTime() + 171000)"
+          @timeout="isTimeout = true"
+          fontSize="small"
+        />
+      </div>
       <BasicButton @click="submitAuthCode()" text="완료" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import CountdownTimer from '@/components/CountdownTimer.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 import BasicButton from '@/components/BasicButton.vue';
 // stores
@@ -44,7 +53,20 @@ const isValidCode = (): boolean => {
   return true;
 };
 
+const isTimeout = ref<boolean>(false);
+
 const submitAuthCode = async (): Promise<void> => {
+  if (isTimeout.value) {
+    modalStore.on({
+      title: '알림',
+      text: '인증 코드가 만료되었습니다.',
+      buttonText: '재발급',
+      buttonFunc: () => {
+        window.location.href = 'http://localhost:3000/login/ft';
+      },
+    });
+    return;
+  }
   if (!isValidCode()) {
     modalStore.on({
       title: '알림',
@@ -54,7 +76,6 @@ const submitAuthCode = async (): Promise<void> => {
     });
     return;
   }
-
   const token = String(route.query.token);
   const authCode: AuthCode = { code: code.value };
   await LoginService.postTwoFactor(token, authCode);
@@ -91,7 +112,17 @@ const submitAuthCode = async (): Promise<void> => {
 }
 
 .submitButton {
-  margin-left: 520px;
+  display: flex;
+  gap: 10px;
+  margin-left: 440px;
+  margin-right: 30px;
   margin-top: 30px;
+}
+
+.timer {
+  display: flex;
+  min-width: max-content;
+  align-self: center;
+  gap: 5px;
 }
 </style>
