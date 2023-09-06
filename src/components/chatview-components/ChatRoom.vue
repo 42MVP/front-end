@@ -95,10 +95,12 @@ import BasicList from '@/components/BasicList.vue';
 // stores
 import { useLoginStore } from '@/stores/login.store';
 import { useChatStore } from '@/stores/chat.store';
+import { useUsersStore } from '@/stores/users.store';
 // interfaces
 import { RoomMode } from '@/services/chat.service';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
+import type { Chat } from '@/interfaces/chat/Chat.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
 import { GameService } from '@/services/game.service';
@@ -108,6 +110,7 @@ const router = useRouter();
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
+const usersStore = useUsersStore();
 
 const modalName = ref<string>('');
 const isActiveDropdown = ref<boolean>(false);
@@ -135,13 +138,17 @@ const addChat = (newMessage: string): void => {
 const showUserProfile = (userId: number) => {
   const selectedUser = chatStore.chatRoom?.users.find(u => u.id === userId);
   router.push(`/users/${selectedUser?.name}`);
-  console.log('된다아');
-  console.log(userId);
 };
+
+// const filterChat = (): Chat[] => {
+//   const filteredChat = chatStore.chat.filter(chat => {
+//     const blocksChat = usersStore.blocks.find(block => block.name === chat.username);
+//   });
+//   return filteredChat;
+// }
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
-  console.log(name);
 };
 
 const roomModeIcon: Record<string, RoomModeIcon[]> = {
