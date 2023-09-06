@@ -1,5 +1,5 @@
 <template>
-  <Modal title="경기 결과" :show="props.isShow">
+  <Modal title="경기 결과">
     <template #body>
       <div class="body-container">
         <div class="user-info-div">
@@ -42,13 +42,9 @@ const gameResult = ref<GameHistory>();
 
 const router = useRouter();
 
-const props = defineProps<{
-  isShow: boolean;
-}>();
-
 const moveToProfile = () => {
   router.push(`/users/${loginStore?.name}`);
-}
+};
 
 onMounted(async () => {
   try {
