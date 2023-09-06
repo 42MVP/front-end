@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { watch } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { useModalStore } from '@/stores/modal.store';
+import { useLoginStore } from './stores/login.store';
 import { ChatSocketService } from './services/chatSocket.service';
 
 import InvitationAcceptedModal from './components/invitation-components/modals/InvitationAcceptedModal.vue';
@@ -12,14 +13,24 @@ import InvitationWaitingModal from './components/invitation-components/modals/In
 import { InvitationStep, useInvitationStore } from './stores/invitation.store';
 import InvitationCancelModal from './components/invitation-components/modals/InvitationCancelModal.vue';
 import { GameService } from './services/game.service';
+import { SocketService } from './services/socket.service';
 
+const loginStore = useLoginStore();
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
 
-onMounted(() => {
-  ChatSocketService.onChat();
-  GameService.invitation.socket.on();
-});
+watch(
+  () => loginStore.isLogin,
+  () => {
+    if (loginStore.isLogin) {
+      ChatSocketService.onChat();
+      GameService.invitation.socket.on();
+    } else {
+      GameService.invitation.socket.off();
+      SocketService.getInstance();
+    }
+  },
+);
 </script>
 
 <template>
