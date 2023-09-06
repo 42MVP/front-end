@@ -9,8 +9,8 @@
     <template #title-icon-menu>
       <DropdownMenu v-if="isMenu">
         <template #dropdown-item>
-          <DropdownMenuItem text="Blocks" @click="listType = 'Blocks'" />
-          <DropdownMenuItem text="Friends" @click="listType = 'Friends'" />
+          <DropdownMenuItem text="Blocks" @click="setType('Blocks')" />
+          <DropdownMenuItem text="Friends" @click="setType('Friends')" />
         </template>
       </DropdownMenu>
     </template>
@@ -55,6 +55,10 @@ const removeFromList = async (id: number) => {
   }
 };
 
+const setType = (type: string) => {
+  listType.value = type
+}
+
 const getButtonTitle = () => {
   return listType.value === 'Friends' ? 'unfollow' : 'unblock';
 };
@@ -65,13 +69,11 @@ onMounted(async () => {
     friends.forEach(e => {
       userStore.addFriends(e);
     });
-    console.log("friends",friends);
     users.value = friends;
     const blocks: OthersInfo[] = await UserService.getBlocksList();
     blocks.forEach(e => {
       userStore.addBlocks(e);
     });
-    console.log("blocks", blocks);
   } catch (e) {
     console.log(e);
   }
@@ -82,8 +84,10 @@ watch(
   () => {
     if (listType.value === 'Friends') {
       users.value = userStore.friends;
+      userStore.selectedUserId = -1;
     } else if (listType.value === 'Blocks') {
       users.value = userStore.blocks;
+      userStore.selectedUserId = -1;
     }
   },
 );

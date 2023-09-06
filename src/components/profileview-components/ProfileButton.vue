@@ -23,7 +23,7 @@ import { useUsersStore } from '@/stores/users.store';
 import { UserService } from '@/services/user.service';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
-// import { usUserInfoerInfo } from 'os';
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 
 const userStore = useUsersStore();
 
@@ -38,10 +38,11 @@ const isBlock = ref<Boolean>(props.profileUser.isBlock);
 const editButton = () => {
   router.push('/users');
 };
+
 const followButton = async () => {
   try {
     isFollow.value = true;
-    await UserService.followUser(props.profileUser.id);
+    await UserService.followUser(getEssentialInfo());
   } catch (e) {
     console.log(e);
   }
@@ -51,7 +52,6 @@ const unFollowButton = async () => {
   try {
     isFollow.value = false;
     await UserService.unfollowUser(props.profileUser.id);
-    userStore.friends.filter(u => u.id !== props.profileUser.id);
   } catch (e) {
     console.log(e);
   }
@@ -60,7 +60,8 @@ const unFollowButton = async () => {
 const blockButton = async () => {
   try {
     isBlock.value = true;
-    await UserService.blockUser(props.profileUser.id);
+    isFollow.value = false;
+    await UserService.blockUser(getEssentialInfo());
   } catch (e) {
     console.log(e);
   }
@@ -70,10 +71,21 @@ const unBlockButton = async () => {
   try {
     isBlock.value = false;
     await UserService.unblockUser(props.profileUser.id);
-    userStore.blocks.filter(u => u.id !== props.profileUser.id);
   } catch (e) {
     console.log(e);
   }
+};
+
+const getEssentialInfo = (): OthersInfo => {
+  const info = {
+    id: props.profileUser.id,
+    name: props.profileUser.name,
+    avatarURL: props.profileUser.avatarURL,
+    rate: props.profileUser.rate,
+    loseNum: props.profileUser.loseNum,
+    winNum: props.profileUser.winNum,
+  };
+  return info;
 };
 </script>
 
