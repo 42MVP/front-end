@@ -5,15 +5,14 @@
         <div class="user-info-div">
           <span class="bold">Win👑</span>
           <AvatarItem :username="gameResult?.winner" :avartarUrl="gameResult?.winnerAvatarUrl" imgSize="100">
-            <span class="rate">{{ gameResult?.winnerRate as number }} +12</span>
-            <span class="bold">{{ gameResult?.winnerScore }}</span>
+            <span class="rate">{{ gameResult?.winnerRate as number }} (+12)</span>
           </AvatarItem>
         </div>
+        <span class="score">{{ gameResult?.winnerScore }} : {{ gameResult?.loserScore }} </span>
         <div class="user-info-div">
           <span class="bold">Lose🍂</span>
           <AvatarItem :username="gameResult?.loser" :avartarUrl="gameResult?.loserAvatarUrl" imgSize="100">
-            <span class="rate">{{ gameResult?.loserRate as number }} -12</span>
-            <span class="bold">{{ gameResult?.loserScore }}</span>
+            <span class="rate">{{ gameResult?.loserRate as number }} (-12)</span>
           </AvatarItem>
         </div>
       </div>
@@ -60,35 +59,28 @@ onMounted(async () => {
 .body-container {
   display: flex;
   flex-flow: row;
+  align-items: center;
   text-align: center;
 }
 
-.game-result-container {
-  display: flex;
-  justify-content: center;
-  align-self: center;
-}
-
 .user-info-div {
-  margin: 0 100px;
+  margin: 0 80px;
   display: flex;
   flex-flow: column;
   text-align: center;
   font: var(--large);
 }
 
-.score-div {
+.score {
   font: var(--extra-large);
   align-self: center;
   font-weight: bolder;
-}
-.bold {
-  font-weight: bold;
 }
 
 .rate {
   align-self: center;
   font-weight: lighter;
+  font-size: medium;
 }
 
 .button-div {
