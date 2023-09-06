@@ -33,8 +33,6 @@ export class UserService {
 
 
   static async followUser(user: OthersInfo): Promise<void> {
-    console.log(userId);
-    console.log('follow');
     await axiosPost(`/friend/${user.id}`);
     usersStore.addFriends(user);
   }
