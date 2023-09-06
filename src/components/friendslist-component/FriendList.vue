@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { type OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import BasicListFrame from '@/components/BasicListFrame.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
@@ -59,14 +59,15 @@ const removeFromList = async (id: number) => {
 };
 
 const setType = (type: string) => {
-  listType.value = type
-}
+  listType.value = type;
+};
 
 const getButtonTitle = () => {
   return listType.value === 'Friends' ? 'unfollow' : 'unblock';
 };
 
 const updateUser = (id: number, state: string): void => {
+  for (const b of userStore.blocks) if (b.id === id) return;
   for (const user of users.value) {
     if (user.id === id) {
       user.state = state;
@@ -95,6 +96,11 @@ onMounted(async () => {
   } catch (e) {
     console.log(e);
   }
+});
+
+onUnmounted(() => {
+  const socket = SocketService.getInstance().getSocket();
+  socket.off('user-update');
 });
 
 watch(
