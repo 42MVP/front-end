@@ -60,6 +60,7 @@ const unFollowButton = async () => {
 const blockButton = async () => {
   try {
     isBlock.value = true;
+    isFollow.value = false;
     await UserService.blockUser(getEssentialInfo());
   } catch (e) {
     console.log(e);
@@ -83,9 +84,9 @@ const getEssentialInfo = (): OthersInfo => {
     rate: props.profileUser.rate,
     loseNum: props.profileUser.loseNum,
     winNum: props.profileUser.winNum,
-  }
+  };
   return info;
-}
+};
 </script>
 
 <style scoped>

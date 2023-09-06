@@ -10,6 +10,7 @@ import { useChatStore } from './stores/chat.store';
 import { useGameStore } from './stores/game.store';
 import { useMatchingStore } from './stores/matching.store';
 import { useInvitationStore } from './stores/invitation.store';
+import { useUsersStore } from './stores/users.store';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -23,5 +24,6 @@ export const chatStore = useChatStore();
 export const gameStore = useGameStore();
 export const matchingStore = useMatchingStore();
 export const invitationStore = useInvitationStore();
+export const usersStore = useUsersStore();
 
 app.mount('#app');

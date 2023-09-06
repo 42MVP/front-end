@@ -138,8 +138,6 @@ const addChat = (newMessage: string): void => {
 const showUserProfile = (userId: number) => {
   const selectedUser = chatStore.chatRoom?.users.find(u => u.id === userId);
   router.push(`/users/${selectedUser?.name}`);
-  console.log('된다아');
-  console.log(userId);
 };
 
 // const filterChat = (): Chat[] => {
@@ -151,7 +149,6 @@ const showUserProfile = (userId: number) => {
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
-  console.log(name);
 };
 
 const roomModeIcon: Record<string, RoomModeIcon[]> = {
