@@ -15,7 +15,7 @@ interface MatchingState {
   id: number;
   step: MatchingStep;
   matchingEndTimeMs: number;
-  option: string; // TODO: 옵션?
+  option: number; // TODO: 옵션?
 }
 
 export const useMatchingStore = defineStore('matching', {
@@ -23,7 +23,7 @@ export const useMatchingStore = defineStore('matching', {
     id: -1,
     step: MatchingStep.GameSetting,
     matchingEndTimeMs: 0,
-    option: '',
+    option: 1,
   }),
   getters: {
     isStep: (state: MatchingState) => {
@@ -39,6 +39,9 @@ export const useMatchingStore = defineStore('matching', {
     },
     setId(id: number): void {
       this.id = id;
+    },
+    setOption(option: number) {
+      this.option = option;
     },
   },
 });

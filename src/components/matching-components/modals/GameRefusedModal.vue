@@ -17,7 +17,7 @@ const matchingStore = useMatchingStore();
 onMounted(() => {
   setTimeout(async () => {
     try {
-      await GameService.matching.applyQueue();
+      await GameService.matching.applyQueue(matchingStore.option);
     } catch (e) {
       matchingStore.setStep(MatchingStep.GameSetting);
     }

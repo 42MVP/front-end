@@ -8,8 +8,8 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
  * API
  */
 export class GameMatchingService {
-  async applyQueue(): Promise<void> {
-    await axiosPost('/game-matching/queue');
+  async applyQueue(option: number): Promise<void> {
+    await axiosPost(`/game-matching/queue/${option}`);
     matchingStore.setStep(MatchingStep.InQueue);
   }
 

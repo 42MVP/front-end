@@ -18,7 +18,7 @@ const matchingStore = useMatchingStore();
 
 const timeout = async () => {
   try {
-    GameService.matching.applyQueue();
+    GameService.matching.applyQueue(matchingStore.option);
   } catch (e) {
     matchingStore.setStep(MatchingStep.GameSetting);
   }
