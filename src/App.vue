@@ -25,9 +25,6 @@ watch(
     if (loginStore.isLogin) {
       ChatSocketService.onChat();
       GameService.invitation.socket.on();
-    } else {
-      GameService.invitation.socket.off();
-      SocketService.getInstance();
     }
   },
 );
