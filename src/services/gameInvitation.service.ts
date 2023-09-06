@@ -1,5 +1,4 @@
-import { APIWithToken } from './utils/apiDecorator.utils';
-import { axiosAPI } from './utils/axiosInstance.utils';
+import { axiosPost } from './utils/axiosInstance.utils';
 import { SocketService } from './socket.service';
 import { gameStore, invitationStore } from '@/main';
 import { InvitationStep } from '@/stores/invitation.store';
@@ -9,14 +8,12 @@ import type { GameMatch } from '@/interfaces/game/GameMatch.interface';
  * API
  */
 export class GameInvitationService {
-  @APIWithToken()
   async inviteMatching(userId: number): Promise<void> {
-    await axiosAPI.auth().post(`/game-invitation/invite/${userId}`);
+    await axiosPost(`/game-invitation/invite/${userId}`);
   }
 
-  @APIWithToken()
   async cancelInvite(invitationId: number): Promise<void> {
-    await axiosAPI.auth().post(`/game-invitation/cancel-invite/${invitationId}`);
+    await axiosPost(`/game-invitation/cancel-invite/${invitationId}`);
     invitationStore.setStep(InvitationStep.None);
   }
 
