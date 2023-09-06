@@ -127,23 +127,3 @@ export async function axiosDelete<ResType = void, B = any>(uri: string, param?: 
     data: reqData,
   }).then(({ data }) => data);
 }
-
-class Axios {
-  // // 요청 인터셉터
-
-  auth() {
-    const tokenInstance = axiosInstance();
-
-    // tokenInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access-token')}`;
-
-    // tokenInstance.interceptors.response.use(this.onFulfilledres, this.onRejectedres);
-
-    return tokenInstance;
-  }
-
-  noAuth() {
-    return axiosInstance;
-  }
-}
-
-export const axiosAPI = new Axios();
