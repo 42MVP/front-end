@@ -3,6 +3,7 @@
     <div v-if="!gameStore.isStarted">
       <CountdownTimer v-if="gameStore.startTimeMs" :targetTime="new Date(gameStore.startTimeMs)" @timeout="timeout" />
     </div>
+    <GameResultModal v-if="gameStore.isFinished === true" />
     <div v-show="gameStore.isStarted">
       <div class="game-ui-continer">
         <div class="user-info-div">
@@ -19,9 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import CountdownTimer from '@/components/CountdownTimer.vue';
+import GameResultModal from '@/components/gameview-components/GameResultModal.vue';
 
 import { useGameStore } from '@/stores/game.store';
 import { GameService } from '@/services/game.service';
@@ -41,6 +43,8 @@ const rightPlayer = ref<GameUser | undefined>(undefined);
 
 const gameBoard = ref<null | HTMLCanvasElement>(null);
 const ctx = ref<null | CanvasRenderingContext2D>(null);
+
+const isCompleted = ref<boolean>(false);
 
 const gameSettings = {
   gameWidth: 1100,

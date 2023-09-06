@@ -24,7 +24,7 @@ interface StartGameData {
 }
 
 interface FinishEventData {
-  gameId: number;
+  gameHistoryId: number;
 }
 
 /**
@@ -63,9 +63,11 @@ class GamePlaySocketService {
     });
 
     this.socket.on(event.finish, (data: FinishEventData) => {
-      // console.log('finish:', data);
+      gameStore.setGameHistoryId(data.gameHistoryId);
+      console.log('finish:', data);
       // TODO : data.gameId
       gameStore.isStarted = false;
+      gameStore.isFinished = true;
     });
   }
 

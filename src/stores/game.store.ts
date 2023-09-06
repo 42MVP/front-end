@@ -6,10 +6,12 @@ interface GameState {
   matchInfo: GameMatch | null;
   startTimeMs: number | undefined;
   isStarted: boolean;
+  isFinished: boolean;
   background: string;
   leftScore: number;
   rightScore: number;
   tableInfo: GameTable;
+  gameHistoryId: number;
 }
 
 const gameSettings = {
@@ -27,6 +29,7 @@ export const useGameStore = defineStore('game', {
     matchInfo: null,
     startTimeMs: undefined,
     isStarted: false,
+    isFinished: false,
     background: 'white',
     leftScore: 0,
     rightScore: 0,
@@ -50,6 +53,7 @@ export const useGameStore = defineStore('game', {
         dy: 1,
       },
     },
+    gameHistoryId: 0,
   }),
   getters: {
     isGameStart(): boolean {
@@ -75,6 +79,10 @@ export const useGameStore = defineStore('game', {
     setTableInfo(newInfo: GameTable) {
       console.log('gameStore - setTableInfo');
       this.tableInfo = newInfo;
+    },
+
+    setGameHistoryId(id: number) {
+      this.gameHistoryId = id;
     },
   },
 });
