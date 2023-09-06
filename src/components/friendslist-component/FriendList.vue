@@ -15,15 +15,17 @@
       </DropdownMenu>
     </template>
     <template #user-element>
-      <BasicList :items="users" @chooseItem="chooseUser" @clickItemSlot="removeFromList" #default="{ clickButton }">
-        <BasicButton :text="getButtonTitle()" @click="clickButton" />
-      </BasicList>
+      <div>
+        <BasicList :items="users" @chooseItem="chooseUser" @clickItemSlot="removeFromList" #default="{ clickButton }">
+          <BasicButton :text="getButtonTitle()" @click="clickButton" />
+        </BasicList>
+      </div>
     </template>
   </BasicListFrame>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { type OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import BasicListFrame from '@/components/BasicListFrame.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
@@ -32,6 +34,7 @@ import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { UserService } from '@/services/user.service';
 import { useUsersStore } from '@/stores/users.store';
+import { SocketService } from '@/services/socket.service';
 
 const isMenu = ref(false);
 const userStore = useUsersStore();
@@ -56,14 +59,30 @@ const removeFromList = async (id: number) => {
 };
 
 const setType = (type: string) => {
-  listType.value = type
-}
+  listType.value = type;
+};
 
 const getButtonTitle = () => {
   return listType.value === 'Friends' ? 'unfollow' : 'unblock';
 };
 
+const updateUser = (id: number, state: string): void => {
+  for (const b of userStore.blocks) if (b.id === id) return;
+  for (const user of users.value) {
+    if (user.id === id) {
+      user.state = state;
+      return;
+    }
+  }
+};
+
 onMounted(async () => {
+  const socket = SocketService.getInstance().getSocket();
+  socket.on('user-update', (d: { id: number; state: string }) => {
+    console.log('user-update:');
+    console.log(d);
+    updateUser(d.id, d.state);
+  });
   try {
     const friends: OthersInfo[] = await UserService.getFriendsList();
     friends.forEach(e => {
@@ -77,6 +96,11 @@ onMounted(async () => {
   } catch (e) {
     console.log(e);
   }
+});
+
+onUnmounted(() => {
+  const socket = SocketService.getInstance().getSocket();
+  socket.off('user-update');
 });
 
 watch(
