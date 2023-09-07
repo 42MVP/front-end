@@ -12,7 +12,7 @@
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomPassword()" />
+      <BasicButton text="확인" @click="changeRoomPassword(); emits('close');" />
     </template>
   </Modal>
 </template>
