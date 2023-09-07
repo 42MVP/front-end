@@ -23,5 +23,15 @@ export const useModalStore = defineStore('modal', {
       this.buttonText = '';
       this.buttonFunc = () => {};
     },
+    notify(message: string) {
+      this.on({
+        title: '알림',
+        text: message,
+        buttonText: '닫기',
+        buttonFunc: () => {
+          this.off;
+        },
+      });
+    },
   },
 });

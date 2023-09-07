@@ -35,13 +35,8 @@ const changeRoomModePublic = async () => {
     roomId: chatStore.selectedID,
     roomMode: 'PUBLIC',
   };
-  console.log(roomMode);
-  try {
-    ChatService.changeRoomMode(roomMode);
-    chatSotre.setRoomMode(roomMode.roomId, roomMode.roomMode);
-  } catch (e) {
-    console.warn(e);
-  }
+  ChatService.changeRoomMode(roomMode);
+  chatSotre.setRoomMode(roomMode.roomId, roomMode.roomMode);
 };
 </script>
 

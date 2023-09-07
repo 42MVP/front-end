@@ -17,20 +17,11 @@ const modalStore = useModalStore();
 const route = useRoute();
 
 onMounted(async () => {
-  try {
-    const token = route.query.token;
-    if (typeof token === 'string') localStorage.setItem('access-token', token);
-    const data = await LoginService.getUserInfo();
-    loginStore.setLogin(data);
-    router.push('/');
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
+  const token = route.query.token;
+  if (typeof token === 'string') localStorage.setItem('access-token', token);
+  const data = await LoginService.getUserInfo();
+  loginStore.setLogin(data);
+  router.push('/');
 });
 </script>
 

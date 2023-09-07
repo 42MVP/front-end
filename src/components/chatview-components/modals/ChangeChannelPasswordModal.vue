@@ -49,12 +49,8 @@ const changeRoomPassword = async () => {
     roomMode: 'PROTECTED',
     password: password.value,
   };
-  try {
-    await ChatService.changeRoomMode(roomInfo);
-    chatStore.setRoomMode(roomInfo.roomId, roomInfo.roomMode);
-  } catch (e) {
-    console.warn(e);
-  }
+  await ChatService.changeRoomMode(roomInfo);
+  chatStore.setRoomMode(roomInfo.roomId, roomInfo.roomMode);
 };
 </script>
 

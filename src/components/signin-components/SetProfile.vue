@@ -51,7 +51,6 @@ const loginStore = useLoginStore();
 
 const defaultName = String(route.query.name);
 
-
 const createFormData = (): FormData => {
   const formData = new FormData();
   formData.append('name', username.value || defaultName);

@@ -123,15 +123,11 @@ const isUserTab = ref(true);
 const joinableUsers = ref<User[]>([] as User[]);
 
 const searchUser = async () => {
-  try {
-    const allUsers: User[] = await UserService.getAllUser();
-    const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
-    const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
-    const filteredOutUserIds = new Set([...channelUserIds, ...banUserIds, loginStore.id]);
-    joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
-  } catch (e) {
-    console.warn(e);
-  }
+  const allUsers: User[] = await UserService.getAllUser();
+  const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
+  const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
+  const filteredOutUserIds = new Set([...channelUserIds, ...banUserIds, loginStore.id]);
+  joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
 };
 
 const searchName = ref<string>('');
@@ -202,14 +198,13 @@ const modeUser = (iconEmitResponse: IconEmitResponse) => {
 
 const serviceChatUser = async (id: number, event: string, muteTime?: Date) => {
   const service = ChatService.getServiceChatUser(event);
-  try {
-    if (!chatStore.isSelected) throw '채팅룸 선택 오류';
-    const chatUser = createChatUserByEvent(id, chatStore.selectedID, event, muteTime);
-    if (!chatUser) throw '채팅 유저 관리 모달 오류';
-    const ret = await service(chatUser);
-  } catch (e) {
-    console.warn('modeUser', e);
+  if (!chatStore.isSelected) {
+    console.log('채팅룸 선택 오류');
+    return;
   }
+  const chatUser = createChatUserByEvent(id, chatStore.selectedID, event, muteTime);
+  if (!chatUser) throw '채팅 유저 관리 모달 오류';
+  await service(chatUser);
 };
 
 const emits = defineEmits<{

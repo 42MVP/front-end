@@ -40,40 +40,24 @@ const editButton = () => {
 };
 
 const followButton = async () => {
-  try {
-    isFollow.value = true;
-    await UserService.followUser(getEssentialInfo());
-  } catch (e) {
-    console.log(e);
-  }
+  isFollow.value = true;
+  await UserService.followUser(getEssentialInfo());
 };
 
 const unFollowButton = async () => {
-  try {
-    isFollow.value = false;
-    await UserService.unfollowUser(props.profileUser.id);
-  } catch (e) {
-    console.log(e);
-  }
+  isFollow.value = false;
+  await UserService.unfollowUser(props.profileUser.id);
 };
 
 const blockButton = async () => {
-  try {
-    isBlock.value = true;
-    isFollow.value = false;
-    await UserService.blockUser(getEssentialInfo());
-  } catch (e) {
-    console.log(e);
-  }
+  isBlock.value = true;
+  isFollow.value = false;
+  await UserService.blockUser(getEssentialInfo());
 };
 
 const unBlockButton = async () => {
-  try {
-    isBlock.value = false;
-    await UserService.unblockUser(props.profileUser.id);
-  } catch (e) {
-    console.log(e);
-  }
+  isBlock.value = false;
+  await UserService.unblockUser(props.profileUser.id);
 };
 
 const getEssentialInfo = (): OthersInfo => {

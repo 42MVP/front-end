@@ -65,31 +65,27 @@ const chatStore = useChatStore();
 const loginStore = useLoginStore();
 
 const createRoom = async () => {
-  try {
-    if (mode[selectedMode.value] === 'PROTECTED') {
-      // TODO : password 처리
-      if (!password.value) throw '패스워드 필요';
-      if (password.value !== password2th.value) throw '패스워드 불일치';
-    }
-    const chatRoom: ChatRoomCreateChannel = {
-      roomName: roomName.value,
-      roomMode: mode[selectedMode.value],
-      password: password.value,
-    };
-    const room = await ChatService.createRoom(chatRoom);
-    const chatInfo: ChatInfo = {
-      id: room.id,
-      name: room.name,
-      roomMode: room.roomMode,
-      isChannel: true,
-      self: loginStore.owner,
-      users: [],
-      banUsers: [],
-    };
-    chatStore.addChatRoom(room.id, chatInfo);
-  } catch (e) {
-    console.warn(e);
+  if (mode[selectedMode.value] === 'PROTECTED') {
+    // TODO : password 처리
+    if (!password.value) throw '패스워드 필요';
+    if (password.value !== password2th.value) throw '패스워드 불일치';
   }
+  const chatRoom: ChatRoomCreateChannel = {
+    roomName: roomName.value,
+    roomMode: mode[selectedMode.value],
+    password: password.value,
+  };
+  const room = await ChatService.createRoom(chatRoom);
+  const chatInfo: ChatInfo = {
+    id: room.id,
+    name: room.name,
+    roomMode: room.roomMode,
+    isChannel: true,
+    self: loginStore.owner,
+    users: [],
+    banUsers: [],
+  };
+  chatStore.addChatRoom(room.id, chatInfo);
 };
 </script>
 

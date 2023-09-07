@@ -44,18 +44,14 @@ const gameRecord = ref<UserGameRecord>();
 
 
 onMounted(async () => {
-  try {
-    profileUser.value = await UserService.getUserProfile(props.username);
-    console.log(profileUser.value)
-    gameRecord.value = {
-      rate: profileUser.value.rate,
-      totalGame: profileUser.value.winNum + profileUser.value.loseNum,
-      winNum: profileUser.value.winNum,
-      loseNum: profileUser.value.loseNum,
-    };
-  } catch (e) {
-    console.warn(e);
-  }
+  profileUser.value = await UserService.getUserProfile(props.username);
+  console.log(profileUser.value)
+  gameRecord.value = {
+    rate: profileUser.value.rate,
+    totalGame: profileUser.value.winNum + profileUser.value.loseNum,
+    winNum: profileUser.value.winNum,
+    loseNum: profileUser.value.loseNum,
+  };
 });
 
 const getLoginName = computed(() => {

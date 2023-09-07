@@ -51,7 +51,6 @@ const applyQueue = async () => {
     await GameService.matching.applyQueue(matchingStore.option);
   } catch (e) {
     alert('큐 요청 실패');
-    console.warn(e);
   }
 };
 </script>

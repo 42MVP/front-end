@@ -58,24 +58,10 @@ const modalName = ref<string>('');
 const isMenu = ref<boolean>(false);
 
 onMounted(async () => {
-  try {
-    const ret: ChatInfo[] = await ChatService.getChatList();
-    ret.forEach(e => {
-      chatStore.addChatRoom(e.id, e);
-    });
-    //    const ret = await ChatService.createRoom({
-    //      roomName: 'wowowowow',
-    //      roomMode: RoomMode.DIRECT,
-    //      dmId: 123,
-    //    });
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
+  const ret: ChatInfo[] = await ChatService.getChatList();
+  ret.forEach(e => {
+    chatStore.addChatRoom(e.id, e);
+  });
 });
 
 const chooseChatRoom = (roomId: number) => {
