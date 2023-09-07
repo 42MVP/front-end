@@ -1,9 +1,9 @@
 export interface UserGameHistory {
   id: number;
   score: number;
-  opponent: string;
+  opponentAvatarURL: string;
+  opponentName: string;
   opponentScore: number;
-  opponentAvatarUrl: string;
   isUserWin: boolean;
-  createAt: string;
+  createdAt: string;
 }
