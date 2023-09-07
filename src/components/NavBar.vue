@@ -31,7 +31,7 @@
                 () => {
                   loginStore.resetAll();
                   isUserDropdownMenu = false;
-                  router.push(`/`);
+                  router.go(0);
                 }
               "
             />
@@ -46,6 +46,7 @@
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
 import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.vue';
+import { SocketService } from '@/services/socket.service';
 
 const isUserDropdownMenu = ref<boolean>(false);
 import { useLoginStore } from '@/stores/login.store';

@@ -23,8 +23,9 @@ watch(
   () => loginStore.isLogin,
   () => {
     if (loginStore.isLogin) {
-      ChatSocketService.onChat();
-      GameService.invitation.socket.on();
+      // ChatSocketService.onChat();
+      // GameService.invitation.socket.on();
+      console.log("socket on");
     }
   },
 );
