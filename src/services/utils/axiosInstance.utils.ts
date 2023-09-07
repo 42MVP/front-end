@@ -1,18 +1,33 @@
-import axios, {
-  type AxiosInstance,
-  type AxiosError,
-  type AxiosResponse,
-  type AxiosRequestConfig,
-  type InternalAxiosRequestConfig,
-  isAxiosError,
-} from 'axios';
+import axios, { type AxiosInstance, type AxiosError, type AxiosResponse, type AxiosRequestConfig } from 'axios';
+import { triggerApiError } from './apiError.utils';
 
 const endpoint = 'http://localhost:3000';
 
-interface ErrorResponseData {
-  message: string;
-  error: string;
-  statusCode: number;
+const setAuthorizationHeader = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  const accessToken = localStorage.getItem('access-token');
+  if (accessToken) {
+    if (!config.headers) {
+      config.headers = {};
+    }
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
+};
+
+async function refreshToken(): Promise<void> {
+  await axios
+    .get(`${endpoint}/auth/reissue`, {
+      withCredentials: true,
+    })
+    .then(({ data }) => {
+      localStorage.setItem('access-token', data);
+    })
+    .catch(error => {
+      // TODO await axios.get(`${endpoint}/auth/logout`, {
+      //   withCredentials: true,
+      // });
+      triggerApiError(error);
+    });
 }
 
 const axiosInstance = (): AxiosInstance => {
@@ -23,40 +38,21 @@ const axiosInstance = (): AxiosInstance => {
       return 200 <= status && status < 400;
     },
   });
-  const onFulfilledReq = (config: AxiosRequestConfig): InternalAxiosRequestConfig => {
-    if (!config.url?.includes('auth')) {
-      const accessToken = localStorage.getItem('access-token');
-      if (accessToken) {
-        if (!config.headers) {
-          config.headers = {};
-        }
-        config.headers.Authorization = `Bearer ${accessToken}`;
-      }
-    }
-    return config as InternalAxiosRequestConfig;
-  };
-  const onRejectedReq = (error: AxiosError) => {
-    return Promise.reject(error);
-  };
+
   const onFulfilledRes = (response: AxiosResponse) => {
     return response;
   };
 
-  const retry = async <T>(errorConfig: AxiosRequestConfig): Promise<ApiResponse<T>> => {
-    const { headers, ...retryConfig } = errorConfig;
-    headers;
-    return await axiosRequest<T>(retryConfig);
+  const retry = async <ResType>(errorConfig: AxiosRequestConfig): Promise<ResType> => {
+    const retryConfig = setAuthorizationHeader(errorConfig);
+    return (await axios.request<ResType>(retryConfig)).data;
   };
 
   const onRejectedRes = async (error: AxiosError) => {
-    const data: ErrorResponseData = error.response?.data as ErrorResponseData;
+    const data = error.response?.data as AxiosError;
     if (data) {
-      // NOTE : if (data.message.includes('JWT Access Token 인증 에러')) {
       if (data.message.includes('JWT')) {
-        const response = await axios.get(`${endpoint}/auth/reissue`, {
-          withCredentials: true,
-        });
-        localStorage.setItem('access-token', response.data);
+        await refreshToken();
         if (error.config) {
           return await retry(error.config);
         }
@@ -66,7 +62,6 @@ const axiosInstance = (): AxiosInstance => {
     return Promise.reject(error);
   };
 
-  axiosInstance.interceptors.request.use(onFulfilledReq, onRejectedReq);
   axiosInstance.interceptors.response.use(onFulfilledRes, onRejectedRes);
   return axiosInstance;
 };
@@ -77,14 +72,13 @@ interface ApiResponse<T> {
 
 export async function axiosRequest<ResType>(config: AxiosRequestConfig): Promise<ApiResponse<ResType>> {
   try {
-    const response: AxiosResponse<ResType> = await axiosInstance().request<ResType>(config);
+    const isAuth = config.url?.includes('auth');
+    const instance = axiosInstance();
+    const reqConfig = isAuth ? config : setAuthorizationHeader(config);
+    const response: AxiosResponse<ResType> = await instance.request<ResType>(reqConfig);
     return { data: response.data };
   } catch (error) {
-    if (isAxiosError(error)) {
-      alert(error.message);
-      throw error.message;
-    }
-    throw error;
+    throw triggerApiError(error);
   }
 }
 
