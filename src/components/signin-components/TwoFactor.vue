@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import CountdownTimer from '@/components/CountdownTimer.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
@@ -44,7 +44,6 @@ import { endpoint } from '@/services/utils/config.utils';
 
 const code = ref<string>('');
 const route = useRoute();
-const router = useRouter();
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
 
@@ -81,9 +80,7 @@ const submitAuthCode = async (): Promise<void> => {
   const token = String(route.query.token);
   const authCode: AuthCode = { code: code.value };
   await LoginService.postTwoFactor(token, authCode);
-  const loginInfo = await LoginService.getUserInfo();
-  loginStore.setLogin(loginInfo);
-  router.push('/');
+  loginStore.login();
 };
 </script>
 

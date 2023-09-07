@@ -33,12 +33,12 @@ import InvitationConfirmModal from '@/components/invitation-components/modals/In
 import InvitationWaitingModal from '@/components/invitation-components/modals/InvitationWaitingModal.vue';
 import InvitationCancelModal from '@/components/invitation-components/modals/InvitationCancelModal.vue';
 // stores
+import { useLoginStore } from './stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
-import { useLoginStore } from '@/stores/login.store';
-import { ChatSocketService } from '@/services/chatSocket.service';
 import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
 // services
 import { GameService } from '@/services/game.service';
+import { ChatSocketService } from '@/services/chatSocket.service';
 import { ApiError } from '@/services/utils/apiError.utils';
 import router from './router';
 
@@ -46,17 +46,18 @@ const loginStore = useLoginStore();
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
 
+const routerNotify = async (uri: string, message: string) => {
+  await router.push(uri);
+  modalStore.notify(message);
+};
+
+
 onMounted(() => {
   if (loginStore.isLogin) {
     ChatSocketService.onChat();
     GameService.invitation.socket.on();
   }
 });
-
-const routerNotify = async (uri: string, message: string) => {
-  await router.push(uri);
-  modalStore.notify(message);
-};
 
 onErrorCaptured((error, vm, info): boolean | void => {
   if (error instanceof ApiError) {
