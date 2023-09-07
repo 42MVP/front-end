@@ -25,15 +25,14 @@ const chatStore = useChatStore();
 const loginStore = useLoginStore();
 
 onMounted(() => {
-  if(loginStore.isLogin){
+  if (loginStore.isLogin) {
     ChatSocketService.onChannel();
-    console.log('챗이다')
   }
 });
 
 onUnmounted(() => {
-  if(loginStore.isLogin){
-   ChatSocketService.offChannel();
+  if (loginStore.isLogin) {
+    ChatSocketService.offChannel();
   }
 });
 </script>

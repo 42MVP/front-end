@@ -125,14 +125,14 @@ watch(
 );
 
 const addChat = (newMessage: string): void => {
-  // if (chatStore.isSelected)
-  //   ChatSocketService.sendMessage(
-  //     chatStore.selectedID,
-  //     loginStore.id,
-  //     loginStore.name,
-  //     loginStore.avatarURL,
-  //     newMessage,
-  //   );
+  if (chatStore.isSelected)
+    ChatSocketService.sendMessage(
+      chatStore.selectedID,
+      loginStore.id,
+      loginStore.name,
+      loginStore.avatarURL,
+      newMessage,
+    );
 };
 
 const showUserProfile = (userId: number) => {
