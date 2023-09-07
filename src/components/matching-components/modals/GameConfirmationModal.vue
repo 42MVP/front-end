@@ -19,15 +19,21 @@ import CountdownTimer from '@/components/CountdownTimer.vue';
 import { GameService } from '@/services/game.service';
 
 import { useMatchingStore } from '@/stores/matching.store';
+import { useLoginStore } from '@/stores/login.store';
 
 const matchingStore = useMatchingStore();
+const loginStore = useLoginStore();
 
 const acceptGame = () => {
-  GameService.matching.socket.acceptGame(matchingStore.id);
+  if(loginStore.isLogin){
+    GameService.matching.socket.acceptGame(matchingStore.id);
+  }
 };
 
 const refuseGame = () => {
-  GameService.matching.socket.rejectGame(matchingStore.id);
+  if(loginStore.isLogin){
+    GameService.matching.socket.rejectGame(matchingStore.id);
+  }
 };
 </script>
 

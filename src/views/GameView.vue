@@ -26,6 +26,7 @@ import CountdownTimer from '@/components/CountdownTimer.vue';
 import GameResultModal from '@/components/gameview-components/GameResultModal.vue';
 
 import { useGameStore } from '@/stores/game.store';
+import { useLoginStore } from '@/stores/login.store';
 import { GameService } from '@/services/game.service';
 import type { GameUser } from '@/interfaces/game/GameUser.interface';
 import type { Paddle, Ball } from '@/interfaces/game/GamePlay.interface';
@@ -37,6 +38,7 @@ const timeout = () => {
 };
 
 const gameStore = useGameStore();
+const loginStore = useLoginStore();
 
 const leftPlayer = ref<GameUser | undefined>(undefined);
 const rightPlayer = ref<GameUser | undefined>(undefined);
@@ -99,22 +101,25 @@ const clearBoard = () => {
 };
 
 onMounted(() => {
-  gameStore.isStarted = false;
-  leftPlayer.value = gameStore.matchInfo?.leftUser;
-  rightPlayer.value = gameStore.matchInfo?.rightUser;
-  GameService.play.socket.on();
-  if (gameBoard.value) {
-    ctx.value = gameBoard.value.getContext('2d');
-  }
+  if(loginStore.isLogin){
+    gameStore.isStarted = false;
+    leftPlayer.value = gameStore.matchInfo?.leftUser;
+    rightPlayer.value = gameStore.matchInfo?.rightUser;
+    GameService.play.socket.on();
+    if (gameBoard.value) {
+      ctx.value = gameBoard.value.getContext('2d');
+    }
   GameService.play.socket.readyGame();
-  // requestAnimationFrame(renderTable);
+  }
 });
 
 onBeforeUnmount(() => {
-  if (gameStore.isStarted) {
-    GameService.play.socket.forceQuitGame();
+  if (loginStore.isLogin){
+    if (gameStore.isStarted) {
+      GameService.play.socket.forceQuitGame();
+    }
+    GameService.play.socket.off();
   }
-  GameService.play.socket.off();
 });
 </script>
 

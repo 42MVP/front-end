@@ -34,10 +34,12 @@ import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { UserService } from '@/services/user.service';
 import { useUsersStore } from '@/stores/users.store';
+import { useLoginStore } from '@/stores/login.store';
 import { SocketService } from '@/services/socket.service';
 
 const isMenu = ref(false);
 const userStore = useUsersStore();
+const loginStore = useLoginStore();
 
 const listType = ref<string>('Friends');
 const users = ref<OthersInfo[]>([]);
@@ -77,12 +79,14 @@ const updateUser = (id: number, state: string): void => {
 };
 
 onMounted(async () => {
-  const socket = SocketService.getInstance().getSocket();
-  socket.on('user-update', (d: { id: number; state: string }) => {
-    console.log('user-update:');
-    console.log(d);
-    updateUser(d.id, d.state);
-  });
+  if(loginStore.isLogin){
+    const socket = SocketService.getInstance().getSocket();
+    socket.on('user-update', (d: { id: number; state: string }) => {
+      console.log('user-update:');
+      console.log(d);
+      updateUser(d.id, d.state);
+    });
+  }
   try {
     const friends: OthersInfo[] = await UserService.getFriendsList();
     friends.forEach(e => {
@@ -99,8 +103,10 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  const socket = SocketService.getInstance().getSocket();
-  socket.off('user-update');
+  if (loginStore.isLogin){
+    const socket = SocketService.getInstance().getSocket();
+    socket.off('user-update');
+  }
 });
 
 watch(

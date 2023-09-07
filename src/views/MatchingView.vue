@@ -24,15 +24,21 @@ import GameTimeoutModal from '@/components/matching-components/modals/GameTimeou
 import { useMatchingStore } from '@/stores/matching.store';
 import { MatchingStep } from '@/stores/matching.store';
 import { GameService } from '@/services/game.service';
+import { useLoginStore } from '@/stores/login.store';
 
 const matchingStore = useMatchingStore();
+const loginStore = useLoginStore();
 
 onMounted(() => {
-  GameService.matching.socket.on();
+  if (loginStore.isLogin) {
+    GameService.matching.socket.on();
+  }
 });
 
 onUnmounted(() => {
-  if (matchingStore.isStep(MatchingStep.GameSetting)) GameService.matching.socket.off();
+  if (loginStore.isLogin) {
+    if (matchingStore.isStep(MatchingStep.GameSetting)) GameService.matching.socket.off();
+  }
 });
 </script>
 

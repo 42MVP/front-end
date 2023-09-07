@@ -121,27 +121,22 @@ watch(
 );
 
 const addChat = (newMessage: string): void => {
-  if (chatStore.isSelected)
-    ChatSocketService.sendMessage(
-      chatStore.selectedID,
-      loginStore.id,
-      loginStore.name,
-      loginStore.avatarURL,
-      newMessage,
-    );
+  if(loginStore.isLogin) {
+    if (chatStore.isSelected)
+      ChatSocketService.sendMessage(
+        chatStore.selectedID,
+        loginStore.id,
+        loginStore.name,
+        loginStore.avatarURL,
+        newMessage,
+      );
+  }
 };
 
 const showUserProfile = (userId: number) => {
   const selectedUser = chatStore.chatRoom?.users.find(u => u.id === userId);
   router.push(`/users/${selectedUser?.name}`);
 };
-
-// const filterChat = (): Chat[] => {
-//   const filteredChat = chatStore.chat.filter(chat => {
-//     const blocksChat = usersStore.blocks.find(block => block.name === chat.username);
-//   });
-//   return filteredChat;
-// }
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
