@@ -10,7 +10,6 @@ export class UserService {
     return user;
   }
 
-  // TODO: TYPE
   static async getUserById(id: number): Promise<UserInfo> {
     const userInfo: UserInfo = await axiosGet(`/user/${id}`);
     return userInfo;

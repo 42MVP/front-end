@@ -9,14 +9,14 @@
         placeholderText="유저명을 입력하세요"
         icon="👩‍🌾"
         :isMenu="searchedUsers.length > 0"
-        @activateSearch="serviceGetUser"
-        @response="searchUser"
+        @activateSearch="searchUser"
+        @response="updateSearchName"
       >
         <template #search-bar-item>
           <BasicList
             :items="searchedUsers"
             :iconButtons="isUserTab ? icons[Mode.INVITE] : icons[Mode.BAN]"
-            @clickIconButton="serviceChatUser"
+            @clickIconButton="modeUser"
           />
         </template>
       </SearchBar>
@@ -29,14 +29,14 @@
             owner?.id === loginStore.id ? [...icons[Role.ADMIN], ...icons[Mode.COMMON]] : icons[Mode.COMMON]
           "
           @onMousePosition="updateMousePosition"
-          @clickIconButton="serviceChatUser"
+          @clickIconButton="modeUser"
           style="position: relative"
         />
         <BasicList
           :items="chatStore.chatRoom?.users.filter(user => user.role === Role.USER)"
           :iconButtons="owner?.id === loginStore.id ? [...icons[Role.USER], ...icons[Mode.COMMON]] : icons[Mode.COMMON]"
           @onMousePosition="updateMousePosition"
-          @clickIconButton="serviceChatUser"
+          @clickIconButton="modeUser"
           style="position: relative"
         />
         <DropdownMenu
@@ -49,7 +49,7 @@
               v-for="(item, index) in getMuteTime()"
               v-bind:key="index"
               :text="item.text"
-              @click="chatStore.isSelected && serviceChatUserMute(muteId, chatStore.selectedID, item.time)"
+              @click="muteId && muteUser(muteId, item.time)"
             />
           </template>
         </DropdownMenu>
@@ -59,7 +59,7 @@
           :items="chatStore.chatRoom?.banUsers"
           :iconButtons="icons[Mode.NONE]"
           style="position: relative"
-          @clickIconButton="serviceChatUser"
+          @clickIconButton="modeUser"
         />
       </div>
     </template>
@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, reactive } from 'vue';
+import { ref, watch, reactive, computed } from 'vue';
 // component
 import Modal from '@/components/Modal.vue';
 import SearchBar from '@/components/SearchBar.vue';
@@ -87,7 +87,6 @@ import { UserService } from '@/services/user.service';
 import { ChatService } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
-import type { ChatUserState } from '@/interfaces/chat/ChatUser.interface';
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
@@ -101,16 +100,10 @@ const props = defineProps<{
   isShow: boolean;
 }>();
 
-const owner = ref<User | undefined>();
-
-onMounted(() => {
-  owner.value = getOwner();
-});
-
-const getOwner = (): User | undefined => {
+const owner = computed(() => {
   const chatInfo = chatStore.chatRoom;
   return chatInfo?.self.role === Role.OWNER ? chatInfo?.self : chatInfo?.users?.find(user => user.role == Role.OWNER);
-};
+});
 
 const icons: Record<string, IconButton[]> = {
   INVITE: [{ emoji: '✉️', event: Mode.INVITE }],
@@ -127,32 +120,52 @@ const icons: Record<string, IconButton[]> = {
 
 const isUserTab = ref(true);
 
-const usersNotInChannel = ref<User[]>([] as User[]);
-const searchedUsers = ref<User[]>([] as User[]);
+const joinableUsers = ref<User[]>([] as User[]);
 
-const serviceGetUser = async () => {
+const searchUser = async () => {
   try {
-    const ret = await UserService.mockUser();
-    const allUsers: User[] = ret;
+    const allUsers: User[] = await UserService.getAllUser();
     const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
-    usersNotInChannel.value = allUsers.filter(user => !channelUserIds.has(user.id));
+    const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
+    const filteredOutUserIds = new Set([...channelUserIds, ...banUserIds, loginStore.id]);
+    joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
   } catch (e) {
     console.warn(e);
   }
 };
 
-const searchUser = (name: string) => {
-  if (name === '') {
-    searchedUsers.value = [];
-  } else if (name === ' ') {
-    searchedUsers.value = usersNotInChannel.value;
-  } else searchedUsers.value = usersNotInChannel.value.filter(user => user.name.startsWith(name));
+const searchName = ref<string>('');
+
+const updateSearchName = (name: string) => {
+  searchName.value = name;
 };
+
+const searchedUsers = computed((): User[] => {
+  if (searchName.value === '') return [];
+  if (searchName.value === ' ') return joinableUsers.value;
+  return joinableUsers.value.filter(user => user.name.startsWith(searchName.value));
+});
+
+watch(
+  () => props.isShow && chatStore.chatRoom?.users,
+  () => {
+    const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
+    joinableUsers.value = joinableUsers.value.filter(user => !channelUserIds.has(user.id));
+  },
+);
+
+watch(
+  () => props.isShow && chatStore.chatRoom?.banUsers,
+  () => {
+    const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
+    joinableUsers.value = joinableUsers.value.filter(user => !banUserIds.has(user.id));
+  },
+);
 
 const muteId = ref<number | null>(null);
 const isMuteTimeVisible = ref<boolean>(false);
 
-const getMuteTime = (): { text: string; time: string }[] => {
+const getMuteTime = (): { text: string; time?: string }[] => {
   const user = chatStore.chatRoom?.users.find(user => user.id === muteId.value);
   if (!user?.abongTime) return [];
   return new Date(user?.abongTime) < new Date()
@@ -163,41 +176,39 @@ const getMuteTime = (): { text: string; time: string }[] => {
         { text: '1시간', time: '01:00:00' },
         { text: '1일', time: '24:00:00' },
       ]
-    : [{ text: '해제', time: '00:00:00' }];
+    : [{ text: '해제' }];
 };
 
-const serviceChatUser = async (iconEmitResponse: IconEmitResponse) => {
-  if (iconEmitResponse.eventName === Mode.ONMUTE) {
-    muteId.value !== iconEmitResponse.id
-      ? (isMuteTimeVisible.value = true)
-      : (isMuteTimeVisible.value = !isMuteTimeVisible.value);
-    muteId.value = iconEmitResponse.id;
-    return;
+const setMuteTimeVisible = (id: number, isOnMute: boolean) => {
+  if (isOnMute) {
+    muteId.value !== id ? (isMuteTimeVisible.value = true) : (isMuteTimeVisible.value = !isMuteTimeVisible.value);
+    muteId.value = id;
   } else isMuteTimeVisible.value = false;
-  const service = ChatService.getServiceChatUser(iconEmitResponse.eventName);
-  if (!service) return;
+};
+
+const muteUser = (id: number, time?: string) => {
+  isMuteTimeVisible.value = false;
+  const mode = time ? Mode.MUTE : Mode.NONE;
+  const muteTime = time ? new Date(new Date().getTime() + ms(time)) : undefined;
+  serviceChatUser(id, mode, muteTime);
+};
+
+const modeUser = (iconEmitResponse: IconEmitResponse) => {
+  const { id, eventName } = iconEmitResponse;
+  const isOnMute = eventName === Mode.ONMUTE;
+  setMuteTimeVisible(id, isOnMute);
+  if (!isOnMute) serviceChatUser(id, eventName);
+};
+
+const serviceChatUser = async (id: number, event: string, muteTime?: Date) => {
+  const service = ChatService.getServiceChatUser(event);
   try {
     if (!chatStore.isSelected) throw '채팅룸 선택 오류';
-    const chatUser = createChatUserByEvent(iconEmitResponse.id, chatStore.selectedID, iconEmitResponse.eventName);
+    const chatUser = createChatUserByEvent(id, chatStore.selectedID, event, muteTime);
     if (!chatUser) throw '채팅 유저 관리 모달 오류';
     const ret = await service(chatUser);
   } catch (e) {
-    console.warn('serviceChatUser', e);
-  }
-};
-
-const serviceChatUserMute = async (userId: number, roomId: number, time: string) => {
-  isMuteTimeVisible.value = false;
-  const muteTime = new Date(new Date().getTime() + ms(time));
-  const chatUserState: ChatUserState = { userId, roomId, status: Mode.NONE };
-  if (ms(time)) {
-    chatUserState.status = Mode.MUTE;
-    chatUserState.muteTime = muteTime;
-  }
-  try {
-    const ret = await ChatService.updateUserState(chatUserState);
-  } catch (e) {
-    console.warn('serviceChatUserMute', e);
+    console.warn('modeUser', e);
   }
 };
 
@@ -216,13 +227,6 @@ const closeModal = () => {
   isMuteTimeVisible.value = false;
   emits('close');
 };
-
-watch(
-  () => chatStore.selectedID,
-  () => {
-    owner.value = getOwner();
-  },
-);
 </script>
 
 <style scoped>
