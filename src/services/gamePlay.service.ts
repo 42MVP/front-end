@@ -68,6 +68,7 @@ class GamePlaySocketService {
       // TODO : data.gameId
       gameStore.isStarted = false;
       gameStore.isFinished = true;
+      
     });
   }
 
