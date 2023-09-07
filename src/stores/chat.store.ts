@@ -90,7 +90,7 @@ export const useChatStore = defineStore('chat', {
     getNotice(id: number): string {
       switch (this.removedRooms[id]) {
         case RemovedRoomMode.DELETED:
-          return '삭제된 채널입니다';
+          return '삭제된 방입니다';
         case RemovedRoomMode.KICKED:
           return '강퇴 당하셨습니다';
         default:
