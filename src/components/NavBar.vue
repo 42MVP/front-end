@@ -31,7 +31,7 @@
                 () => {
                   loginStore.resetAll();
                   isUserDropdownMenu = false;
-                  router.push(`/`);
+                  router.go(0);
                 }
               "
             />

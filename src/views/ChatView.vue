@@ -17,17 +17,23 @@ import ChatList from '@/components/chatview-components/ChatList.vue';
 import ChatRoom from '@/components/chatview-components/ChatRoom.vue';
 // store
 import { useChatStore } from '@/stores/chat.store';
+import { useLoginStore } from '@/stores/login.store';
 // service
 import { ChatSocketService } from '@/services/chatSocket.service';
 
 const chatStore = useChatStore();
+const loginStore = useLoginStore();
 
 onMounted(() => {
-  ChatSocketService.onChannel();
+  if (loginStore.isLogin) {
+    ChatSocketService.onChannel();
+  }
 });
 
 onUnmounted(() => {
-  ChatSocketService.offChannel();
+  if (loginStore.isLogin) {
+    ChatSocketService.offChannel();
+  }
 });
 </script>
 
