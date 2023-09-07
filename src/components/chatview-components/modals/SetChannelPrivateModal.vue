@@ -35,12 +35,8 @@ const changeRoomModePrivate = async () => {
     roomMode: 'PRIVATE',
   };
   console.log(roomMode);
-  try {
-    const ret = await ChatService.changeRoomMode(roomMode);
-    chatStore.setRoomMode(roomMode.roomId, roomMode.roomMode);
-  } catch (e) {
-    console.warn('changeRoomModePrivate', e);
-  }
+  await ChatService.changeRoomMode(roomMode);
+  chatStore.setRoomMode(roomMode.roomId, roomMode.roomMode);
 };
 </script>
 

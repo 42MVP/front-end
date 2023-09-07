@@ -46,12 +46,8 @@ const moveToProfile = () => {
 };
 
 onMounted(async () => {
-  try {
-    gameResult.value = await GameService.getGameResult(gameStore.gameHistoryId);
-    // gameResult.value = await GameService.getGameResult(gameStore.matchInfo!.gameRoomId!);
-  } catch (e) {
-    console.log(e);
-  }
+  gameResult.value = await GameService.getGameResult(gameStore.gameHistoryId);
+  // gameResult.value = await GameService.getGameResult(gameStore.matchInfo!.gameRoomId!);
 });
 </script>
 

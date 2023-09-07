@@ -58,24 +58,10 @@ const modalName = ref<string>('');
 const isMenu = ref<boolean>(false);
 
 onMounted(async () => {
-  try {
-    const ret: ChatInfo[] = await ChatService.getChatList();
-    ret.forEach(e => {
-      chatStore.addChatRoom(e.id, e);
-    });
-    //    const ret = await ChatService.createRoom({
-    //      roomName: 'wowowowow',
-    //      roomMode: RoomMode.DIRECT,
-    //      dmId: 123,
-    //    });
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
+  const ret: ChatInfo[] = await ChatService.getChatList();
+  ret.forEach(e => {
+    chatStore.addChatRoom(e.id, e);
+  });
 });
 
 const chooseChatRoom = (roomId: number) => {
@@ -93,18 +79,9 @@ const chooseChatRoom = (roomId: number) => {
 };
 
 const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
-  try {
-    await ChatService.exitRoom(iconEmitResponse.id);
-    chatStore.selectChatRoom(-1);
-    chatStore.deleteChatRoom(iconEmitResponse.id);
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
+  await ChatService.exitRoom(iconEmitResponse.id);
+  chatStore.selectChatRoom(-1);
+  chatStore.deleteChatRoom(iconEmitResponse.id);
 };
 
 watch(

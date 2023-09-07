@@ -65,7 +65,7 @@ onErrorCaptured((error, vm, info): boolean | void => {
       // TODO : logout, localStorage.clear();
       return false;
     } else {
-      // TODO : modalStore.on();
+      modalStore.notify(error.message);
     }
   } else {
     console.log('에러:', error.name, error.message);

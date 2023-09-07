@@ -43,19 +43,15 @@ const listType = ref<string>('Friends');
 const users = ref<OthersInfo[]>([]);
 
 const removeFromList = async (id: number) => {
-  try {
-    users.value = users.value.filter(u => u.id !== id);
-    if (listType.value === 'Friends') {
-      userStore.friends.filter(u => u.id !== id);
-      await UserService.unfollowUser(id);
-    } else if (listType.value === 'Blocks') {
-      userStore.blocks.filter(u => u.id !== id);
-      await UserService.unblockUser(id);
-    }
-    userStore.selectedUserId = -1;
-  } catch (e) {
-    console.log(e);
+  users.value = users.value.filter(u => u.id !== id);
+  if (listType.value === 'Friends') {
+    userStore.friends.filter(u => u.id !== id);
+    await UserService.unfollowUser(id);
+  } else if (listType.value === 'Blocks') {
+    userStore.blocks.filter(u => u.id !== id);
+    await UserService.unblockUser(id);
   }
+  userStore.selectedUserId = -1;
 };
 
 const setType = (type: string) => {
@@ -83,19 +79,15 @@ onMounted(async () => {
     console.log(d);
     updateUser(d.id, d.state);
   });
-  try {
-    const friends: OthersInfo[] = await UserService.getFriendsList();
-    friends.forEach(e => {
-      userStore.addFriends(e);
-    });
-    users.value = friends;
-    const blocks: OthersInfo[] = await UserService.getBlocksList();
-    blocks.forEach(e => {
-      userStore.addBlocks(e);
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  const friends: OthersInfo[] = await UserService.getFriendsList();
+  friends.forEach(e => {
+    userStore.addFriends(e);
+  });
+  users.value = friends;
+  const blocks: OthersInfo[] = await UserService.getBlocksList();
+  blocks.forEach(e => {
+    userStore.addBlocks(e);
+  });
 });
 
 onUnmounted(() => {

@@ -43,30 +43,24 @@ const passwordDup = ref<string>('');
 
 const chatStore = useChatStore();
 
+const validForm = (): never | void => {
+  if (password.value === '') throw '비밀번호 공백';
+  if (password.value !== passwordDup.value) throw '비밀번호 확인 필요';
+};
+
 const changeRoomModeProtected = async () => {
   if (!chatStore.isSelected) {
     console.log('채팅룸 선택 오류');
     return;
   }
-  if (password.value === '') {
-    console.log('비밀번호 공백');
-    return;
-  }
-  if (password.value !== passwordDup.value) {
-    console.log('비밀번호 확인 필요');
-  }
+  validForm();
   const roomMode: ChatRoomMode = {
     roomId: chatStore.selectedID,
     roomMode: 'PROTECTED',
     password: password.value,
   };
-  console.log(roomMode);
-  try {
-    await ChatService.changeRoomMode(roomMode);
-    chatStore.setRoomMode(roomMode.roomId, roomMode.roomMode);
-  } catch (e) {
-    console.warn(e);
-  }
+  await ChatService.changeRoomMode(roomMode);
+  chatStore.setRoomMode(roomMode.roomId, roomMode.roomMode);
 };
 </script>
 

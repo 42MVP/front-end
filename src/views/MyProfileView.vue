@@ -65,21 +65,10 @@ const createFormData = (): FormData => {
 };
 
 const submitFrom = async (): Promise<void> => {
-  try {
-    const formData = createFormData();
-    await UserService.setUserProfile(formData);
-    const loginInfo = await LoginService.getUserInfo();
-    loginStore.updateLoginInfo(loginInfo);
-  } catch (e) {
-    modalStore.on({
-      title: '오류',
-      text: String(e),
-      buttonText: '닫기',
-      buttonFunc: () => {
-        modalStore.off();
-      },
-    });
-  }
+  const formData = createFormData();
+  await UserService.setUserProfile(formData);
+  const loginInfo = await LoginService.getUserInfo();
+  loginStore.updateLoginInfo(loginInfo);
 };
 </script>
 

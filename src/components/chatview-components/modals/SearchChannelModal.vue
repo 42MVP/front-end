@@ -81,17 +81,8 @@ const chatList = ref<ChatRoom[]>([]);
 const searchChatList = ref<ChatRoom[]>([]);
 
 onMounted(async () => {
-  try {
-    const ret = await ChatService.searchChatList();
-    chatList.value = ret;
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
+  const ret = await ChatService.searchChatList();
+  chatList.value = ret;
 });
 
 const emits = defineEmits(['close', 'submit']);
@@ -115,18 +106,9 @@ const chooseRoom = (roomId: number) => {
 };
 
 const enterRoom = async (roomId: number, password?: string) => {
-  try {
-    const roomEnter: ChatRoomEnter = { roomId: roomId, password: password };
-    const enter = await ChatService.enterRoom(roomEnter);
-    chatStore.addChatRoom(roomId, enter);
-  } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
-  }
+  const roomEnter: ChatRoomEnter = { roomId: roomId, password: password };
+  const enter = await ChatService.enterRoom(roomEnter);
+  chatStore.addChatRoom(roomId, enter);
 };
 </script>
 
