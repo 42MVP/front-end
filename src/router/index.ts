@@ -26,6 +26,11 @@ const router = createRouter({
           name: 'oauth',
           component: () => import('@/components/signup-components/LoginOauth.vue'),
         },
+        {
+          path: '2fa-auth',
+          name: '2fa-auth',
+          component: () => import('@/components/signin-components/TwoFactor.vue'),
+        },
       ],
     },
     {
