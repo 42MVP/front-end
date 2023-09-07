@@ -3,7 +3,7 @@
     <template #body> 채팅방이 더이상 Private 상태가 아니며, 검색 결과에 포함됩니다 </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomModePublic()" />
+      <BasicButton text="확인" @click="changeRoomModePublic(); emits('close');" />
     </template>
   </Modal>
 </template>
