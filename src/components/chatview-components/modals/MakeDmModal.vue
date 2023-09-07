@@ -65,7 +65,11 @@ const searchUser = async () => {
   try {
     const allUsers: User[] = await UserService.getAllUser();
     const blockedUserIds = new Set(userStore.blocks.map(blockedUser => blockedUser.id));
-    const filteredOutUserIds = new Set([...blockedUserIds, loginStore.id]);
+    const dmUserIds = Object.values(chatStore.rooms)
+      .flat()
+      .filter(room => room.roomMode === 'DIRECT')
+      .map(room => room.users[0].id);
+    const filteredOutUserIds = new Set([...blockedUserIds, loginStore.id, ...dmUserIds]);
     joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
   } catch (e) {
     console.warn(e);
