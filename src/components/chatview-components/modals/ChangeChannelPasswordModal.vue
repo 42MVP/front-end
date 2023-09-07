@@ -2,8 +2,13 @@
   <Modal title="비밀번호 변경" :show="props.isShow">
     <template #body>
       <TextInputBox type="password" placeholderText="비밀번호 입력" :maxLength="15" @response="e => (password = e)" />
-      <TextInputBox type="password" placeholderText="비밀번호 입력 확인" :maxLength="15" :prevPassword="password"
-        @response="e => (passwordDup = e)" />
+      <TextInputBox
+        type="password"
+        placeholderText="비밀번호 입력 확인"
+        :maxLength="15"
+        :prevPassword="password"
+        @response="e => (passwordDup = e)"
+      />
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
