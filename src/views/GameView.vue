@@ -111,8 +111,10 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  if (gameStore.isStarted) {
+    GameService.play.socket.forceQuitGame();
+  }
   GameService.play.socket.off();
-  gameStore.isStarted = false;
 });
 </script>
 

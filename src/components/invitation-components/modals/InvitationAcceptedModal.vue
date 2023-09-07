@@ -44,7 +44,7 @@ const router = useRouter();
 
 onMounted(() => {
   setTimeout(() => {
-    invitationStore.setStep(InvitationStep.InGame);
+    invitationStore.setStep(InvitationStep.None);
     router.push('/game');
   }, 5000);
 });

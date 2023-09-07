@@ -6,7 +6,6 @@ export enum InvitationStep {
   Waiting = 1,
   Accept = 2,
   Cancel = 3,
-  InGame = 4,
 }
 
 interface InvitationState {
