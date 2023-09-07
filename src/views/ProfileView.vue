@@ -1,9 +1,5 @@
 <template>
-  <div v-if="!profileUser">
-    No data
-    <!-- TODO : 404 not found -->
-  </div>
-  <div v-else class="p-container">
+  <div v-if="profileUser" class="p-container">
     <div class="top">
       <AvatarItem class="avatar-item" :username="profileUser.name" :avartarUrl="profileUser.avatarURL">
         <ProfileButton :isLoginUser="username === getLoginName" :profileUser="profileUser" />
@@ -20,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import ProfileButton from '@/components/profileview-components/ProfileButton.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
@@ -42,8 +38,7 @@ const profileUser = ref<UserInfo>();
 
 const gameRecord = ref<UserGameRecord>();
 
-
-onMounted(async () => {
+onBeforeMount(async () => {
   profileUser.value = await UserService.getUserProfile(props.username);
   gameRecord.value = {
     rate: profileUser.value.rate,
