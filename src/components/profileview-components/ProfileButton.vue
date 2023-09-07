@@ -16,38 +16,76 @@
 import { ref } from 'vue';
 import BasicButton from '@/components/BasicButton.vue';
 import router from '@/router';
+//stores
+import { useUsersStore } from '@/stores/users.store';
+
+// services
+import { UserService } from '@/services/user.service';
+// interfaces
+import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
+import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
+
+const userStore = useUsersStore();
 
 const props = defineProps({
   isLoginUser: { type: Boolean, default: false },
-  isFollow: { type: Boolean, default: false },
-  isBlock: { type: Boolean, default: false },
+  profileUser: { type: Object as () => UserInfo, default: {} as UserInfo },
 });
 
-const isFollow = ref<Boolean>(props.isFollow);
-const isBlock = ref<Boolean>(props.isBlock);
+const isFollow = ref<Boolean>(props.profileUser.isFollow);
+const isBlock = ref<Boolean>(props.profileUser.isBlock);
 
 const editButton = () => {
   router.push('/users');
 };
-const followButton = () => {
-  isFollow.value = true;
-  console.log(isFollow.value);
-};
 
-const unFollowButton = () => {
-  isFollow.value = false;
-  console.log(isFollow.value);
-};
-
-const blockButton = () => {
-  isBlock.value = true;
-  isFollow.value = false;
-};
-
-const unBlockButton = () => {
-  if (isBlock.value) {
-    isBlock.value = false;
+const followButton = async () => {
+  try {
+    isFollow.value = true;
+    await UserService.followUser(getEssentialInfo());
+  } catch (e) {
+    console.log(e);
   }
+};
+
+const unFollowButton = async () => {
+  try {
+    isFollow.value = false;
+    await UserService.unfollowUser(props.profileUser.id);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const blockButton = async () => {
+  try {
+    isBlock.value = true;
+    isFollow.value = false;
+    await UserService.blockUser(getEssentialInfo());
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const unBlockButton = async () => {
+  try {
+    isBlock.value = false;
+    await UserService.unblockUser(props.profileUser.id);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getEssentialInfo = (): OthersInfo => {
+  const info = {
+    id: props.profileUser.id,
+    name: props.profileUser.name,
+    avatarURL: props.profileUser.avatarURL,
+    rate: props.profileUser.rate,
+    loseNum: props.profileUser.loseNum,
+    winNum: props.profileUser.winNum,
+  };
+  return info;
 };
 </script>
 

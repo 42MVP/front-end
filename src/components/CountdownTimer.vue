@@ -1,5 +1,5 @@
 <template>
-  <div class="formatted-timde-div">
+  <div :class="{ 'formatted-timde-div': true, 'small-font': props.fontSize === 'small' ? true : false }">
     {{ formattedTime }}
   </div>
 </template>
@@ -10,6 +10,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 const props = defineProps({
   targetTime: { type: Date, default: new Date() },
   timeoutMessage: { type: String },
+  fontSize: { type: String, default: 'extra-large' },
 });
 
 const emits = defineEmits(['timeout']);
@@ -49,5 +50,8 @@ onMounted(() => {
   justify-content: center;
   font: var(--extra-large);
   font-weight: bolder;
+}
+.small-font {
+  font: var(--small);
 }
 </style>

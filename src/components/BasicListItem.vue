@@ -1,12 +1,27 @@
 <template>
   <li class="list-element-container">
+    <div v-if="props.item.state" class="indicator-dot-container">
+      <div v-if="props.item.state === UserStateString.ONLINE" class="indicator-dot" />
+      <div
+        v-else-if="props.item.state === UserStateString.IN_GAME"
+        class="indicator-dot"
+        style="background-color: yellow"
+      />
+      <div
+        v-else-if="props.item.state === UserStateString.FIND_GAME"
+        class="indicator-dot"
+        style="background-color: blue"
+      />
+      <div v-else class="indicator-dot" style="background-color: gray" />
+      {{ props.item.state }}
+    </div>
     <div class="list-element-info-container">
       <div v-if="'avatarURL' in props.item" class="list-element-avatar profileText">
-        <img :src="props.item.avatarURL !== '' ? props.item.avatarURL : ''" />
+        <AvatarItem :avartarUrl="props.item.avatarURL" imgSize="40" />
       </div>
       <div>
         <span>{{ props.item?.name }}</span>
-        <p v-if="'level' in props.item">[{{ props.item?.level }}] {{ props.item?.achievement }}</p>
+        <p v-if="'level' in props.item">[{{ props.item?.level }}]</p>
       </div>
     </div>
     <div class="list-element-icon-container">
@@ -22,14 +37,15 @@
 </template>
 
 <script setup lang="ts">
+import AvatarItem from '@/components/common/AvatarItem.vue';
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
-import type { FriendInfo } from '@/interfaces/FriendsInfo.interface';
+import { UserStateString, type OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import type { User } from '@/interfaces/user/User.interface';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom } from '@/interfaces/chat/ChatRoom.interface';
 
-type ItemInfo = User | ChatInfo | FriendInfo | ChatRoom;
+type ItemInfo = User | ChatInfo | OthersInfo | ChatRoom;
 
 const props = defineProps({
   itemKey: { type: Number, default: -1 },
@@ -53,6 +69,7 @@ const onClick = (event: MouseEvent, id: number, iconEvent: string) => {
 
 <style scoped>
 .list-element-container {
+  position: relative;
   display: flex;
   flex: none;
   justify-content: space-between;
@@ -133,5 +150,24 @@ const onClick = (event: MouseEvent, id: number, iconEvent: string) => {
 .list-element-icon-container button:hover {
   opacity: 0.5;
   transition: 0.1s ease-out;
+}
+
+.indicator-dot-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 3px;
+  left: 3px;
+  font-size: 12px;
+}
+
+.indicator-dot {
+  opacity: 0.3;
+  width: 10px;
+  height: 10px;
+  border-radius: 30%;
+  background-color: green;
+  margin-right: 5px;
 }
 </style>

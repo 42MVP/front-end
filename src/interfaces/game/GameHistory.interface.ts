@@ -1,5 +1,4 @@
 export interface GameHistory {
-  id: number;
   winnerScore: number;
   loserScore: number;
   winner: string;
@@ -7,4 +6,6 @@ export interface GameHistory {
   winnerAvatarUrl: string;
   loserAvatarUrl: string;
   createAt: string;
+  winnerRate: number;
+  loserRate: number;
 }

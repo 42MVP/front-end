@@ -1,5 +1,4 @@
-import { APIWithToken } from '@/services/utils/apiDecorator.utils';
-import { axiosAPI } from '@/services/utils/axiosInstance.utils';
+import { axiosGet, axiosPatch, axiosPost, axiosDelete } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 import type { ChatUserInfo } from '@/interfaces/chat/ChatUser.interface';
@@ -18,69 +17,56 @@ export class ChatService {
     return chatUserServiceFunctions[eventName];
   }
 
-  @APIWithToken()
   static async createRoom(body: ChatRoomCreate): Promise<ChatRoom> {
-    const ret = await axiosAPI.auth().post('/chat/create-room', body);
-    const chatRoom: ChatInfo = ret.data;
+    const chatRoom: ChatRoom = await axiosPost('/chat/create-room', body);
     return chatRoom;
   }
 
-  @APIWithToken()
   static async enterRoom(body: ChatRoomEnter): Promise<ChatInfo> {
-    const ret = await axiosAPI.auth().post('/chat/enter-room', body);
-    const chatInfo: ChatInfo = ret.data;
+    const chatInfo: ChatInfo = await axiosPost('/chat/enter-room', body);
     return chatInfo;
   }
 
-  @APIWithToken()
   static async exitRoom(roomId: number): Promise<void> {
     console.log('exit:', `/chat/exit-room/${roomId}`);
-    await axiosAPI.auth().delete(`/chat/exit-room/${roomId}`);
+    await axiosDelete(`/chat/exit-room/${roomId}`);
   }
 
-  @APIWithToken()
   static async changeRoomMode(body: ChatRoomMode): Promise<void> {
-    await axiosAPI.auth().patch('/chat/change-room-info', body);
+    await axiosPatch('/chat/change-room-info', body);
   }
 
-  @APIWithToken()
+  // static async getChatList(): Promise<ChatInfo[]> {
+  //   const ret = await axiosGet(`/chat`);
+  //   const chatInfo: ChatInfo[] = ret.data;
+
+  //   return chatInfo;
+  // }
+
   static async getChatList(): Promise<ChatInfo[]> {
-    const ret = await axiosAPI.auth().get(`/chat`);
-    const chatInfo: ChatInfo[] = ret.data;
-
-    return chatInfo;
+    const ChatList: ChatInfo[] = await axiosGet(`/chat`);
+    return ChatList;
   }
 
-  @APIWithToken()
   static async searchChatList(): Promise<ChatRoom[]> {
-    const ret = await axiosAPI.auth().get('/chat/search');
-    const chatRoom: ChatRoom[] = ret.data;
-
+    const chatRoom: ChatRoom[] = await axiosGet('/chat/search');
     return chatRoom;
   }
 
-  @APIWithToken()
   static async inviteUser(body: ChatUserInfo): Promise<void> {
-    const ret = await axiosAPI.auth().post('/chat/invite', body);
-    return ret.data;
+    await axiosPost('/chat/invite', body);
   }
 
-  @APIWithToken()
   static async kickUser(body: ChatUserInfo): Promise<void> {
-    const ret = await axiosAPI.auth().delete('/chat/kick', { data: body });
-    return ret.data;
+    await axiosDelete('/chat/kick', undefined, body);
   }
 
-  @APIWithToken()
   static async updateUserRole(body: ChatUserInfo): Promise<void> {
-    const ret = await axiosAPI.auth().patch('/chat/change-role', body);
-    return ret.data;
+    await axiosPatch('/chat/change-role', body);
   }
 
-  @APIWithToken()
   static async updateUserState(body: ChatUserInfo): Promise<void> {
-    const ret = await axiosAPI.auth().patch('/chat/change-status', body);
-    return ret.data;
+    await axiosPatch('/chat/change-status', body);
   }
 }
 

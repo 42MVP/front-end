@@ -26,6 +26,7 @@ import type { GameUser } from '@/interfaces/game/GameUser.interface';
 import { useGameStore } from '@/stores/game.store';
 import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const gameStore = useGameStore();
 const invitationStore = useInvitationStore();
@@ -39,10 +40,12 @@ const UnknownPlayer: GameUser = {
 const leftUser = gameStore.matchInfo?.leftUser ? gameStore.matchInfo.leftUser : UnknownPlayer;
 const rightUser = gameStore.matchInfo?.rightUser ? gameStore.matchInfo.rightUser : UnknownPlayer;
 
+const router = useRouter();
+
 onMounted(() => {
   setTimeout(() => {
-    invitationStore.setStep(InvitationStep.InGame);
-    console.log('move to game!');
+    invitationStore.setStep(InvitationStep.None);
+    router.push('/game');
   }, 5000);
 });
 </script>

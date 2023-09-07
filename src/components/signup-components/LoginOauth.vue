@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
 import { LoginService } from '@/services/login.service';
@@ -14,15 +14,14 @@ import { LoginService } from '@/services/login.service';
 const router = useRouter();
 const loginStore = useLoginStore();
 const modalStore = useModalStore();
+const route = useRoute();
 
 onMounted(async () => {
   try {
-    const ret = await LoginService.getUserInfo();
-    const data = ret.data;
-    console.log(data);
-    loginStore.name = data.name;
-    loginStore.id = data.id;
-    loginStore.isLogin = true;
+    const token = route.query.token;
+    if (typeof token === 'string') localStorage.setItem('access-token', token);
+    const data = await LoginService.getUserInfo();
+    loginStore.setLogin(data);
     router.push('/');
   } catch (e) {
     modalStore.on({

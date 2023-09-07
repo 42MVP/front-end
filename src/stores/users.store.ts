@@ -7,7 +7,7 @@ interface UsersState {
   selectedUserId: number;
 }
 
-export const useUsersSotre = defineStore('users', {
+export const useUsersStore = defineStore('users', {
   state: (): UsersState => ({
     friends: [],
     blocks: [],
@@ -16,16 +16,18 @@ export const useUsersSotre = defineStore('users', {
   getters: {},
   actions: {
     addFriends(user: OthersInfo) {
-      this.friends.push(user);
+      if(!this.friends.some(u => u.id === user.id))
+        this.friends.push(user);
     },
     addBlocks(user: OthersInfo) {
-      this.blocks.push(user);
+      if (!this.blocks.some(u => u.id === user.id)) 
+        this.blocks.push(user);
     },
     deleteFriends(id: number) {
-      this.friends.filter(user => user.id !== id);
+      this.friends = this.friends.filter(user => user.id !== id);
     },
     deleteBlocks(id: number) {
-      this.blocks.filter(user => user.id !== id);
+      this.blocks = this.blocks.filter(user => user.id !== id);
     },
 
     //unfollow, unblock이 있으니까 delete action 도 추가해두기

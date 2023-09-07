@@ -8,7 +8,6 @@ export enum MatchingStep {
   Timeout = 4,
   Accept = 5,
   Reject = 6,
-  InGame = 7,
 }
 
 interface MatchingState {

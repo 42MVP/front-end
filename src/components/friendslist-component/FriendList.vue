@@ -9,21 +9,23 @@
     <template #title-icon-menu>
       <DropdownMenu v-if="isMenu">
         <template #dropdown-item>
-          <DropdownMenuItem text="Blocks" @click="listType = 'Blocks'" />
-          <DropdownMenuItem text="Friends" @click="listType = 'Friends'" />
+          <DropdownMenuItem text="Blocks" @click="setType('Blocks')" />
+          <DropdownMenuItem text="Friends" @click="setType('Friends')" />
         </template>
       </DropdownMenu>
     </template>
     <template #user-element>
-      <BasicList :items="users" @chooseItem="chooseUser" @clickItemSlot="removeFromList" #default="{ clickButton }">
-        <BasicButton :text="getButtonTitle()" @click="clickButton" />
-      </BasicList>
+      <div>
+        <BasicList :items="users" @chooseItem="chooseUser" @clickItemSlot="removeFromList" #default="{ clickButton }">
+          <BasicButton :text="getButtonTitle()" @click="clickButton" />
+        </BasicList>
+      </div>
     </template>
   </BasicListFrame>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { type OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import BasicListFrame from '@/components/BasicListFrame.vue';
 import DropdownMenu from '@/components/dropdown-component/DropdownMenu.vue';
@@ -31,10 +33,11 @@ import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.v
 import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { UserService } from '@/services/user.service';
-import { useUsersSotre } from '@/stores/users.store';
+import { useUsersStore } from '@/stores/users.store';
+import { SocketService } from '@/services/socket.service';
 
 const isMenu = ref(false);
-const userStore = useUsersSotre();
+const userStore = useUsersStore();
 
 const listType = ref<string>('Friends');
 const users = ref<OthersInfo[]>([]);
@@ -55,17 +58,36 @@ const removeFromList = async (id: number) => {
   }
 };
 
+const setType = (type: string) => {
+  listType.value = type;
+};
+
 const getButtonTitle = () => {
   return listType.value === 'Friends' ? 'unfollow' : 'unblock';
 };
 
+const updateUser = (id: number, state: string): void => {
+  for (const b of userStore.blocks) if (b.id === id) return;
+  for (const user of users.value) {
+    if (user.id === id) {
+      user.state = state;
+      return;
+    }
+  }
+};
+
 onMounted(async () => {
+  const socket = SocketService.getInstance().getSocket();
+  socket.on('user-update', (d: { id: number; state: string }) => {
+    console.log('user-update:');
+    console.log(d);
+    updateUser(d.id, d.state);
+  });
   try {
     const friends: OthersInfo[] = await UserService.getFriendsList();
     friends.forEach(e => {
       userStore.addFriends(e);
     });
-    console.log(friends);
     users.value = friends;
     const blocks: OthersInfo[] = await UserService.getBlocksList();
     blocks.forEach(e => {
@@ -76,13 +98,20 @@ onMounted(async () => {
   }
 });
 
+onUnmounted(() => {
+  const socket = SocketService.getInstance().getSocket();
+  socket.off('user-update');
+});
+
 watch(
   () => listType.value,
   () => {
     if (listType.value === 'Friends') {
       users.value = userStore.friends;
+      userStore.selectedUserId = -1;
     } else if (listType.value === 'Blocks') {
       users.value = userStore.blocks;
+      userStore.selectedUserId = -1;
     }
   },
 );
