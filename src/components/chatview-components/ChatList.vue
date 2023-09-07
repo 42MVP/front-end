@@ -93,17 +93,21 @@ const chooseChatRoom = (roomId: number) => {
 };
 
 const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
+  const id = iconEmitResponse.id;
+  const roomMode = chatStore.rooms[id].roomMode;
   try {
-    await ChatService.exitRoom(iconEmitResponse.id);
+    await ChatService.exitRoom(id);
     chatStore.selectChatRoom(-1);
-    chatStore.deleteChatRoom(iconEmitResponse.id);
+    chatStore.deleteChatRoom(id);
   } catch (e) {
-    modalStore.on({
-      title: '알림',
-      text: e,
-      buttonText: '닫기',
-      buttonFunc: () => {},
-    });
+    if (roomMode !== 'DIRECT') {
+      modalStore.on({
+        title: '알림',
+        text: e,
+        buttonText: '닫기',
+        buttonFunc: () => {},
+      });
+    }
   }
 };
 
