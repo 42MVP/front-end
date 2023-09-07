@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { onMounted } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
@@ -19,15 +19,13 @@ const loginStore = useLoginStore();
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
 
-watch(
-  () => loginStore.isLogin,
-  () => {
-    if (loginStore.isLogin) {
-      ChatSocketService.onChat();
-      GameService.invitation.socket.on();
-    }
-  },
-);
+onMounted(() => {
+  if (loginStore.isLogin) {
+    ChatSocketService.onChat();
+    GameService.invitation.socket.on();
+  }
+});
+
 </script>
 
 <template>
@@ -39,15 +37,11 @@ watch(
     <Modal :title="modalStore.title" :show="modalStore.isActive">
       <template #body>{{ modalStore.text }} </template>
       <template #footer>
-        <BasicButton
-          :text="modalStore.buttonText"
-          @click="
-            () => {
-              modalStore.buttonFunc();
-              modalStore.off();
-            }
-          "
-        />
+        <BasicButton :text="modalStore.buttonText" @click="() => {
+          modalStore.buttonFunc();
+          modalStore.off();
+        }
+          " />
       </template>
     </Modal>
 

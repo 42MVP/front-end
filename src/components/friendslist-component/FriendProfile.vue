@@ -1,6 +1,8 @@
 <template>
   <div class="wrap">
-    <div v-if="!selectedUser">🫥</div>
+    <div v-if="!selectedUser">      
+      <div class="user-unchoose">☺️</div>
+    </div>
     <div v-else class="p-container">
       <div class="top">
         <AvatarItem class="p-info" :username="selectedUser?.name" :avartarUrl="selectedUser.avatarURL" />
@@ -97,5 +99,19 @@ onMounted(() => {
   /* border-radius: 10px; */
   padding: 80px 34px 80px 34px;
   justify-content: space-between;
+}
+
+
+.user-unchoose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 200px;
+
+  font-size: 300px;
+  opacity: 0.1;
+  width: 100%;
+  height: 100%;
+  color: var(--brown, #463f3a);
 }
 </style>
