@@ -61,7 +61,7 @@ const { gameWidth, gameHeight, boardBackground, paddleColor, ballColor, ballRadi
 const renderTable = () => {
   if (gameStore.tableInfo) {
     const tableInfo = gameStore.tableInfo;
-    clearBoard();
+    clearBoard(tableInfo.background);
     drawBall(tableInfo.ball);
     drawPaddles(tableInfo.leftPaddle, tableInfo.rightPaddle);
     requestAnimationFrame(renderTable);
@@ -92,9 +92,9 @@ const drawPaddles = (leftPaddle: Paddle, rightPaddle: Paddle) => {
   ctx.value.strokeRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
 };
 
-const clearBoard = () => {
+const clearBoard = (background: string) => {
   if (!ctx.value) return;
-  ctx.value.fillStyle = boardBackground || '#E0AFA0FF';
+  ctx.value.fillStyle = background || '#E0AFA0FF';
   ctx.value.fillRect(0, 0, gameWidth, gameHeight);
 };
 
@@ -129,6 +129,7 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   margin: 0px 50px;
   min-width: 500px;
+
   .user-info-div {
     font: var(--medium);
   }
@@ -139,6 +140,7 @@ onBeforeUnmount(() => {
     min-width: max-content;
   }
 }
+
 .scoreText {
   font-family: 'consolas', monospace;
   font-size: 100px;
@@ -160,6 +162,7 @@ onBeforeUnmount(() => {
 .gameBoard {
   border: 3px solid;
   margin-top: 15px;
+
   .net-div {
     border: 1px dashed var(--base-gray);
     width: 1px;
