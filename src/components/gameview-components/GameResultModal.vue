@@ -42,6 +42,7 @@ const gameResult = ref<GameHistory>();
 const router = useRouter();
 
 const moveToProfile = () => {
+  gameStore.isFinished = false;
   router.push(`/users/${loginStore?.name}`);
 };
 

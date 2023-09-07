@@ -5,9 +5,9 @@ import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 import { usersStore } from '@/main';
 
 export class UserService {
-  static async getAllUser(): Promise<User> {
-    const user: User = await axiosGet('/user');
-    return user;
+  static async getAllUser(): Promise<User[]> {
+    const users: User[] = await axiosGet('/user');
+    return users;
   }
 
   static async getUserById(id: number): Promise<UserInfo> {
@@ -30,7 +30,6 @@ export class UserService {
     return friendsList;
   }
 
-
   static async followUser(user: OthersInfo): Promise<void> {
     await axiosPost(`/friend/${user.id}`);
     usersStore.addFriends(user);
@@ -45,7 +44,6 @@ export class UserService {
     const BlocksList: OthersInfo[] = await axiosGet(`/block`);
     return BlocksList;
   }
-
 
   static async blockUser(user: OthersInfo): Promise<void> {
     await axiosPost(`/block/${user.id}`);

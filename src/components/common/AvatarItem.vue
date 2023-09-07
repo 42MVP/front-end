@@ -10,11 +10,11 @@
 const props = defineProps({
   username: {
     type: String,
-    default: undefined,
+    default: "",
   },
   avartarUrl: {
     type: String,
-    default: undefined,
+    default:"",
   },
   imgSize: {
     type: String,

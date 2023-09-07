@@ -3,7 +3,7 @@
     <template #body> 채팅방이 public으로 설정됩니다. </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomModePublic()" />
+      <BasicButton text="확인" @click="changeRoomModePublic(); emits('close');" />
     </template>
   </Modal>
 </template>

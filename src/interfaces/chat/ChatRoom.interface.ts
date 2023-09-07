@@ -13,7 +13,7 @@ export type ChatRoomCreate = ChatRoomCreateDM | ChatRoomCreateChannel;
 
 export interface ChatRoomCreateDM {
   userId: number;
-  roomMode: { type: string; default: 'DIRECT' };
+  roomMode: string;
 }
 
 export interface ChatRoomCreateChannel {

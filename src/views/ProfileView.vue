@@ -42,8 +42,10 @@ const profileUser = ref<UserInfo>();
 
 const gameRecord = ref<UserGameRecord>();
 
+
 onMounted(async () => {
   profileUser.value = await UserService.getUserProfile(props.username);
+  console.log(profileUser.value)
   gameRecord.value = {
     rate: profileUser.value.rate,
     totalGame: profileUser.value.winNum + profileUser.value.loseNum,

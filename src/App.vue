@@ -7,15 +7,11 @@
     <Modal :title="modalStore.title" :show="modalStore.isActive">
       <template #body>{{ modalStore.text }} </template>
       <template #footer>
-        <BasicButton
-          :text="modalStore.buttonText"
-          @click="
-            () => {
-              modalStore.buttonFunc();
-              modalStore.off();
-            }
-          "
-        />
+        <BasicButton :text="modalStore.buttonText" @click="() => {
+          modalStore.buttonFunc();
+          modalStore.off();
+        }
+          " />
       </template>
     </Modal>
 
@@ -27,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, onErrorCaptured } from 'vue';
+import { onMounted, onErrorCaptured } from 'vue';
 // components
 import NavBar from '@/components/NavBar.vue';
 import Modal from '@/components/Modal.vue';
@@ -49,15 +45,12 @@ const loginStore = useLoginStore();
 const modalStore = useModalStore();
 const invitationStore = useInvitationStore();
 
-watch(
-  () => loginStore.isLogin,
-  () => {
-    if (loginStore.isLogin) {
-      ChatSocketService.onChat();
-      GameService.invitation.socket.on();
-    }
-  },
-);
+onMounted(() => {
+  if (loginStore.isLogin) {
+    ChatSocketService.onChat();
+    GameService.invitation.socket.on();
+  }
+});
 
 onErrorCaptured((error, vm, info): boolean | void => {
   if (error instanceof ApiError) {
