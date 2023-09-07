@@ -1,61 +1,35 @@
 <template>
-  <li class="item" v-for="history in props.histories" v-bind:key="history.id">
+  <li class="item" v-for="(history, idx) in props.histories" :key="idx">
     <AvatarItem
       class="p-user"
-      :username="history.winner"
-      :avartarUrl="history.winnerAvatarUrl"
+      :username="username"
+      :avartarUrl="img"
       imgSize="100"
-      :style="!(history.winner === username) && 'opacity: 0.3'"
+      :style="(history.score < history.opponentScore) && 'opacity: 0.3'"
     />
-    <DBox :top="history.createAt" :middle="history.winnerScore + ' vs ' + history.loserScore" />
+    <DBox :top="''" :middle="history.score + ' vs ' + history.opponentScore" />
     <AvatarItem
       class="opponent"
-      :username="history.loser"
-      :avartarUrl="history.loserAvatarUrl"
+      :username="history.opponentName"
+      :avartarUrl="history.opponentAvatarURL"
       imgSize="100"
-      :style="(history.winner === username) && 'opacity: 0.3'"
+      :style="!(history.score < history.opponentScore) && 'opacity: 0.3'"
     />
   </li>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import DBox from '@/components/common/BasicBox.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
-import type { GameHistory } from '@/interfaces/GameHistory.interface';
 import type { UserGameHistory } from '@/interfaces/user/UserGameHistory.interface';
 
 const props = defineProps({
   username: { type: String, default: '' },
   img: { type: String, default: '' },
-  histories: { type: Array<GameHistory>, default: [] as GameHistory[] },
+  histories: { type: Array<UserGameHistory>, default: [] as UserGameHistory[] },
 });
 
-const processedHistories = ref<UserGameHistory[]>([]);
-
-const processGameHistory = (gameHistories: GameHistory[], username: string): UserGameHistory[] => {
-  return gameHistories.map(history => {
-    const { id, winner, loser, winnerScore, loserScore, createAt, loserAvatarUrl, winnerAvatarUrl } = history;
-    console.log("history: ", props.histories)
-    const isUserWin = winner === username;
-    const score = isUserWin ? winnerScore : loserScore;
-    const opponent = isUserWin ? loser : winner;
-    const opponentScore = isUserWin ? loserScore : winnerScore;
-    const opponentAvatarUrl = isUserWin ? loserAvatarUrl : winnerAvatarUrl;
-
-    return {
-      id,
-      score,
-      opponent,
-      opponentScore,
-      opponentAvatarUrl,
-      isUserWin,
-      createAt,
-    };
-  });
-};
-
-processedHistories.value = processGameHistory(props.histories, props.username);
 </script>
 
 <style scoped>
