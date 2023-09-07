@@ -1,19 +1,19 @@
 <template>
-  <li class="item" v-for="history in processedHistories" v-bind:key="history.id">
+  <li class="item" v-for="history in props.histories" v-bind:key="history.id">
     <AvatarItem
       class="p-user"
-      :username="props.username"
-      :avartarUrl="props.img"
+      :username="history.winner"
+      :avartarUrl="history.winnerAvatarUrl"
       imgSize="100"
-      :style="!history.isUserWin && 'opacity: 0.3'"
+      :style="!(history.winner === username) && 'opacity: 0.3'"
     />
-    <DBox :top="history.createAt" :middle="history.score + ' vs ' + history.opponentScore" />
+    <DBox :top="history.createAt" :middle="history.winnerScore + ' vs ' + history.loserScore" />
     <AvatarItem
       class="opponent"
-      :username="history.opponent"
-      :avartarUrl="history.opponentAvatarUrl"
+      :username="history.loser"
+      :avartarUrl="history.loserAvatarUrl"
       imgSize="100"
-      :style="history.isUserWin && 'opacity: 0.3'"
+      :style="(history.winner === username) && 'opacity: 0.3'"
     />
   </li>
 </template>
@@ -32,10 +32,11 @@ const props = defineProps({
 });
 
 const processedHistories = ref<UserGameHistory[]>([]);
+
 const processGameHistory = (gameHistories: GameHistory[], username: string): UserGameHistory[] => {
   return gameHistories.map(history => {
     const { id, winner, loser, winnerScore, loserScore, createAt, loserAvatarUrl, winnerAvatarUrl } = history;
-
+    console.log("history: ", props.histories)
     const isUserWin = winner === username;
     const score = isUserWin ? winnerScore : loserScore;
     const opponent = isUserWin ? loser : winner;
