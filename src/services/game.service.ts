@@ -1,8 +1,7 @@
 import { GameInvitationService } from '@/services/gameInvitation.service';
 import { GameMatchingService } from '@/services/gameMatching.service';
 import { GamePlayService } from '@/services/gamePlay.service';
-import { APIWithToken } from './utils/apiDecorator.utils';
-import { axiosAPI } from './utils/axiosInstance.utils';
+import { axiosGet } from '@/services/utils/axiosInstance.utils';
 import type { GameHistory } from '@/interfaces/game/GameHistory.interface';
 
 export class GameService {
@@ -26,11 +25,8 @@ export class GameService {
     return this.gamePlayService;
   }
 
-  @APIWithToken()
   static async getGameResult(gameId: number): Promise<GameHistory> {
-    const ret = await axiosAPI.auth().get(`/game/game-history/${gameId}`);
-    const gameResult: GameHistory = ret.data;
-
+    const gameResult: GameHistory = await axiosGet(`/game/game-history/${gameId}`);
     return gameResult;
   }
 }
