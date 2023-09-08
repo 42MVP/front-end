@@ -19,10 +19,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// NOTE : unused-vars
-const emits = defineEmits(['response']);
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .user-main-container {
