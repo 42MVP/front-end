@@ -26,7 +26,7 @@ import BasicListItem from '@/components/BasicListItem.vue';
 type ItemsInfo = User[] | ChatInfo[] | OthersInfo[] | ChatRoom[];
 
 const props = defineProps({
-  items: { type: Object as () => ItemsInfo, defalut: [] as OthersInfo[] },
+  items: { type: Object as () => ItemsInfo, defalut: [] as User[] },
   clickEvent: { type: Boolean, default: true },
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });
