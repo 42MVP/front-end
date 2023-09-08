@@ -28,7 +28,7 @@
   <div class="chat-list-container">
     <div v-if="chatStore.chatRoom?.roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
-        <div class="chat-box-list-name-left-word">{{ chatStore.chatRoom?.name }}</div>
+        <div class="chat-box-list-name-left-word" style="font-weight: bold;">{{ chatStore.chatRoom?.name }}</div>
         <div class="chat-box-list-name-left-icon-container">
           <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
