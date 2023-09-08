@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { axiosGet } from '@/services/utils/axiosInstance.utils';
-import { endpoint } from '@/services/utils/config.utils';
+import { axiosGet, axiosPost } from '@/services/utils/axiosInstance.utils';
 import type { LoginInfo } from '@/interfaces/login/login.interface';
 
 export interface AuthCode {
@@ -13,21 +11,13 @@ export class LoginService {
     return loginInfo;
   }
 
-  static async postTwoFactor(token: String, authCode: AuthCode): Promise<void> {
-    const ret = await axios.post(endpoint + '/login/2fa-auth', authCode, {
-      headers: { Authorization: `Bearer ${token}` },
-      withCredentials: true,
-    });
-    if (typeof ret.data === 'string') localStorage.setItem('access-token', ret.data);
+  static async postTwoFactor(authCode: AuthCode): Promise<void> {
+    const data = await axiosPost('/login/2fa-auth', authCode);
+    if (typeof data === 'string') localStorage.setItem('token', data);
   }
 
   static async logout(): Promise<void> {
-    await axios
-      .post(endpoint + '/logout', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('access-token')}` },
-        withCredentials: true,
-      })
-      .catch(() => {console.log('hohoh')});
+    await axiosPost('/logout');
     localStorage.clear();
   }
 }

@@ -14,7 +14,7 @@ const route = useRoute();
 
 onMounted(async () => {
   const token = route.query.token;
-  if (typeof token === 'string') localStorage.setItem('access-token', token);
+  if (typeof token === 'string') localStorage.setItem('token', token);
   loginStore.login();
 });
 </script>

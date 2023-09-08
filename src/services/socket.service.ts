@@ -6,7 +6,7 @@ export class SocketService {
   private socket: any;
 
   private constructor() {
-    const accessToken = localStorage.getItem('access-token');
+    const accessToken = localStorage.getItem('token');
     const URL = endpoint;
     this.socket = io(URL, {
       auth: {
