@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import GBox from '@/components/profileview-components/GameInfoBox.vue';
 import ProfileButton from '@/components/profileview-components/ProfileButton.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
@@ -28,23 +28,40 @@ import { UserService } from '@/services/user.service';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { UserGameRecord } from '@/interfaces/user/UserGameRecord.interface';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   username: { type: String, default: '' },
 });
 
 const profileUser = ref<UserInfo>();
-
 const gameRecord = ref<UserGameRecord>();
+const route = useRoute();
+
+const updateUserProfile = async (userInfo: UserInfo) => {
+  profileUser.value = userInfo;
+  gameRecord.value = {
+    rate: userInfo.rate,
+    totalGame: userInfo.winNum + userInfo.loseNum,
+    winNum: userInfo.winNum,
+    loseNum: userInfo.loseNum,
+  };
+};
+
+watch(
+  () => route,
+  async () => {
+    const userInfo: UserInfo = await UserService.getUserProfile(props.username);
+    updateUserProfile(userInfo);
+  },
+  {
+    deep: true,
+  },
+);
 
 onBeforeMount(async () => {
-  profileUser.value = await UserService.getUserProfile(props.username);
-  gameRecord.value = {
-    rate: profileUser.value.rate,
-    totalGame: profileUser.value.winNum + profileUser.value.loseNum,
-    winNum: profileUser.value.winNum,
-    loseNum: profileUser.value.loseNum,
-  };
+  const userInfo: UserInfo = await UserService.getUserProfile(props.username);
+  updateUserProfile(userInfo);
 });
 
 const getLoginName = computed(() => {
