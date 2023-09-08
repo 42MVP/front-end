@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 import TButton from '@/components/common/ToggleButton.vue';
 import UploadImage from '@/components/common/UploadImage.vue';
@@ -49,6 +50,8 @@ import { LoginService } from '@/services/login.service';
 
 const loginStore = useLoginStore();
 const modalStore = useModalStore();
+
+const router = useRouter();
 
 const isCheckAuth = ref<boolean>(loginStore.isAuth);
 const uploadedFile = ref<File | undefined>(undefined);
@@ -73,6 +76,8 @@ const submitFrom = async (): Promise<void> => {
   await UserService.setUserProfile(formData);
   const loginInfo = await LoginService.getUserInfo();
   loginStore.updateLoginInfo(loginInfo);
+  router.push(`/users/${loginStore?.name}`);
+
 };
 </script>
 
