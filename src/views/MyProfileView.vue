@@ -18,7 +18,7 @@
       </div>
       <div class="auth">
         <h3>2차인증</h3>
-        <TButton :value="isCheckAuth" @input="updateAuth" />
+        <TButton v-model="isCheckAuth"  />
       </div>
       <div class="mail">
         <h3>인증메일</h3>
@@ -57,9 +57,9 @@ const isCheckAuth = ref<boolean>(loginStore.isAuth);
 const uploadedFile = ref<File | undefined>(undefined);
 const username = ref<string>('');
 
-const updateAuth = (newValue: boolean) => {
-  isCheckAuth.value = newValue;
-}
+// const updateAuth = (newValue: boolean) => {
+//   isCheckAuth.value = newValue;
+// }
 
 const createFormData = (): FormData => {
   const formData = new FormData();

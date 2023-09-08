@@ -7,8 +7,8 @@
         type="checkbox"
         class="v-switch-input"
         :name="name"
-        :checked="value"
-        v-model="toggled"
+        :checked="props.value"
+        :value="props.value"
         :disabled="disabled"
         @change.stop="toggle"
       />
@@ -43,14 +43,13 @@ const props = defineProps({
   label: { type: String, default: '' },
 });
 
-const toggled = reactive({ value: !!props.value });
-
-const emits = defineEmits(['input', 'change']);
-
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+}>();
 const className = computed(() => [
   'vue-js-switch',
   {
-    toggled: toggled.value,
+    toggled: props.value,
     disabled: props.disabled,
   },
 ]);
@@ -58,9 +57,9 @@ const className = computed(() => [
 const coreStyle = computed(() => ({
   width: px(props.width),
   height: px(props.height),
-  backgroundColor: toggled.value ? DEFAULT_COLOR_CHECKED : DEFAULT_COLOR_UNCHECKED,
+  backgroundColor: props.value ? DEFAULT_COLOR_CHECKED : DEFAULT_COLOR_UNCHECKED,
   borderRadius: px(Math.round(props.height / 2)),
-  borderColor: toggled.value ? DEFAULT_SWITCH_COLOR : DEFAULT_SWITCH_COLOR_UNCHECKED,
+  borderColor: props.value ? DEFAULT_SWITCH_COLOR : DEFAULT_SWITCH_COLOR_UNCHECKED,
 }));
 
 const distance = () => px(props.width - props.height);
@@ -68,8 +67,8 @@ const distance = () => px(props.width - props.height);
 const buttonStyle = computed(() => {
   const transition = `transform ${props.speed}ms`;
   const offset = px('-1');
-  const transform = toggled.value ? translate(distance(), offset) : translate(offset, offset);
-  const background = toggled.value ? DEFAULT_SWITCH_COLOR : DEFAULT_SWITCH_COLOR_UNCHECKED;
+  const transform = props.value ? translate(distance(), offset) : translate(offset, offset);
+  const background = props.value ? DEFAULT_SWITCH_COLOR : DEFAULT_SWITCH_COLOR_UNCHECKED;
 
   return {
     width: px(props.height),
@@ -88,10 +87,11 @@ const keyToggle = (event: Event) => {
 };
 
 const toggle = (event: Event) => {
-  const newValue = !toggled.value;
-  toggled.value = newValue;
-  emits('input', newValue);
-  emits('change', { value: newValue, srcEvent: event });
+  event;
+  const newValue = !props.value;
+  // emits('input', newValue);
+  emits('update:modelValue', newValue);
+  // emits('change', { value: newValue, srcEvent: event });
 };
 
 // onMounted(() => {
