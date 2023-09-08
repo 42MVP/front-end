@@ -18,6 +18,5 @@ export class LoginService {
       withCredentials: true,
     });
     if (typeof ret.data === 'string') localStorage.setItem('access-token', ret.data);
-    localStorage.clear()
   }
 }
