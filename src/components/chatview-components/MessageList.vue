@@ -23,7 +23,7 @@ onMounted(() => {
 const props = defineProps<{ chats: Chat[] }>();
 
 watch(
-  () => props.chats,
+  () => props.chats.length,
   () => {
     scrollToLatestMsg();
   },
