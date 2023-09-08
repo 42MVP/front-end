@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 // NOTE : unused-vars
-const emits = defineEmits(['response']);
 </script>
 
 <style scoped>

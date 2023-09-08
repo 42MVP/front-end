@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import TButton from '@/components/common/ToggleButton.vue';
@@ -43,13 +43,11 @@ import BasicButton from '@/components/BasicButton.vue';
 
 // stores
 import { useLoginStore } from '@/stores/login.store';
-import { useModalStore } from '@/stores/modal.store';
 // services
 import { UserService } from '@/services/user.service';
 import { LoginService } from '@/services/login.service';
 
 const loginStore = useLoginStore();
-const modalStore = useModalStore();
 
 const router = useRouter();
 
