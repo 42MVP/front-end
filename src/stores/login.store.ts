@@ -1,12 +1,7 @@
 import { defineStore } from 'pinia';
-import { useRouter } from 'vue-router';
-import { GameService } from '@/services/game.service';
 import { LoginService } from '@/services/login.service';
-import { ChatSocketService } from '@/services/chatSocket.service';
 import type { User } from '@/interfaces/user/User.interface';
 import type { LoginInfo } from '@/interfaces/login/login.interface';
-
-const router = useRouter();
 
 interface LoginState {
   isLogin: boolean;
@@ -42,7 +37,6 @@ export const useLoginStore = defineStore('login', {
       const loginInfo = await LoginService.getUserInfo();
       this.setLogin(loginInfo);
       window.location.href = '/';
-    //  window.history.replaceState('', '', '/');
     },
     async logout() {
       await LoginService.logout();
