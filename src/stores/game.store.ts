@@ -34,8 +34,7 @@ export const useGameStore = defineStore('game', {
     leftScore: 0,
     rightScore: 0,
     tableInfo: {
-      background: 'white'
-      ,
+      background: 'white',
       leftPaddle: {
         width: 20,
         height: 100,
