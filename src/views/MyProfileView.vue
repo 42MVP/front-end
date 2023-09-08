@@ -18,7 +18,7 @@
       </div>
       <div class="auth">
         <h3>2차인증</h3>
-        <TButton :value="isCheckAuth" />
+        <TButton :value="isCheckAuth" @input="updateAuth" />
       </div>
       <div class="mail">
         <h3>인증메일</h3>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 import TButton from '@/components/common/ToggleButton.vue';
 import UploadImage from '@/components/common/UploadImage.vue';
@@ -47,12 +47,16 @@ import { useModalStore } from '@/stores/modal.store';
 import { UserService } from '@/services/user.service';
 import { LoginService } from '@/services/login.service';
 
-const uploadedFile = ref<File | undefined>(undefined);
-const username = ref<string>('');
-const isCheckAuth = ref<boolean>(false);
-
 const loginStore = useLoginStore();
 const modalStore = useModalStore();
+
+const isCheckAuth = ref<boolean>(loginStore.isAuth);
+const uploadedFile = ref<File | undefined>(undefined);
+const username = ref<string>('');
+
+const updateAuth = (newValue: boolean) => {
+  isCheckAuth.value = newValue;
+}
 
 const createFormData = (): FormData => {
   const formData = new FormData();
