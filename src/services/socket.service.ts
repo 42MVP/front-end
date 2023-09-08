@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import { endpoint } from './utils/config.utils';
 
 export class SocketService {
   private static instance: SocketService;
@@ -6,7 +7,7 @@ export class SocketService {
 
   private constructor() {
     const accessToken = localStorage.getItem('access-token');
-    const URL = 'http://localhost:3000/';
+    const URL = endpoint;
     this.socket = io(URL, {
       auth: {
         token: accessToken,
