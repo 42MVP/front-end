@@ -4,13 +4,20 @@
     <div class="p-info">
       <div class="name">
         <h3>닉네임 설정</h3>
-        <TextInputBox @response="e => {
-          username = e;
-        }
-          " :placeholderText="loginStore?.name" type="name" :maxLength="15" required />
+        <TextInputBox
+          @response="
+            e => {
+              username = e;
+            }
+          "
+          :placeholderText="loginStore?.name"
+          type="name"
+          :maxLength="15"
+          required
+        />
       </div>
       <div class="auth">
-        <h3>닉네임 설정</h3>
+        <h3>2차인증 설정</h3>
         <input type="checkbox" v-model="isCheckAuth" class="c-box" />
         <span class="checkmark"></span>
       </div>
