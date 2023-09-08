@@ -40,6 +40,7 @@ import { InvitationStep, useInvitationStore } from '@/stores/invitation.store';
 // services
 import { GameService } from '@/services/game.service';
 import { ApiError } from '@/services/utils/apiError.utils';
+import router from './router';
 
 const loginStore = useLoginStore();
 const modalStore = useModalStore();
@@ -52,13 +53,22 @@ onMounted(() => {
   }
 });
 
+const routerNotify = async (uri: string, message: string) => {
+  await router.push(uri);
+  modalStore.notify(message);
+};
+
 onErrorCaptured((error, vm, info): boolean | void => {
   if (error instanceof ApiError) {
     if (error.message.includes('JWT')) {
       // TODO : logout, localStorage.clear();
       return false;
     } else {
-      modalStore.notify(error.message);
+      if (error.statusCode === 404) {
+        routerNotify('/404', error.message);
+      } else {
+        modalStore.notify(error.message);
+      }
     }
   } else {
     console.log('에러:', error.name, error.message);
