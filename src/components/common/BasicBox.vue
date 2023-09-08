@@ -41,9 +41,5 @@ const props = defineProps({
   text-align: left;
   color: var(--base-gray, #bcb8b1);
   font: var(--medium, 500 24px/32px 'Inter', sans-serif);
-
-  .win-lose-num {
-    color: var(--semi-brown, #8a817c);
-  }
 }
 </style>

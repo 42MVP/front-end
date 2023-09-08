@@ -1,4 +1,4 @@
-import type { GameHistory } from '@/interfaces/game/GameHistory.interface';
+import type { UserGameHistory } from './UserGameHistory.interface';
 
 export interface UserInfo {
   id: number;
@@ -10,5 +10,5 @@ export interface UserInfo {
   winNum: number;
   loseNum: number;
   achievement: number[];
-  gameHistory: GameHistory[];
+  gameHistory: UserGameHistory[];
 }

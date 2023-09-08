@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 
 const DEFAULT_COLOR_CHECKED = '#FFF';
 const DEFAULT_COLOR_UNCHECKED = '#D9D9D9';
@@ -43,7 +43,7 @@ const props = defineProps({
   label: { type: String, default: '' },
 });
 
-const toggled = reactive({ value: !!props.value });
+const toggled = ref<boolean>(!!props.value);
 
 const emits = defineEmits(['input', 'change']);
 
@@ -113,18 +113,21 @@ const translate = (x: string, y: string) => {
   align-items: center;
   justify-content: space-between;
 }
+
+
 .vue-js-switch {
   cursor: pointer;
   justify-self: start;
+}
 
-  .v-switch-input {
+.vue-js-switch .v-switch-input {
     opacity: 1;
     position: absolute;
     width: 0;
     height: 0;
   }
 
-  .v-switch-core {
+.vue-js-switch .v-switch-core {
     display: block;
     position: relative;
     box-sizing: border-box;
@@ -133,16 +136,16 @@ const translate = (x: string, y: string) => {
 
     /* transition: border-color 0.3s, background-color 0.3s; */
     user-select: none;
+}
 
-    .v-switch-button {
+.vue-js-switch .v-switch-core .v-switch-button {
       display: block;
       overflow: hidden;
 
       border-radius: 100%;
       z-index: 2;
     }
-  }
-}
+
 .label-text {
   color: var(--brown, #463f3a);
   font: var(--small, 500 16px/24px 'Inter', sans-serif);

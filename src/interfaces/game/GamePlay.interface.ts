@@ -6,6 +6,7 @@ export interface GameInfo {
 }
 
 export interface GameTable {
+  background: string;
   leftPaddle: Paddle;
   rightPaddle: Paddle;
   ball: Ball;

@@ -1,6 +1,6 @@
 <template>
   <li class="list-element-container">
-    <div v-if="props.item.state" class="indicator-dot-container">
+    <div v-if="'state' in props.item" class="indicator-dot-container">
       <div v-if="props.item.state === UserStateString.ONLINE" class="indicator-dot" />
       <div
         v-else-if="props.item.state === UserStateString.IN_GAME"
@@ -49,7 +49,7 @@ type ItemInfo = User | ChatInfo | OthersInfo | ChatRoom;
 
 const props = defineProps({
   itemKey: { type: Number, default: -1 },
-  item: { type: Object as () => ItemInfo, default: {} as User },
+  item: { type: Object as () => ItemInfo, default: {} as OthersInfo },
   clickEvent: { type: String, default: '' },
   iconButtons: { type: Array<IconButton>, default: [] as IconButton[] },
 });

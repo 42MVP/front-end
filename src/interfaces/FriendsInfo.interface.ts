@@ -1,5 +1,5 @@
 export interface OthersInfo {
-  state: string;
+  state?: string;
   id: number;
   name: string;
   avatarURL: string;

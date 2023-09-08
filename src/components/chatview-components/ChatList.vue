@@ -41,7 +41,6 @@ import MakeChannelModal from '@/components/chatview-components/modals/MakeChanne
 // stores
 import { useChatStore } from '@/stores/chat.store';
 import { useModalStore } from '@/stores/modal.store';
-import { useLoginStore } from '@/stores/login.store';
 // services
 import { ChatService } from '@/services/chat.service';
 // interfaces
@@ -50,7 +49,6 @@ import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 
 const chatStore = useChatStore();
 const modalStore = useModalStore();
-const loginStore = useLoginStore();
 
 const iconButtons = [{ emoji: '❌', event: 'quit' }];
 
@@ -89,7 +87,7 @@ const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
     if (roomMode !== 'DIRECT') {
       modalStore.on({
         title: '알림',
-        text: e,
+        text: String(e),
         buttonText: '닫기',
         buttonFunc: () => {},
       });

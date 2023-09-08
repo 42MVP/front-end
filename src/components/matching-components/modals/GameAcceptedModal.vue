@@ -34,7 +34,7 @@ const matchingStore = useMatchingStore();
 const UnknownPlayer: GameUser = {
   name: 'Unknown',
   avatarURL: '',
-  rating: '0',
+  rating: 0,
 };
 
 const leftUser = gameStore.matchInfo?.leftUser ? gameStore.matchInfo.leftUser : UnknownPlayer;
