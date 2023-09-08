@@ -27,7 +27,7 @@ const setAuthorizationHeader = (config: AxiosRequestConfig): AxiosRequestConfig 
   return config;
 };
 
-async function refreshToken(): Promise<void> {
+export async function refreshToken(): Promise<void> {
   const data = await axiosGet('/auth/reissue');
   if (typeof data === 'string') localStorage.setItem('token', data);
 }
