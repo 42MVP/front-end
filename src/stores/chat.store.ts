@@ -154,10 +154,10 @@ export const useChatStore = defineStore('chat', {
     },
     changeUserMode(roomId: number, userId: number, role: string) {
       const room = this.rooms[roomId];
-      const target = room.users.find(user => user.id === userId);
+      const target = room.users?.find(user => user.id === userId);
 
       if (target) target.role = role;
-      else if (room.self.id === userId) room.self.role = role;
+      else if (room.self?.id === userId) room.self.role = role;
     },
   },
 });
