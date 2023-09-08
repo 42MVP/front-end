@@ -106,7 +106,6 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 200px;
 
   font-size: 300px;
   opacity: 0.1;

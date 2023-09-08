@@ -56,6 +56,8 @@ const emits = defineEmits(['response']);
   flex-direction: column;
   background-color: var(--base-ivory, #f4f3ee);
   overflow: auto;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 .title-icon-container {

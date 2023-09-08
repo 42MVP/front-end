@@ -3,7 +3,7 @@
   <InvitationWaitingModal v-else-if="invitationStore.isStep(InvitationStep.Waiting)" />
   <InvitationAcceptedModal v-else-if="invitationStore.isStep(InvitationStep.Accept)" />
   <InvitationCancelModal v-else-if="invitationStore.isStep(InvitationStep.Cancel)" />
-  <main>
+  <main class="container">
     <Modal :title="modalStore.title" :show="modalStore.isActive">
       <template #body>{{ modalStore.text }} </template>
       <template #footer>
@@ -68,3 +68,10 @@ onErrorCaptured((error, vm, info): boolean | void => {
   return false;
 });
 </script>
+
+<style scoped>
+.container {
+  min-width: 1000px;
+  min-height: 1000px;
+}
+</style>
