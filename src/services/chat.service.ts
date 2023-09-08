@@ -28,7 +28,6 @@ export class ChatService {
   }
 
   static async exitRoom(roomId: number): Promise<void> {
-    console.log('exit:', `/chat/exit-room/${roomId}`);
     await axiosDelete(`/chat/exit-room/${roomId}`);
   }
 

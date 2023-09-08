@@ -49,7 +49,6 @@ onBeforeMount(async () => {
 });
 
 const getLoginName = computed(() => {
-  console.log(props.username);
   return useLoginStore().name;
 });
 </script>

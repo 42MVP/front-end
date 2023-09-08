@@ -70,10 +70,6 @@ onErrorCaptured((error, vm, info): boolean | void => {
         modalStore.notify(error.message);
       }
     }
-  } else {
-    console.log('에러:', error.name, error.message);
-    console.log('컴포넌트:', vm);
-    console.log('에러 정보:', info);
   }
   return false;
 });

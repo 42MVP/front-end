@@ -74,8 +74,6 @@ const updateUser = (id: number, state: string): void => {
 onMounted(async () => {
   const socket = SocketService.getInstance().getSocket();
   socket.on('user-update', (d: { id: number; state: string }) => {
-    console.log('user-update:');
-    console.log(d);
     updateUser(d.id, d.state);
   });
   const friends: OthersInfo[] = await UserService.getFriendsList();

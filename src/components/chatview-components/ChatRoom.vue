@@ -6,21 +6,18 @@
     :isShow="modalName === '비밀번호 해제'"
     @close="modalName = ''"
     @submit="
-      console.log('비밀 번호 해제');
       modalName = '';
     "
   />
   <SetChannelPrivateModal
     :isShow="modalName === '프라이빗 설정'"
     @submit="
-      console.log('프라이빗 설정');
       modalName = '';
     "
   />
   <UndoChannelPrivateModal
     :isShow="modalName === '프라이빗 해제'"
     @submit="
-      console.log('프라이빗 설정');
       modalName = '';
     "
   />

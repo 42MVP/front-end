@@ -74,11 +74,7 @@ export class GameInvitationSocketService {
    */
 
   on() {
-    console.log('socket invitation on');
-
-    this.socket.on(event.invite, (data: InviteEventData) => {
-      console.log('게임 초대됨');
-      console.log(data);
+      this.socket.on(event.invite, (data: InviteEventData) => {
       invitationStore.setId(data.invitationId);
       invitationStore.setEndTimeMs(data.endTimeMs);
       invitationStore.setInviter(data.inviterName, data.inviterAvatarUrl);
@@ -86,49 +82,37 @@ export class GameInvitationSocketService {
     });
 
     this.socket.on(event.inviteSuccess, (data: InviteSuccessEventData) => {
-      console.log('상대가 초대를 수신함');
-      console.log(data);
       invitationStore.setId(data.invitationId);
       invitationStore.setEndTimeMs(data.endTimeMs);
       invitationStore.setStep(InvitationStep.Waiting);
     });
 
     this.socket.on(event.inviteCancel, (data: InviteCancelEventData) => {
-      console.log('상대가 초대를 취소함');
-      console.log(data);
-
       invitationStore.setCancelMessage('상대가 초대를 취소함');
       invitationStore.setStep(InvitationStep.Cancel);
     });
 
     this.socket.on(event.inviteConfirm, (data: InviteConfirmEventData) => {
       if (data.result === true) {
-        console.log('게임 수락됨');
         invitationStore.setStep(InvitationStep.Accept);
         gameStore.setMatchInfo(data);
       } else {
-        console.log('초대 게임 거절됨');
         invitationStore.setCancelMessage('초대 거절 됨');
         invitationStore.setStep(InvitationStep.Cancel);
       }
     });
 
     this.socket.on(event.inviteTimeout, (data: InviteTimeoutEventData) => {
-      console.log('상대가 초대를 받지 않음');
-      console.log(data);
       invitationStore.setCancelMessage('상대가 초대를 받지 않음');
       invitationStore.setStep(InvitationStep.Cancel);
     });
 
     this.socket.on(event.inviteError, (data: InviteErrorEventData) => {
       alert(`error from server: ${data.msg}`);
-      console.log(data);
     });
   }
 
   off(): void {
-    console.log('socket invitation off');
-
     this.socket.off(event.invite);
     this.socket.off(event.inviteSuccess);
     this.socket.off(event.inviteCancel);

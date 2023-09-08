@@ -42,7 +42,7 @@ const axiosInstance = (): AxiosInstance => {
     return response;
   };
 
-  const retry = async <ResType>(errorConfig: AxiosRequestConfig): Promise<ResType> => {
+  const retry = async <ResType>(errorConfig: AxiosRequestConfig): Promise<ApiResponse<ResType>> => {
     const retryConfig = setAuthorizationHeader(errorConfig);
     return (await axios.request<ResType>(retryConfig)).data;
   };

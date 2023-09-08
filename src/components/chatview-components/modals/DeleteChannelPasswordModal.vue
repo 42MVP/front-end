@@ -26,10 +26,7 @@ const props = defineProps<{
 const chatStore = useChatStore();
 
 const changeRoomModePublic = async () => {
-  if (!chatStore.isSelected) {
-    console.log('채팅룸 선택 오류');
-    return;
-  }
+  if (!chatStore.isSelected) return;
   const roomMode: ChatRoomMode = {
     roomId: chatStore.selectedID,
     roomMode: 'PUBLIC',

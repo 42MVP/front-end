@@ -95,7 +95,6 @@ const searchRoom = (roomName: string) => {
 const chooseRoom = (roomId: number) => {
   const chatRoom = chatList.value.find(chat => chat.id === roomId);
   const roomMode = chatRoom?.roomMode;
-  console.log('chooseRoom', chatRoom, roomMode);
   if (roomMode === RoomMode.PROTECTED) {
     enterStatus.value = EnterStatus.PASSWORD;
   } else {
