@@ -19,9 +19,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// NOTE : unused-vars
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .user-main-container {
