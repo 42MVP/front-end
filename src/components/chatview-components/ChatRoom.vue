@@ -60,7 +60,11 @@
       </div>
     </div>
     <div v-else class="chat-box-list-name">
-      <div class="chat-box-list-name-left-word">{{ chatStore.chatRoom?.users[0]?.name && chatStore.chatRoom?.users[0]?.name }}님과의 대화</div>
+      <div class="chat-box-list-name-left-word">
+        <span class="chat-box-list-dm-name" @click="toProfile">
+          {{ chatStore.chatRoom?.users[0]?.name && chatStore.chatRoom?.users[0]?.name }}
+        </span>
+        님과의 대화</div>
     </div>
     <MessageList :chats="chatStore.chat" />
     <ChatInputBox
@@ -119,6 +123,10 @@ watch(
     newMode ? (roomMode.value = newMode) : (roomMode.value = '');
   },
 );
+
+const toProfile = () => {
+  router.push(`/users/${chatStore.chatRoom?.users[0]?.name}`)
+}
 
 const addChat = (newMessage: string): void => {
   if (chatStore.isSelected)
@@ -193,6 +201,10 @@ const inviteGame = (iconEmitResponse: IconEmitResponse) => {
   font: var(--medium);
   margin-right: 10px;
   color: var(--brown, #463f3a);
+}
+.chat-box-list-dm-name {
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .chat-box-list-name-left-icon-container {
