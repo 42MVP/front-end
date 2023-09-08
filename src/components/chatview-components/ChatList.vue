@@ -101,7 +101,7 @@ watch(
   () => chatStore.isSelected && chatStore.removedRooms,
   () => {
     const id = chatStore.selectedID;
-    if (chatStore.removedRooms[id])
+    if (chatStore.removedRooms[id] && chatStore.rooms[id].roomMode !== 'DIRECT')
       modalStore.on({
         title: '알림',
         text: chatStore.getNotice(id),
