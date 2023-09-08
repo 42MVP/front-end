@@ -4,7 +4,7 @@
       <div class="chat-info-line-box">
         <AvatarItem class="user-avatar" :avartarUrl="props.chat.avatarURL" imgSize="50" />
       </div>
-      <div class="chat-info-line-text">
+      <div class="chat-info-line-text"  @click="toProfile">
         <p
           :class="{
             'chat-info-line-box': !isMyMessage,
@@ -29,11 +29,17 @@ import { computed, ref } from 'vue';
 import AvatarItem from '../common/AvatarItem.vue';
 import { useLoginStore } from '@/stores/login.store';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const loginStore = useLoginStore();
 const loginUsername = ref(loginStore?.name);
 
 const props = defineProps<{ chat: Chat }>();
+
+const toProfile = () => {
+  router.push(`/users/${props.chat.username}`)
+}
 
 const isMyMessage = computed(() => {
   return props.chat.username === loginUsername.value;
@@ -77,6 +83,7 @@ const timeString = computed(() => {
   justify-content: center;
   align-items: flex-start;
   color: var(--brown, #463f3a);
+  cursor: pointer;
 }
 
 .chat-info-line-box {
