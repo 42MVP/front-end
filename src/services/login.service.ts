@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { axiosGet } from './utils/axiosInstance.utils';
+import { axiosGet } from '@/services/utils/axiosInstance.utils';
+import { endpoint } from '@/services/utils/config.utils';
 import type { LoginInfo } from '@/interfaces/login/login.interface';
 
 export interface AuthCode {
@@ -8,12 +9,12 @@ export interface AuthCode {
 
 export class LoginService {
   static async getUserInfo(): Promise<LoginInfo> {
-    const loginInfo: LoginInfo = await axiosGet(`http://localhost:3000/user/me`);
+    const loginInfo: LoginInfo = await axiosGet('/user/me');
     return loginInfo;
   }
 
   static async postTwoFactor(token: String, authCode: AuthCode): Promise<void> {
-    const ret = await axios.post('http://localhost:3000/login/2fa-auth', authCode, {
+    const ret = await axios.post(endpoint + '/login/2fa-auth', authCode, {
       headers: { Authorization: `Bearer ${token}` },
       withCredentials: true,
     });

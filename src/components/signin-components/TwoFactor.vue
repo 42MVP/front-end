@@ -39,6 +39,8 @@ import { useLoginStore } from '@/stores/login.store';
 import { useModalStore } from '@/stores/modal.store';
 // services
 import { LoginService, type AuthCode } from '@/services/login.service';
+// utils
+import { endpoint } from '@/services/utils/config.utils';
 
 const code = ref<string>('');
 const route = useRoute();
@@ -62,7 +64,7 @@ const submitAuthCode = async (): Promise<void> => {
       text: '인증 코드가 만료되었습니다.',
       buttonText: '재발급',
       buttonFunc: () => {
-        window.location.href = 'http://localhost:3000/login/ft';
+        window.location.href = endpoint + '/login/ft';
       },
     });
     return;

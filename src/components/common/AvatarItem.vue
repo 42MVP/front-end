@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import { defaultAvatarURL } from '@/services/utils/config.utils';
+
 const props = defineProps({
   username: {
     type: String,
@@ -22,7 +24,7 @@ const props = defineProps({
   },
 });
 
-const avatarURL = import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
+const avatarURL = defaultAvatarURL;
 
 const avatarStyle = {
   minWidth: `${props.imgSize}px`,

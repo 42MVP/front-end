@@ -12,6 +12,7 @@
 import { ref, onMounted } from 'vue';
 import { useLoginStore } from '@/stores/login.store';
 import BasicButton from '@/components/BasicButton.vue';
+import { defaultAvatarURL } from '@/services/utils/config.utils';
 
 const props = defineProps({
   uploadedFile: { type: File, default: undefined },
@@ -21,7 +22,7 @@ const loginStore = useLoginStore();
 const previewImage = ref<string>('');
 
 onMounted(() => {
-  previewImage.value = loginStore.avatarURL || import.meta.env.VITE_APP_DEFAULT_AVATAR_URL;
+  previewImage.value = loginStore.avatarURL || defaultAvatarURL;
 });
 
 const emits = defineEmits<{
