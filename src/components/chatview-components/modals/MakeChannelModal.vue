@@ -20,14 +20,19 @@
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="createRoom(); emits('close');" />
+      <BasicButton
+        text="확인"
+        @click="
+          createRoom();
+          emits('close');
+        "
+      />
     </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ChatService } from '@/services/chat.service';
 
 import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
@@ -37,7 +42,7 @@ import TextInputBox from '@/components/TextInputBox.vue';
 import type { ChatRoomCreateChannel } from '@/interfaces/chat/ChatRoom.interface';
 import { useChatStore } from '@/stores/chat.store';
 import { useLoginStore } from '@/stores/login.store';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
+import { useModalStore } from '@/stores/modal.store';
 
 const emits = defineEmits(['close']);
 const props = defineProps<{ isShow: boolean }>();
@@ -63,29 +68,25 @@ const password2th = ref<string>('');
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
+const modalStore = useModalStore();
 
 const createRoom = async () => {
   if (mode[selectedMode.value] === 'PROTECTED') {
-    // TODO : password 처리
-    if (!password.value) throw '패스워드 필요';
-    if (password.value !== password2th.value) throw '패스워드 불일치';
+    if (!password.value) {
+      modalStore.notify('패스워드 필요');
+      return;
+    }
+    if (password.value !== password2th.value) {
+      modalStore.notify('패스워드 불일치');
+      return;
+    }
   }
   const chatRoom: ChatRoomCreateChannel = {
     roomName: roomName.value,
     roomMode: mode[selectedMode.value],
     password: password.value,
   };
-  const room = await ChatService.createRoom(chatRoom);
-  const chatInfo: ChatInfo = {
-    id: room.id,
-    name: room.name,
-    roomMode: room.roomMode,
-    isChannel: true,
-    self: loginStore.owner,
-    users: [],
-    banUsers: [],
-  };
-  chatStore.addChatRoom(room.id, chatInfo);
+  chatStore.createRoom(chatRoom, true, loginStore.owner);
 };
 </script>
 

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
 import type { User } from '@/interfaces/user/User.interface';
-import type { ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
+import type { ChatRoomCreate, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 import { ChatService } from '@/services/chat.service';
 import { ApiError } from '@/services/utils/apiError.utils';
 
@@ -116,6 +116,15 @@ export const useChatStore = defineStore('chat', {
       }
     },
     // api actions
+    async createRoom(roomInfo: ChatRoomCreate, isChannel: boolean, self: User): Promise<void> {
+      try {
+        const room = await ChatService.createRoom(roomInfo);
+        const chatInfo: ChatInfo = ChatService.createChatInfo(room, isChannel, self);
+        this.addChatRoom(room.id, chatInfo);
+      } catch (error) {
+        if (error instanceof ApiError) alert(error.message);
+      }
+    },
     async changeRoomMode(roomInfo: ChatRoomMode) {
       try {
         await ChatService.changeRoomMode(roomInfo);

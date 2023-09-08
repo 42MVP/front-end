@@ -2,6 +2,7 @@ import { axiosGet, axiosPatch, axiosPost, axiosDelete } from '@/services/utils/a
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 import type { ChatUserInfo } from '@/interfaces/chat/ChatUser.interface';
+import type { User } from '@/interfaces/user/User.interface';
 
 export enum RoomMode {
   PUBLIC = 'PUBLIC',
@@ -66,6 +67,18 @@ export class ChatService {
 
   static async updateUserState(body: ChatUserInfo): Promise<void> {
     await axiosPatch('/chat/change-status', body);
+  }
+
+  static createChatInfo(room: ChatRoom, isChannel: boolean, self: User): ChatInfo {
+    return {
+      id: room.id,
+      name: room.name,
+      roomMode: room.roomMode,
+      isChannel: isChannel,
+      self: self,
+      users: [],
+      banUsers: [],
+    };
   }
 }
 
