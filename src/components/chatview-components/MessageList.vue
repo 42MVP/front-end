@@ -1,6 +1,6 @@
 <template>
   <div class="chat-box-container" ref="chatref">
-    <div v-for="chat in chats">
+    <div v-for="(chat, idx) in chats" :key="idx">
     <MessageBox v-if="isBlockUser(chat.username)" :key="chat.id" :chat="chat" />
   </div>
  </div>
@@ -14,7 +14,7 @@ import { useUsersStore } from '@/stores/users.store';
 
 const usersStore = useUsersStore();
 
-let chatref = ref(null);
+let chatref = ref();
 
 onMounted(() => {
   chatref.value.scrollTop = chatref.value.scrollHeight;

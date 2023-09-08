@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 import CountdownTimer from '@/components/CountdownTimer.vue';
 import GameResultModal from '@/components/gameview-components/GameResultModal.vue';
@@ -44,7 +44,6 @@ const rightPlayer = ref<GameUser | undefined>(undefined);
 const gameBoard = ref<null | HTMLCanvasElement>(null);
 const ctx = ref<null | CanvasRenderingContext2D>(null);
 
-const isCompleted = ref<boolean>(false);
 
 const gameSettings = {
   gameWidth: 1100,
@@ -56,7 +55,7 @@ const gameSettings = {
   paddleSpeed: 50,
 };
 
-const { gameWidth, gameHeight, boardBackground, paddleColor, ballColor, ballRadius } = gameSettings;
+const { gameWidth, gameHeight, paddleColor, ballColor, ballRadius } = gameSettings;
 
 const renderTable = () => {
   if (gameStore.tableInfo) {
@@ -129,16 +128,16 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   margin: 0px 50px;
   min-width: 500px;
+}
 
-  .user-info-div {
+.game-ui-continer .user-info-div {
     font: var(--medium);
-  }
+}
 
-  .score-div {
+.game-ui-continer .score-div{
     font: var(--extra-large);
     align-self: center;
     min-width: max-content;
-  }
 }
 
 .scoreText {
@@ -162,13 +161,5 @@ onBeforeUnmount(() => {
 .gameBoard {
   border: 3px solid;
   margin-top: 15px;
-
-  .net-div {
-    border: 1px dashed var(--base-gray);
-    width: 1px;
-    height: 100%;
-    min-height: inherit;
-  }
 }
 </style>
-@/services/gamePlay.service

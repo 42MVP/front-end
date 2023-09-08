@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
 import DBox from '@/components/common/BasicBox.vue';
 import AvatarItem from '@/components/common/AvatarItem.vue';
 import type { UserGameHistory } from '@/interfaces/user/UserGameHistory.interface';

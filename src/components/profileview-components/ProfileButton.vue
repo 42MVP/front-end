@@ -16,8 +16,6 @@
 import { ref } from 'vue';
 import BasicButton from '@/components/BasicButton.vue';
 import router from '@/router';
-//stores
-import { useUsersStore } from '@/stores/users.store';
 
 // services
 import { UserService } from '@/services/user.service';
@@ -25,7 +23,6 @@ import { UserService } from '@/services/user.service';
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
 
-const userStore = useUsersStore();
 
 const props = defineProps({
   isLoginUser: { type: Boolean, default: false },

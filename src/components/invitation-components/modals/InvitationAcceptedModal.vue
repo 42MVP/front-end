@@ -34,7 +34,7 @@ const invitationStore = useInvitationStore();
 const UnknownPlayer: GameUser = {
   name: 'Unknown',
   avatarURL: '',
-  rating: '0',
+  rating: 0,
 };
 
 const leftUser = gameStore.matchInfo?.leftUser ? gameStore.matchInfo.leftUser : UnknownPlayer;
@@ -50,7 +50,7 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
 .body-container {
   display: flex;
   flex-direction: row;

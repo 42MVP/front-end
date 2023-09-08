@@ -34,6 +34,8 @@ export const useGameStore = defineStore('game', {
     leftScore: 0,
     rightScore: 0,
     tableInfo: {
+      background: 'white'
+      ,
       leftPaddle: {
         width: 20,
         height: 100,
@@ -77,7 +79,6 @@ export const useGameStore = defineStore('game', {
       this.tableInfo = gameInfo.tableInfo;
     },
     setTableInfo(newInfo: GameTable) {
-      console.log('gameStore - setTableInfo');
       this.tableInfo = newInfo;
     },
 
