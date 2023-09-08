@@ -38,6 +38,7 @@ onUnmounted(() => {
 
 <style scoped>
 .matching-view-container {
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -6,7 +6,6 @@
       </AvatarItem>
       <div class="g-info-div">
         <GBox class="g-box" :record="gameRecord" />
-        <Achieve :achievement="profileUser.achievement" class="achieve" />
       </div>
     </div>
     <div v-show="profileUser.gameHistory.length" class="bottom">
@@ -61,6 +60,7 @@ const getLoginName = computed(() => {
   position: relative;
   align-items: center;
 }
+
 .p-container {
   flex-direction: column;
   min-width: max-content;

@@ -4,22 +4,16 @@
     <div class="p-info">
       <div class="name">
         <h3>닉네임 설정</h3>
-        <TextInputBox
-          @response="
-            e => {
-              username = e;
-            }
-          "
-          :placeholderText="loginStore?.name"
-          type="name"
-          :maxLength="15"
-          required
-        />
+        <TextInputBox @response="e => {
+          username = e;
+        }
+          " :placeholderText="loginStore?.name" type="name" :maxLength="15" required />
       </div>
-      <div class="auth">
-        <h3>2차인증</h3>
-        <TButton :value="isCheckAuth" @input="updateAuth" />
-      </div>
+      <label class="container">
+        2차 인증 사용하기
+        <input type="checkbox" v-model="isCheckAuth" />
+        <span class="checkmark"></span>
+      </label>
       <div class="mail">
         <h3>인증메일</h3>
         <a>{{ loginStore?.email }}</a>
@@ -117,11 +111,13 @@ const submitFrom = async (): Promise<void> => {
   flex-flow: row;
   gap: 64px;
 }
+
 .mail {
   display: flex;
   flex-flow: row;
   gap: 60px;
 }
+
 .name {
   display: flex;
   flex-flow: row;
