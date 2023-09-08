@@ -63,7 +63,6 @@ const getButtonTitle = () => {
 };
 
 const updateUser = (id: number, state: string): void => {
-  for (const b of userStore.blocks) if (b.id === id) return;
   for (const user of users.value) {
     if (user.id === id) {
       user.state = state;
