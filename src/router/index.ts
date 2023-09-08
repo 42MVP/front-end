@@ -117,17 +117,13 @@ router.beforeEach((to, from, next) => {
   const loginStore = useLoginStore();
   const modalStore = useModalStore();
 
+  const routerNotify = async (uri: string, message: string) => {
+    await router.push(uri);
+    modalStore.notify(message);
+  };
+
   if (to.meta.requireAuth && !loginStore.isLogin) {
-    modalStore.on({
-      title: '알림',
-      text: '로그인이 필요합니다.',
-      buttonText: '로그인 하기',
-      buttonFunc: () => {
-        router.push('/signin');
-      },
-    });
-  } else {
-    modalStore.off();
+	routerNotify('/signin', '로그인이 필요합니다.');
   }
   next();
 });
