@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { Chat } from '@/interfaces/chat/Chat.interface';
 import type { User } from '@/interfaces/user/User.interface';
+import type { ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
+import { ChatService } from '@/services/chat.service';
+import { ApiError } from '@/services/utils/apiError.utils';
 
 enum RemovedRoomMode {
   DELETED = 1,
@@ -110,6 +113,15 @@ export const useChatStore = defineStore('chat', {
       const chats = this.chats[id];
       if (chats) {
         chats.push(newChat);
+      }
+    },
+    // api actions
+    async changeRoomMode(roomInfo: ChatRoomMode) {
+      try {
+        await ChatService.changeRoomMode(roomInfo);
+        this.setRoomMode(roomInfo.roomId, roomInfo.roomMode);
+      } catch (e) {
+        if (e instanceof ApiError) alert(e.message);
       }
     },
     // socket actions

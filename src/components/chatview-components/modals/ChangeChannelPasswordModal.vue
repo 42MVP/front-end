@@ -12,7 +12,13 @@
     </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomPassword(); emits('close');" />
+      <BasicButton
+        text="확인"
+        @click="
+          changeRoomPassword();
+          emits('close');
+        "
+      />
     </template>
   </Modal>
 </template>
@@ -23,8 +29,7 @@ import Modal from '@/components/Modal.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import TextInputBox from '@/components/TextInputBox.vue';
 
-import type { ChatRoom, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
-import { ChatService, RoomMode } from '@/services/chat.service';
+import type { ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
 import { useChatStore } from '@/stores/chat.store';
 
 const emits = defineEmits(['close', 'submit']);
@@ -42,15 +47,14 @@ const isValidPassword = () => {
   return true;
 };
 
-const changeRoomPassword = async () => {
+const changeRoomPassword = async (): Promise<void> => {
   if (!chatStore.isSelected || !isValidPassword) return;
   const roomInfo: ChatRoomMode = {
     roomId: chatStore.selectedID,
     roomMode: 'PROTECTED',
     password: password.value,
   };
-  await ChatService.changeRoomMode(roomInfo);
-  chatStore.setRoomMode(roomInfo.roomId, roomInfo.roomMode);
+  chatStore.changeRoomMode(roomInfo);
 };
 </script>
 
