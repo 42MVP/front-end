@@ -5,27 +5,15 @@
   <DeleteChannelPasswordModal
     :isShow="modalName === '비밀번호 해제'"
     @close="modalName = ''"
-    @submit="
-      modalName = '';
-    "
+    @submit="modalName = ''"
   />
-  <SetChannelPrivateModal
-    :isShow="modalName === '프라이빗 설정'"
-    @submit="
-      modalName = '';
-    "
-  />
-  <UndoChannelPrivateModal
-    :isShow="modalName === '프라이빗 해제'"
-    @submit="
-      modalName = '';
-    "
-  />
+  <SetChannelPrivateModal :isShow="modalName === '프라이빗 설정'" @submit="modalName = ''" />
+  <UndoChannelPrivateModal :isShow="modalName === '프라이빗 해제'" @submit="modalName = ''" />
 
   <div class="chat-list-container">
     <div v-if="chatStore.chatRoom?.roomMode !== RoomMode.DIRECT" class="chat-box-list-name">
       <div class="chat-box-list-name-left">
-        <div class="chat-box-list-name-left-word" style="font-weight: bold;">{{ chatStore.chatRoom?.name }}</div>
+        <div class="chat-box-list-name-left-word" style="font-weight: bold">{{ chatStore.chatRoom?.name }}</div>
         <div class="chat-box-list-name-left-icon-container">
           <div class="chat-box-list-name-left-icon" @click="isActiveDropdown = !isActiveDropdown">
             {{ !isActiveDropdown ? '⊕' : '⊖' }}
@@ -61,7 +49,8 @@
         <span class="chat-box-list-dm-name" @click="toProfile">
           {{ chatStore.chatRoom?.users[0]?.name && chatStore.chatRoom?.users[0]?.name }}
         </span>
-        님과의 대화</div>
+        님과의 대화
+      </div>
     </div>
     <MessageList :chats="chatStore.chat" />
     <ChatInputBox
@@ -99,7 +88,9 @@ import type { RoomModeIcon } from '@/interfaces/chat/ChatRoom.interface';
 // services
 import { ChatSocketService } from '@/services/chatSocket.service';
 import { GameService } from '@/services/game.service';
+import type { ApiError } from '@/services/utils/apiError.utils';
 import { useRouter } from 'vue-router';
+import { useModalStore } from '@/stores/modal.store';
 
 const router = useRouter();
 
@@ -118,8 +109,8 @@ watch(
 );
 
 const toProfile = () => {
-  router.push(`/users/${chatStore.chatRoom?.users[0]?.name}`)
-}
+  router.push(`/users/${chatStore.chatRoom?.users[0]?.name}`);
+};
 
 const addChat = (newMessage: string): void => {
   if (chatStore.isSelected)
@@ -133,10 +124,11 @@ const addChat = (newMessage: string): void => {
 };
 
 const showUserProfile = (userId: number) => {
-  const selectedUser = chatStore.chatRoom?.users.find(u => u.id === userId);
-  router.push(`/users/${selectedUser?.name}`);
+  if (!isInvite.value) {
+    const selectedUser = chatStore.chatRoom?.users.find(u => u.id === userId);
+    router.push(`/users/${selectedUser?.name}`);
+  } else isInvite.value = false;
 };
-
 
 const setModal: Function = (name: string) => {
   modalName.value = name;
@@ -157,9 +149,18 @@ const roomModeIcon: Record<string, RoomModeIcon[]> = {
   ],
 };
 
+const isInvite = ref<boolean>(false);
+
+const modalStore = useModalStore();
 
 const inviteGame = (iconEmitResponse: IconEmitResponse) => {
-  GameService.invitation.inviteMatching(iconEmitResponse.id);
+  isInvite.value = true;
+  GameService.invitation
+    .inviteMatching(iconEmitResponse.id)
+    .then(() => (isActiveDropdown.value = false))
+    .catch((error: ApiError) => {
+      modalStore.notify(error.message);
+    });
 };
 </script>
 
