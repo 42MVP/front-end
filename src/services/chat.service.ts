@@ -1,7 +1,7 @@
 import { axiosGet, axiosPatch, axiosPost, axiosDelete } from '@/services/utils/axiosInstance.utils';
 import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoom, ChatRoomCreate, ChatRoomEnter, ChatRoomMode } from '@/interfaces/chat/ChatRoom.interface';
-import type { ChatUserInfo } from '@/interfaces/chat/ChatUser.interface';
+import type { ChatUserInfo, ChatUser, ChatUserState, ChatUserRole } from '@/interfaces/chat/ChatUser.interface';
 import type { User } from '@/interfaces/user/User.interface';
 
 export enum RoomMode {
@@ -9,6 +9,22 @@ export enum RoomMode {
   PROTECTED = 'PROTECTED',
   PRIVATE = 'PRIVATE',
   DIRECT = 'DIRECT',
+}
+
+export enum Role {
+  OWNER = 'OWNER',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export enum Mode {
+  INVITE = 'INVITE',
+  KICK = 'KICK',
+  ONMUTE = 'ONMUTE',
+  MUTE = 'MUTE',
+  NONE = 'NONE',
+  BAN = 'BAN',
+  COMMON = 'COMMON',
 }
 
 export type ServiceChatUser = (body: ChatUserInfo) => Promise<void> | null;
@@ -35,13 +51,6 @@ export class ChatService {
   static async changeRoomMode(body: ChatRoomMode): Promise<void> {
     await axiosPatch('/chat/change-room-info', body);
   }
-
-  // static async getChatList(): Promise<ChatInfo[]> {
-  //   const ret = await axiosGet(`/chat`);
-  //   const chatInfo: ChatInfo[] = ret.data;
-
-  //   return chatInfo;
-  // }
 
   static async getChatList(): Promise<ChatInfo[]> {
     const ChatList: ChatInfo[] = await axiosGet(`/chat`);
@@ -91,3 +100,55 @@ const chatUserServiceFunctions: Record<string, ServiceChatUser> = {
   MUTE: ChatService.updateUserState,
   NONE: ChatService.updateUserState,
 };
+
+export function createChatUserByEvent(
+  userId: number,
+  roomId: number,
+  eventName: string,
+  muteTime?: Date,
+): ChatUserInfo | null {
+  if (createChatUserFunctions[eventName]) {
+    return createChatUserFunctions[eventName](userId, roomId);
+  }
+  if (createChatUserStateFunctions[eventName]) {
+    return muteTime
+      ? createChatUserStateFunctions[eventName](userId, roomId, eventName, muteTime)
+      : createChatUserStateFunctions[eventName](userId, roomId, eventName);
+  }
+  if (createChatUserRoleFunctions[eventName]) {
+    return createChatUserRoleFunctions[eventName](userId, roomId, eventName);
+  }
+  return null;
+}
+
+type ChatUserFunction = (userId: number, roomId: number) => ChatUser;
+type ChatUserRoleFunction = (userId: number, roomId: number, role: string) => ChatUserRole;
+type ChatUserStateFunction = (userId: number, roomId: number, status: string, muteTime?: Date) => ChatUserState;
+
+const createChatUserFunctions: Record<string, ChatUserFunction> = {
+  INVITE: createChatUser,
+};
+
+const createChatUserRoleFunctions: Record<string, ChatUserRoleFunction> = {
+  ADMIN: createChatUserRole,
+  USER: createChatUserRole,
+};
+
+const createChatUserStateFunctions: Record<string, ChatUserStateFunction> = {
+  KICK: createChatUserState,
+  BAN: createChatUserState,
+  MUTE: createChatUserState,
+  NONE: createChatUserState,
+};
+
+function createChatUser(userId: number, roomId: number): ChatUser {
+  return { userId, roomId };
+}
+
+function createChatUserState(userId: number, roomId: number, status: string, muteTime?: Date): ChatUserState {
+  return muteTime ? { userId, roomId, status, muteTime } : { userId, roomId, status };
+}
+
+function createChatUserRole(userId: number, roomId: number, role: string): ChatUserRole {
+  return { userId, roomId, role };
+}
