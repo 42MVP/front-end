@@ -113,10 +113,6 @@ const chooseUser = (userId: number) => {
 </script>
 
 <style scoped>
-.listBox {
-  margin: 0;
-  padding: 0px 20px 20px 10px;
-}
 .title-icon-relative {
   position: relative;
 }

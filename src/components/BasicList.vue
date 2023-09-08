@@ -58,7 +58,7 @@ ul {
   justify-content: space-between;
   min-width: max-content;
   min-height: max-content;
-  padding: 0 5px;
+  padding: 0 10px 0 15px;
 }
 
 .list-item-container:hover {
