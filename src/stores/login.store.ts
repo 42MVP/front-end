@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { LoginService } from '@/services/login.service';
 import type { User } from '@/interfaces/user/User.interface';
 import type { LoginInfo } from '@/interfaces/login/login.interface';
 
@@ -32,6 +33,16 @@ export const useLoginStore = defineStore('login', {
     },
   },
   actions: {
+    async login() {
+      const loginInfo = await LoginService.getUserInfo();
+      this.setLogin(loginInfo);
+      window.location.href = '/';
+    },
+    async logout() {
+      await LoginService.logout();
+      this.resetAll();
+      window.location.href = '/';
+    },
     resetAll() {
       this.isLogin = false;
       this.id = -1;

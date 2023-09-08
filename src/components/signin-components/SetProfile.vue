@@ -65,8 +65,7 @@ const submitFrom = async (): Promise<void> => {
   try {
     const formData = createFormData();
     await UserService.setUserProfile(formData);
-    const loginInfo = await LoginService.getUserInfo();
-    loginStore.setLogin(loginInfo);
+    loginStore.login();
     if (username.value.length === 0) {
       modalStore.on({
         title: '알림',

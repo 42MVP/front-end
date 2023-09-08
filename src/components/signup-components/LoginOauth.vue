@@ -6,22 +6,16 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useLoginStore } from '@/stores/login.store';
-import { useModalStore } from '@/stores/modal.store';
-import { LoginService } from '@/services/login.service';
 
-const router = useRouter();
 const loginStore = useLoginStore();
-const modalStore = useModalStore();
 const route = useRoute();
 
 onMounted(async () => {
   const token = route.query.token;
   if (typeof token === 'string') localStorage.setItem('access-token', token);
-  const data = await LoginService.getUserInfo();
-  loginStore.setLogin(data);
-  router.push('/');
+  loginStore.login();
 });
 </script>
 

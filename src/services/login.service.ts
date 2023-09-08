@@ -20,4 +20,14 @@ export class LoginService {
     });
     if (typeof ret.data === 'string') localStorage.setItem('access-token', ret.data);
   }
+
+  static async logout(): Promise<void> {
+    await axios
+      .post(endpoint + '/logout', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('access-token')}` },
+        withCredentials: true,
+      })
+      .catch(() => {console.log('hohoh')});
+    localStorage.clear();
+  }
 }

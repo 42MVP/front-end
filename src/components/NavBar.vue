@@ -29,9 +29,8 @@
               text="로그아웃"
               @click="
                 () => {
-                  loginStore.resetAll();
+                  loginStore.logout();
                   isUserDropdownMenu = false;
-                  router.go(0);
                 }
               "
             />
