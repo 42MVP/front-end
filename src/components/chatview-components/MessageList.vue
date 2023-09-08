@@ -36,9 +36,6 @@ const scrollToLatestMsg: Function = () => {
 };
 
 const isBlockUser = (name: string) : boolean => {
-  const res =  usersStore.blocks.find(block => block.name === name)
-  console.log("blocks", usersStore.blocks);
-  console.log(res);
   return  usersStore.blocks.find(block => block.name === name) ? false : true;
 }
 

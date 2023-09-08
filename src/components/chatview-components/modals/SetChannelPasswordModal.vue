@@ -49,10 +49,7 @@ const validForm = (): never | void => {
 };
 
 const changeRoomModeProtected = async () => {
-  if (!chatStore.isSelected) {
-    console.log('채팅룸 선택 오류');
-    return;
-  }
+  if (!chatStore.isSelected) return;
   validForm();
   const roomMode: ChatRoomMode = {
     roomId: chatStore.selectedID,

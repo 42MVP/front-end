@@ -58,10 +58,7 @@ export const useGameStore = defineStore('game', {
   }),
   getters: {
     isGameStart(): boolean {
-      console.log('gameStore - isGameStart');
       const isOver = this.startTimeMs ? this.startTimeMs < new Date().getTime() : false;
-      console.log(this.tableInfo);
-      console.log(isOver);
       return this.tableInfo !== undefined && isOver;
     },
   },
@@ -71,7 +68,6 @@ export const useGameStore = defineStore('game', {
     },
     // game play
     setGamInfo(gameInfo: GameInfo): void {
-      console.log('gameStore - setGamInfo');
       this.background = gameInfo.background;
       this.leftScore = gameInfo.leftScore;
       this.rightScore = gameInfo.rightScore;

@@ -198,10 +198,7 @@ const modeUser = (iconEmitResponse: IconEmitResponse) => {
 
 const serviceChatUser = async (id: number, event: string, muteTime?: Date) => {
   const service = ChatService.getServiceChatUser(event);
-  if (!chatStore.isSelected) {
-    console.log('채팅룸 선택 오류');
-    return;
-  }
+  if (!chatStore.isSelected) return;
   const chatUser = createChatUserByEvent(id, chatStore.selectedID, event, muteTime);
   if (!chatUser) throw '채팅 유저 관리 모달 오류';
   await service(chatUser);

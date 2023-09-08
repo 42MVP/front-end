@@ -44,28 +44,21 @@ class GamePlaySocketService {
    */
 
   on(): void {
-    console.log('socket matching on');
     this.socket.on(event.start, (data: StartGameData) => {
       gameStore.startTimeMs = data.startTimeMs;
-      console.log('start: ', gameStore.startTimeMs);
-      console.log('curr, start', new Date(), new Date(gameStore.startTimeMs));
       window.addEventListener('keydown', this.keyDown);
     });
 
     this.socket.on(event.init, (data: GameInfo) => {
-      console.log('init: ', data);
       gameStore.setGamInfo(data);
     });
 
     this.socket.on(event.render, (data: GameTable) => {
-      console.log('render:', data);
       gameStore.setTableInfo(data);
     });
 
     this.socket.on(event.finish, (data: FinishEventData) => {
       gameStore.setGameHistoryId(data.gameHistoryId);
-      console.log('finish:', data);
-      // TODO : data.gameId
       gameStore.isStarted = false;
       gameStore.isFinished = true;
       gameStore.leftScore = 0;
@@ -75,7 +68,6 @@ class GamePlaySocketService {
   }
 
   off(): void {
-    // console.log('socket matching off');
     this.socket.off(event.init);
     this.socket.off(event.render);
     this.socket.off(event.finish);
@@ -87,7 +79,6 @@ class GamePlaySocketService {
    */
 
   readyGame(): void {
-    console.log('readyGame');
     this.socket.emit('ready');
   }
 
@@ -98,7 +89,6 @@ class GamePlaySocketService {
   }
 
   forceQuitGame(): void {
-    console.log('forceQuit');
     this.socket.emit('forceQuit');
   }
 }

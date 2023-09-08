@@ -59,17 +59,13 @@ class GameMatchingSocketService {
    */
 
   on(): void {
-    console.log('socket matching on');
-
     this.socket.on(event.matched, (data: MatchedEventData) => {
-      console.log('matched: ', data);
       matchingStore.setMatchingEndTimeMs(data.endTimeMs);
       matchingStore.setId(data.matchingId);
       matchingStore.setStep(MatchingStep.InMatching);
     });
 
     this.socket.on(event.confirm, (data: ConfirmEventData) => {
-      console.log('confirm:', data);
       if (data.result === true) {
         gameStore.setMatchInfo(data);
         matchingStore.setStep(MatchingStep.Accept);
@@ -79,13 +75,11 @@ class GameMatchingSocketService {
     });
 
     this.socket.on(event.timeout, (data: TimeoutEventData) => {
-      console.log('timeout', data);
       matchingStore.setStep(MatchingStep.Timeout);
     });
   }
 
   off(): void {
-    console.log('socket matching off');
     this.socket.off(event.matched);
     this.socket.off(event.confirm);
     this.socket.off(event.timeout);

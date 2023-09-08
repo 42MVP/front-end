@@ -31,7 +31,6 @@ const formatTime = (time: number) => {
 const updateFormattedTime = (targetTime: Date) => {
   const timeDifference = getTimeDifference(targetTime);
   timeDifference < 1 ? emits('timeout', props.timeoutMessage) : (formattedTime.value = formatTime(timeDifference + 1));
-  // console.log('updateTimer', targetTime.getUTCMinutes(), ':', targetTime.getUTCSeconds());
 };
 
 onMounted(() => {
