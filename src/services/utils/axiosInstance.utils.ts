@@ -1,7 +1,6 @@
 import axios, { type AxiosInstance, type AxiosError, type AxiosResponse, type AxiosRequestConfig } from 'axios';
 import { triggerApiError } from './apiError.utils';
-
-const endpoint = 'http://localhost:3000';
+import { endpoint } from '@/services/utils/config.utils';
 
 const setAuthorizationHeader = (config: AxiosRequestConfig): AxiosRequestConfig => {
   const accessToken = localStorage.getItem('access-token');
