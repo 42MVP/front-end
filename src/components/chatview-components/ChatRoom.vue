@@ -60,7 +60,7 @@
       </div>
     </div>
     <div v-else class="chat-box-list-name">
-      <div class="chat-box-list-name-left-word">디엠상대 님과의 대화</div>
+      <div class="chat-box-list-name-left-word">{{ chatStore.chatRoom?.users[0]?.name && chatStore.chatRoom?.users[0]?.name }}님과의 대화</div>
     </div>
     <MessageList :chats="chatStore.chat" />
     <ChatInputBox
