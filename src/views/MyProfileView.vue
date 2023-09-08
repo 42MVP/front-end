@@ -17,8 +17,9 @@
         />
       </div>
       <div class="auth">
-        <h3>2차인증</h3>
-        <TButton :value="isCheckAuth" @input="updateAuth" />
+        <h3>2차인증 설정</h3>
+        <input type="checkbox" v-model="isCheckAuth" class="c-box" />
+        <span class="checkmark"></span>
       </div>
       <div class="mail">
         <h3>인증메일</h3>
@@ -115,13 +116,21 @@ const submitFrom = async (): Promise<void> => {
 .auth {
   display: flex;
   flex-flow: row;
-  gap: 64px;
+  align-items: center;
+  gap: 34px;
 }
+
+.c-box {
+  width: 20px;
+  height: 20px;
+}
+
 .mail {
   display: flex;
   flex-flow: row;
   gap: 60px;
 }
+
 .name {
   display: flex;
   flex-flow: row;
