@@ -9,11 +9,11 @@
         }
           " :placeholderText="loginStore?.name" type="name" :maxLength="15" required />
       </div>
-      <label class="container">
-        2차 인증 사용하기
-        <input type="checkbox" v-model="isCheckAuth" />
+      <div class="auth">
+        <h3>닉네임 설정</h3>
+        <input type="checkbox" v-model="isCheckAuth" class="c-box" />
         <span class="checkmark"></span>
-      </label>
+      </div>
       <div class="mail">
         <h3>인증메일</h3>
         <a>{{ loginStore?.email }}</a>
@@ -109,7 +109,13 @@ const submitFrom = async (): Promise<void> => {
 .auth {
   display: flex;
   flex-flow: row;
-  gap: 64px;
+  align-items: center;
+  gap: 34px;
+}
+
+.c-box {
+  width: 20px;
+  height: 20px;
 }
 
 .mail {
