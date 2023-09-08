@@ -26,7 +26,7 @@
       </div>
       <div class="two-buttons">
         <BasicButton text="완료" @click="submitFrom()" />
-        <BasicButton text="취소" :type="false" />
+        <BasicButton text="취소" @click="goToMyProfile()" :type="false" />
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@ const username = ref<string>('');
 
 const updateAuth = (newValue: boolean) => {
   isCheckAuth.value = newValue;
-}
+};
 
 const createFormData = (): FormData => {
   const formData = new FormData();
@@ -77,7 +77,10 @@ const submitFrom = async (): Promise<void> => {
   const loginInfo = await LoginService.getUserInfo();
   loginStore.updateLoginInfo(loginInfo);
   router.push(`/users/${loginStore?.name}`);
+};
 
+const goToMyProfile = () => {
+  router.push(`/users/${loginStore.name}`);
 };
 </script>
 
