@@ -19,10 +19,11 @@ import router from '@/router';
 
 // services
 import { UserService } from '@/services/user.service';
+// stores
+import { useModalStore } from '@/stores/modal.store';
 // interfaces
 import type { UserInfo } from '@/interfaces/user/UserInfo.interface';
 import type { OthersInfo } from '@/interfaces/FriendsInfo.interface';
-
 
 const props = defineProps({
   isLoginUser: { type: Boolean, default: false },
@@ -32,29 +33,40 @@ const props = defineProps({
 const isFollow = ref<Boolean>(props.profileUser.isFollow);
 const isBlock = ref<Boolean>(props.profileUser.isBlock);
 
+const modalStore = useModalStore();
+
 const editButton = () => {
   router.push('/users');
 };
 
 const followButton = async () => {
   isFollow.value = true;
-  await UserService.followUser(getEssentialInfo());
+
+  await UserService.followUser(getEssentialInfo()).catch(({ message }) => {
+    modalStore.notify(message);
+  });
 };
 
 const unFollowButton = async () => {
   isFollow.value = false;
-  await UserService.unfollowUser(props.profileUser.id);
+  await UserService.unfollowUser(props.profileUser.id).catch(({ message }) => {
+    modalStore.notify(message);
+  });
 };
 
 const blockButton = async () => {
   isBlock.value = true;
   isFollow.value = false;
-  await UserService.blockUser(getEssentialInfo());
+  await UserService.blockUser(getEssentialInfo()).catch(({ message }) => {
+    modalStore.notify(message);
+  });
 };
 
 const unBlockButton = async () => {
   isBlock.value = false;
-  await UserService.unblockUser(props.profileUser.id);
+  await UserService.unblockUser(props.profileUser.id).catch(({ message }) => {
+    modalStore.notify(message);
+  });
 };
 
 const getEssentialInfo = (): OthersInfo => {
