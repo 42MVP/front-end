@@ -92,7 +92,7 @@ const drawPaddles = (leftPaddle: Paddle, rightPaddle: Paddle) => {
 
 const clearBoard = (background: string) => {
   if (!ctx.value) return;
-  ctx.value.fillStyle = background || '#E0AFA0FF';
+  ctx.value.fillStyle = background || '#e0f0ff';
   ctx.value.fillRect(0, 0, gameWidth, gameHeight);
 };
 
