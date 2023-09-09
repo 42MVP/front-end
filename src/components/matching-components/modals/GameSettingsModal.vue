@@ -2,27 +2,9 @@
   <MatchingBox title="게임 설정">
     <template #body>
       <div class="radio-button-out-div">
-        <RadioButton
-          :value="0"
-          text="default"
-          @click="selectButton"
-          :isActive="setActive(0)"
-          style="margin: 10px"
-        />
-        <RadioButton
-          :value="1"
-          text="그레이"
-          @click="selectButton"
-          :isActive="setActive(1)"
-          style="margin: 10px"
-        />
-        <RadioButton
-          :value="2"
-          text="핑꾸"
-          @click="selectButton"
-          :isActive="setActive(2)"
-          style="margin: 10px"
-        />
+        <RadioButton :value="3" text="default" @click="selectButton" :isActive="setActive(3)" style="margin: 10px" />
+        <RadioButton :value="1" text="그레이" @click="selectButton" :isActive="setActive(1)" style="margin: 10px" />
+        <RadioButton :value="2" text="핑꾸" @click="selectButton" :isActive="setActive(2)" style="margin: 10px" />
       </div>
     </template>
     <template #footer>
@@ -39,9 +21,12 @@ import Button from '@/components/BasicButton.vue';
 import RadioButton from '@/components/RadioButton.vue';
 
 import { GameService } from '@/services/game.service';
-import { useMatchingStore } from '@/stores/matching.store';
+import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
+import { useGameStore } from '@/stores/game.store';
 
-const matchingStore = useMatchingStore()
+
+const matchingStore = useMatchingStore();
+const gameStore = useGameStore();
 const selectedOption = ref<number>(0);
 
 const selectButton = (index: number) => {
@@ -57,7 +42,7 @@ const applyQueue = async () => {
   try {
     await GameService.matching.applyQueue(matchingStore.option);
   } catch (e) {
-    alert('큐 요청 실패');
+    matchingStore.setStep(MatchingStep.GameSetting);
   }
 };
 </script>
