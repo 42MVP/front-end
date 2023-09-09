@@ -17,7 +17,7 @@ export class LoginService {
   }
 
   static async logout(): Promise<void> {
-    await axiosPost('/logout');
+    await axiosPost('/logout').catch(() => {});
     localStorage.clear();
   }
 }
