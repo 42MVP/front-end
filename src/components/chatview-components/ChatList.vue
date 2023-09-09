@@ -21,7 +21,7 @@
     <template #user-element>
       <BasicList
         :items="Object.values(chatStore.rooms).flat()"
-        :icon-buttons="iconButtons"
+        :iconButtons="iconButtons"
         @chooseItem="chooseChatRoom"
         @clickIconButton="actionChatRoom"
       />
