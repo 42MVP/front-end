@@ -3,7 +3,13 @@
     <template #body> 채팅방이 private으로 설정되며 검색목록에 조회되지 않습니다. </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomModePrivate(); emits('close');" />
+      <BasicButton
+        text="확인"
+        @click="
+          changeRoomModePrivate();
+          emits('close');
+        "
+      />
     </template>
   </Modal>
 </template>

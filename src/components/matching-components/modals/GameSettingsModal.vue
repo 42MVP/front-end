@@ -2,27 +2,9 @@
   <MatchingBox title="게임 설정">
     <template #body>
       <div class="radio-button-out-div">
-        <RadioButton
-          :value="0"
-          text="default"
-          @click="selectButton"
-          :isActive="setActive(0)"
-          style="margin: 10px"
-        />
-        <RadioButton
-          :value="1"
-          text="그레이"
-          @click="selectButton"
-          :isActive="setActive(1)"
-          style="margin: 10px"
-        />
-        <RadioButton
-          :value="2"
-          text="핑꾸"
-          @click="selectButton"
-          :isActive="setActive(2)"
-          style="margin: 10px"
-        />
+        <RadioButton :value="0" text="default" @click="selectButton" :isActive="setActive(0)" style="margin: 10px" />
+        <RadioButton :value="1" text="그레이" @click="selectButton" :isActive="setActive(1)" style="margin: 10px" />
+        <RadioButton :value="2" text="핑꾸" @click="selectButton" :isActive="setActive(2)" style="margin: 10px" />
       </div>
     </template>
     <template #footer>
@@ -41,7 +23,7 @@ import RadioButton from '@/components/RadioButton.vue';
 import { GameService } from '@/services/game.service';
 import { useMatchingStore } from '@/stores/matching.store';
 
-const matchingStore = useMatchingStore()
+const matchingStore = useMatchingStore();
 const selectedOption = ref<number>(0);
 
 const selectButton = (index: number) => {

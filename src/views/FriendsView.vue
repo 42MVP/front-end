@@ -43,5 +43,4 @@ import FriendProfile from '@/components/friendslist-component/FriendProfile.vue'
   height: 100%;
   background-color: inherit;
 }
-
 </style>

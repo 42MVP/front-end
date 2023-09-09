@@ -4,8 +4,9 @@ import { endpoint } from '@/services/utils/config.utils';
 
 const setRequestConfig = (config: AxiosRequestConfig) => {
   if (config.url?.includes('auth')) {
-    if (config.url?.includes('login') || config.url?.includes('logout'))
+    if (config.url?.includes('login') || config.url?.includes('logout')) {
       return setWithCredentials(setAuthorizationHeader(config));
+    }
     return setWithCredentials(config);
   }
   return setAuthorizationHeader(config);
