@@ -63,36 +63,46 @@ onMounted(async () => {
 });
 
 const chooseChatRoom = (roomId: number) => {
-  if (chatStore.removedRooms[roomId])
-    modalStore.on({
-      title: '알림',
-      text: chatStore.getNotice(roomId),
-      buttonText: '닫기',
-      buttonFunc: () => {
-        chatStore.deleteChatRoom(roomId);
-        modalStore.off();
-      },
-    });
-  else chatStore.selectChatRoom(roomId);
+  if (!isLeave.value) {
+    if (chatStore.removedRooms[roomId])
+      modalStore.on({
+        title: '알림',
+        text: chatStore.getNotice(roomId),
+        buttonText: '닫기',
+        buttonFunc: () => {
+          chatStore.deleteChatRoom(roomId);
+          modalStore.off();
+        },
+      });
+    else {
+      chatStore.selectChatRoom(roomId);
+    }
+  } else {
+    isLeave.value = false;
+  }
 };
 
+const isLeave = ref<boolean>(false);
+
 const actionChatRoom = async (iconEmitResponse: IconEmitResponse) => {
+  isLeave.value = true;
   const id = iconEmitResponse.id;
   const roomMode = chatStore.rooms[id].roomMode;
   try {
     await ChatService.exitRoom(id);
-    chatStore.selectChatRoom(-1);
-    chatStore.deleteChatRoom(id);
   } catch (e) {
-    if (roomMode !== 'DIRECT') {
+    if (!chatStore.removedRooms[id] && roomMode !== 'DIRECT') {
       modalStore.on({
         title: '알림',
         text: String(e),
         buttonText: '닫기',
         buttonFunc: () => {},
       });
+      return;
     }
   }
+  chatStore.selectChatRoom(-1);
+  chatStore.deleteChatRoom(id);
 };
 
 watch(
