@@ -44,7 +44,6 @@ const rightPlayer = ref<GameUser | undefined>(undefined);
 const gameBoard = ref<null | HTMLCanvasElement>(null);
 const ctx = ref<null | CanvasRenderingContext2D>(null);
 
-
 const gameSettings = {
   gameWidth: 1100,
   gameHeight: 700,
@@ -131,13 +130,13 @@ onBeforeUnmount(() => {
 }
 
 .game-ui-continer .user-info-div {
-    font: var(--medium);
+  font: var(--medium);
 }
 
-.game-ui-continer .score-div{
-    font: var(--extra-large);
-    align-self: center;
-    min-width: max-content;
+.game-ui-continer .score-div {
+  font: var(--extra-large);
+  align-self: center;
+  min-width: max-content;
 }
 
 .scoreText {

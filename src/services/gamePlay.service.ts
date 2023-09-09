@@ -63,7 +63,6 @@ class GamePlaySocketService {
       gameStore.isFinished = true;
       gameStore.leftScore = 0;
       gameStore.rightScore = 0;
-      
     });
   }
 

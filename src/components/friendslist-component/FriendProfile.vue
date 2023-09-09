@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div v-if="!selectedUser">      
+    <div v-if="!selectedUser">
       <div class="user-unchoose">☺️</div>
     </div>
     <div v-else class="p-container">
@@ -100,7 +100,6 @@ onMounted(() => {
   padding: 80px 34px 80px 34px;
   justify-content: space-between;
 }
-
 
 .user-unchoose {
   display: flex;

@@ -74,7 +74,7 @@ export class GameInvitationSocketService {
    */
 
   on() {
-      this.socket.on(event.invite, (data: InviteEventData) => {
+    this.socket.on(event.invite, (data: InviteEventData) => {
       invitationStore.setId(data.invitationId);
       invitationStore.setEndTimeMs(data.endTimeMs);
       invitationStore.setInviter(data.inviterName, data.inviterAvatarUrl);

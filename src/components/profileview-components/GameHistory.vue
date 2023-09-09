@@ -5,7 +5,7 @@
       :username="username"
       :avartarUrl="img"
       imgSize="100"
-      :style="(history.score < history.opponentScore) && 'opacity: 0.3'"
+      :style="history.score < history.opponentScore && 'opacity: 0.3'"
     />
     <DBox :top="''" :middle="history.score + ' vs ' + history.opponentScore" />
     <AvatarItem
@@ -28,7 +28,6 @@ const props = defineProps({
   img: { type: String, default: '' },
   histories: { type: Array<UserGameHistory>, default: [] as UserGameHistory[] },
 });
-
 </script>
 
 <style scoped>

@@ -114,37 +114,36 @@ const translate = (x: string, y: string) => {
   justify-content: space-between;
 }
 
-
 .vue-js-switch {
   cursor: pointer;
   justify-self: start;
 }
 
 .vue-js-switch .v-switch-input {
-    opacity: 1;
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
+  opacity: 1;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
 
 .vue-js-switch .v-switch-core {
-    display: block;
-    position: relative;
-    box-sizing: border-box;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
 
-    border-style: solid;
+  border-style: solid;
 
-    /* transition: border-color 0.3s, background-color 0.3s; */
-    user-select: none;
+  /* transition: border-color 0.3s, background-color 0.3s; */
+  user-select: none;
 }
 
 .vue-js-switch .v-switch-core .v-switch-button {
-      display: block;
-      overflow: hidden;
+  display: block;
+  overflow: hidden;
 
-      border-radius: 100%;
-      z-index: 2;
-    }
+  border-radius: 100%;
+  z-index: 2;
+}
 
 .label-text {
   color: var(--brown, #463f3a);

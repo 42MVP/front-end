@@ -156,7 +156,7 @@ export const useChatStore = defineStore('chat', {
       this.rooms[roomId].banUsers = [...this.rooms[roomId].banUsers, ...[user]];
     },
     unbanUser(roomId: number, userId: number) {
-      this.rooms[roomId].banUsers = this.rooms[roomId].users.filter(user => user.id !== userId);
+      this.rooms[roomId].banUsers = this.rooms[roomId].banUsers.filter(user => user.id !== userId);
     },
     kickUser(roomId: number) {
       this.removedRooms = { ...this.removedRooms, [roomId]: RemovedRoomMode.KICKED };

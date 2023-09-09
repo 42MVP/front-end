@@ -1,4 +1,4 @@
-export function ms(timeStr: string) : number {
+export function ms(timeStr: string): number {
   const millisecondsPerSecond = 1000;
   const millisecondsPerMinute = millisecondsPerSecond * 60;
   const millisecondsPerHour = millisecondsPerMinute * 60;

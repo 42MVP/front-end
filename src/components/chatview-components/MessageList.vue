@@ -1,9 +1,9 @@
 <template>
   <div class="chat-box-container" ref="chatref">
     <div v-for="(chat, idx) in chats" :key="idx">
-    <MessageBox v-if="isBlockUser(chat.username)" :key="chat.id" :chat="chat" />
+      <MessageBox v-if="isBlockUser(chat.username)" :key="chat.id" :chat="chat" />
+    </div>
   </div>
- </div>
 </template>
 
 <script setup lang="ts">
@@ -35,10 +35,9 @@ const scrollToLatestMsg: Function = () => {
   });
 };
 
-const isBlockUser = (name: string) : boolean => {
-  return  usersStore.blocks.find(block => block.name === name) ? false : true;
-}
-
+const isBlockUser = (name: string): boolean => {
+  return usersStore.blocks.find(block => block.name === name) ? false : true;
+};
 </script>
 
 <style>

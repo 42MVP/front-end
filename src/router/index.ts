@@ -123,7 +123,7 @@ router.beforeEach((to, from, next) => {
   };
 
   if (to.meta.requireAuth && !loginStore.isLogin) {
-	routerNotify('/signin', '로그인이 필요합니다.');
+    routerNotify('/signin', '로그인이 필요합니다.');
   }
   next();
 });
