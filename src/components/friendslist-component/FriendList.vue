@@ -34,22 +34,29 @@ import BasicList from '@/components/BasicList.vue';
 import BasicButton from '@/components/BasicButton.vue';
 import { UserService } from '@/services/user.service';
 import { useUsersStore } from '@/stores/users.store';
+import { useModalStore } from '@/stores/modal.store';
 import { SocketService } from '@/services/socket.service';
+import { ApiError } from '@/services/utils/apiError.utils';
 
 const isMenu = ref(false);
 const userStore = useUsersStore();
+const modalStore = useModalStore();
 
 const listType = ref<string>('Friends');
 const users = ref<OthersInfo[]>([]);
 
 const removeFromList = async (id: number) => {
   users.value = users.value.filter(u => u.id !== id);
-  if (listType.value === 'Friends') {
-    userStore.friends.filter(u => u.id !== id);
-    await UserService.unfollowUser(id);
-  } else if (listType.value === 'Blocks') {
-    userStore.blocks.filter(u => u.id !== id);
-    await UserService.unblockUser(id);
+  try {
+    if (listType.value === 'Friends') {
+      userStore.friends.filter(u => u.id !== id);
+      await UserService.unfollowUser(id);
+    } else if (listType.value === 'Blocks') {
+      userStore.blocks.filter(u => u.id !== id);
+      await UserService.unblockUser(id);
+    }
+  } catch (error) {
+    if (error instanceof ApiError) modalStore.notify(error.message);
   }
   userStore.selectedUserId = -1;
 };

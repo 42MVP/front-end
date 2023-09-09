@@ -63,6 +63,7 @@ import { useChatStore } from '@/stores/chat.store';
 import { useModalStore } from '@/stores/modal.store';
 // interface
 import type { ChatRoom, ChatRoomEnter } from '@/interfaces/chat/ChatRoom.interface';
+import { ApiError } from '@/services/utils/apiError.utils';
 
 const EnterStatus = {
   CHOICE: 1,
@@ -105,9 +106,13 @@ const chooseRoom = (roomId: number) => {
 };
 
 const enterRoom = async (roomId: number, password?: string) => {
-  const roomEnter: ChatRoomEnter = { roomId: roomId, password: password };
-  const enter = await ChatService.enterRoom(roomEnter);
-  chatStore.addChatRoom(roomId, enter);
+  try {
+    const roomEnter: ChatRoomEnter = { roomId: roomId, password: password };
+    const enter = await ChatService.enterRoom(roomEnter);
+    chatStore.addChatRoom(roomId, enter);
+  } catch (error) {
+    if (error instanceof ApiError) modalStore.notify(error.message);
+  }
 };
 </script>
 
