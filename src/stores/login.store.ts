@@ -40,16 +40,8 @@ export const useLoginStore = defineStore('login', {
     },
     async logout() {
       await LoginService.logout();
-      this.resetAll();
+      localStorage.clear();
       window.location.href = '/';
-    },
-    resetAll() {
-      this.isLogin = false;
-      this.id = -1;
-      this.name = '';
-      this.avatarURL = '';
-      this.isAuth = false;
-      this.email = '';
     },
     setLogin(user: LoginInfo) {
       this.isLogin = true;

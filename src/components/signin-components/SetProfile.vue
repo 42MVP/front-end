@@ -83,7 +83,7 @@ const submitFrom = async (): Promise<void> => {
       text: String(e),
       buttonText: '닫기',
       buttonFunc: () => {
-        loginStore.resetAll();
+        localStorage.clear();
         router.push('/');
       },
     });

@@ -2,8 +2,22 @@ import axios, { type AxiosInstance, type AxiosError, type AxiosResponse, type Ax
 import { triggerApiError } from './apiError.utils';
 import { endpoint } from '@/services/utils/config.utils';
 
+const setRequestConfig = (config: AxiosRequestConfig) => {
+  if (config.url?.includes('auth')) {
+    if (config.url?.includes('login') || config.url?.includes('logout'))
+      return setWithCredentials(setAuthorizationHeader(config));
+    return setWithCredentials(config);
+  }
+  return setAuthorizationHeader(config);
+};
+
+const setWithCredentials = (config: AxiosRequestConfig) => {
+  config.withCredentials = true;
+  return config;
+};
+
 const setAuthorizationHeader = (config: AxiosRequestConfig): AxiosRequestConfig => {
-  const accessToken = localStorage.getItem('access-token');
+  const accessToken = localStorage.getItem('token');
   if (accessToken) {
     if (!config.headers) {
       config.headers = {};
@@ -13,20 +27,9 @@ const setAuthorizationHeader = (config: AxiosRequestConfig): AxiosRequestConfig 
   return config;
 };
 
-async function refreshToken(): Promise<void> {
-  await axios
-    .get(`${endpoint}/auth/reissue`, {
-      withCredentials: true,
-    })
-    .then(({ data }) => {
-      localStorage.setItem('access-token', data);
-    })
-    .catch(error => {
-      // TODO await axios.get(`${endpoint}/auth/logout`, {
-      //   withCredentials: true,
-      // });
-      triggerApiError(error);
-    });
+export async function refreshToken(): Promise<void> {
+  const data = await axiosGet('/auth/reissue');
+  if (typeof data === 'string') localStorage.setItem('token', data);
 }
 
 const axiosInstance = (): AxiosInstance => {
@@ -44,20 +47,19 @@ const axiosInstance = (): AxiosInstance => {
 
   const retry = async <ResType>(errorConfig: AxiosRequestConfig): Promise<ApiResponse<ResType>> => {
     const retryConfig = setAuthorizationHeader(errorConfig);
-    return (await axios.request<ResType>(retryConfig)).data;
+    return await axios.request<ResType>(retryConfig);
   };
 
-  const onRejectedRes = async (error: AxiosError) => {
+  const onRejectedRes = async <ResType>(error: AxiosError) => {
     const data = error.response?.data as AxiosError;
-    if (data) {
+    if (data && !error.config?.url?.includes('auth') && !error.config?.url?.includes('logout')) {
       if (data.message.includes('JWT')) {
         await refreshToken();
         if (error.config) {
-          return await retry(error.config);
+          return await retry<ResType>(error.config);
         }
       }
     }
-
     return Promise.reject(error);
   };
 
@@ -71,9 +73,8 @@ interface ApiResponse<T> {
 
 export async function axiosRequest<ResType>(config: AxiosRequestConfig): Promise<ApiResponse<ResType>> {
   try {
-    const isAuth = config.url?.includes('auth');
+    const reqConfig = setRequestConfig(config);
     const instance = axiosInstance();
-    const reqConfig = isAuth ? config : setAuthorizationHeader(config);
     const response: AxiosResponse<ResType> = await instance.request<ResType>(reqConfig);
     return { data: response.data };
   } catch (error) {
@@ -82,15 +83,14 @@ export async function axiosRequest<ResType>(config: AxiosRequestConfig): Promise
 }
 
 export async function axiosGet<ResType>(uri: string, params?: URLSearchParams | string): Promise<ResType> {
-  return axiosRequest<ResType>({
+  return await axiosRequest<ResType>({
     method: 'GET',
     url: uri,
     params,
   }).then(({ data }) => data);
 }
-
 export async function axiosPatch<ResType, B>(uri: string, reqData?: B): Promise<ResType> {
-  return axiosRequest<ResType>({
+  return await axiosRequest<ResType>({
     method: 'PATCH',
     url: uri,
     data: reqData,
@@ -98,7 +98,7 @@ export async function axiosPatch<ResType, B>(uri: string, reqData?: B): Promise<
 }
 
 export async function axiosPost<ResType, B>(uri: string, reqData?: B): Promise<ResType> {
-  return axiosRequest<ResType>({
+  return await axiosRequest<ResType>({
     method: 'POST',
     url: uri,
     data: reqData,
@@ -106,7 +106,7 @@ export async function axiosPost<ResType, B>(uri: string, reqData?: B): Promise<R
 }
 
 export async function axiosPut<ResType = void, B = any>(uri: string, reqData?: B): Promise<ResType> {
-  return axiosRequest<ResType>({
+  return await axiosRequest<ResType>({
     method: 'PUT',
     url: uri,
     data: reqData,
@@ -114,7 +114,7 @@ export async function axiosPut<ResType = void, B = any>(uri: string, reqData?: B
 }
 
 export async function axiosDelete<ResType = void, B = any>(uri: string, param?: string, reqData?: B): Promise<ResType> {
-  return axiosRequest<ResType>({
+  return await axiosRequest<ResType>({
     method: 'DELETE',
     url: param ? `${uri}/${param}` : uri,
     data: reqData,

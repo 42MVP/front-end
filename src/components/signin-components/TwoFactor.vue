@@ -78,8 +78,9 @@ const submitAuthCode = async (): Promise<void> => {
     return;
   }
   const token = String(route.query.token);
+  if (typeof token === 'string') localStorage.setItem('token', token);
   const authCode: AuthCode = { code: code.value };
-  await LoginService.postTwoFactor(token, authCode);
+  await LoginService.postTwoFactor(authCode);
   loginStore.login();
 };
 </script>

@@ -1,19 +1,13 @@
 import { io } from 'socket.io-client';
 import { endpoint } from './utils/config.utils';
+import { refreshToken } from './utils/axiosInstance.utils';
 
 export class SocketService {
   private static instance: SocketService;
   private socket: any;
 
   private constructor() {
-    const accessToken = localStorage.getItem('access-token');
-    const URL = endpoint;
-    this.socket = io(URL, {
-      auth: {
-        token: accessToken,
-      },
-    });
-    this.onSocket();
+    this.connectSocket();
   }
 
   static getInstance(): SocketService {
@@ -21,6 +15,17 @@ export class SocketService {
       SocketService.instance = new SocketService();
     }
     return SocketService.instance;
+  }
+
+  connectSocket(): void {
+    const accessToken = localStorage.getItem('token');
+    const URL = endpoint;
+    this.socket = io(URL, {
+      auth: {
+        token: accessToken,
+      },
+    });
+    this.onSocket();
   }
 
   getSocket(): any {
@@ -31,8 +36,12 @@ export class SocketService {
     this.socket.on('connect', () => {
       console.log('connect');
     });
-    this.socket.on('disconnect', () => {
+    this.socket.on('disconnect', async () => {
       console.log('disconnect');
+      await refreshToken().catch(() => {
+        localStorage.clear();
+      });
+      location.reload();
     });
     this.socket.on('connect_error', (error: any) => {
       console.log('connect_error:', error);

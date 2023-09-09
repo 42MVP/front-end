@@ -7,11 +7,15 @@
     <Modal :title="modalStore.title" :show="modalStore.isActive">
       <template #body>{{ modalStore.text }} </template>
       <template #footer>
-        <BasicButton :text="modalStore.buttonText" @click="() => {
-          modalStore.buttonFunc();
-          modalStore.off();
-        }
-          " />
+        <BasicButton
+          :text="modalStore.buttonText"
+          @click="
+            () => {
+              modalStore.buttonFunc();
+              modalStore.off();
+            }
+          "
+        />
       </template>
     </Modal>
 
@@ -51,7 +55,6 @@ const routerNotify = async (uri: string, message: string) => {
   modalStore.notify(message);
 };
 
-
 onMounted(() => {
   if (loginStore.isLogin) {
     ChatSocketService.onChat();
@@ -62,8 +65,8 @@ onMounted(() => {
 onErrorCaptured((error, vm, info): boolean | void => {
   if (error instanceof ApiError) {
     if (error.message.includes('JWT')) {
-      // TODO : logout, localStorage.clear();
-      return false;
+      localStorage.clear();
+      routerNotify('/signin', '로그인이 필요합니다.');
     } else {
       if (error.statusCode === 404) {
         routerNotify('/404', error.message);
