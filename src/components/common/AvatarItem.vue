@@ -12,11 +12,11 @@ import { defaultAvatarURL } from '@/services/utils/config.utils';
 const props = defineProps({
   username: {
     type: String,
-    default: "",
+    default: '',
   },
   avartarUrl: {
     type: String,
-    default:"",
+    default: '',
   },
   imgSize: {
     type: String,

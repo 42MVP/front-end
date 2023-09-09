@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import TextInputBox from '@/components/TextInputBox.vue';
@@ -51,6 +51,11 @@ const loginStore = useLoginStore();
 
 const defaultName = String(route.query.name);
 
+onMounted(() => {
+  const token = route.query.token;
+  if (typeof token === 'string') localStorage.setItem('token', token);
+});
+
 const createFormData = (): FormData => {
   const formData = new FormData();
   formData.append('name', username.value || defaultName);
@@ -66,17 +71,6 @@ const submitFrom = async (): Promise<void> => {
     const formData = createFormData();
     await UserService.setUserProfile(formData);
     loginStore.login();
-    if (username.value.length === 0) {
-      modalStore.on({
-        title: '알림',
-        text: '기본 닉네임이 유지됩니다.\n언제든 [유저 - 내 프로필] 에서 변경이 가능합니다.\
-      ',
-        buttonText: '홈으로',
-        buttonFunc: () => {
-          router.push('/');
-        },
-      });
-    } else router.push('/');
   } catch (e) {
     modalStore.on({
       title: '오류',

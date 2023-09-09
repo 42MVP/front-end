@@ -25,8 +25,10 @@ import { MatchingStep, useMatchingStore } from '@/stores/matching.store';
 import { useGameStore } from '@/stores/game.store';
 
 
+
 const matchingStore = useMatchingStore();
 const gameStore = useGameStore();
+
 const selectedOption = ref<number>(0);
 
 const selectButton = (index: number) => {

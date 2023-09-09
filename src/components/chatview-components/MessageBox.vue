@@ -4,7 +4,7 @@
       <div class="chat-info-line-box">
         <AvatarItem class="user-avatar" :avartarUrl="props.chat.avatarURL" imgSize="50" />
       </div>
-      <div class="chat-info-line-text"  @click="toProfile">
+      <div class="chat-info-line-text" @click="toProfile">
         <p
           :class="{
             'chat-info-line-box': !isMyMessage,
@@ -38,8 +38,8 @@ const loginUsername = ref(loginStore?.name);
 const props = defineProps<{ chat: Chat }>();
 
 const toProfile = () => {
-  router.push(`/users/${props.chat.username}`)
-}
+  router.push(`/users/${props.chat.username}`);
+};
 
 const isMyMessage = computed(() => {
   return props.chat.username === loginUsername.value;

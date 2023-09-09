@@ -1,9 +1,9 @@
 <script lang="ts">
-import InfoBox from './InfoBox.vue'
+import InfoBox from './InfoBox.vue';
 
 export default {
   components: {
-    InfoBox
+    InfoBox,
   },
 };
 </script>
@@ -14,15 +14,9 @@ export default {
     <div class="top">
       <div class="user-card">usercard</div>
       <div class="game-card">
-        <InfoBox>
-          aasd
-        </InfoBox>
-        <InfoBox>
-          aasd
-        </InfoBox>
-        <InfoBox>
-          aasd
-        </InfoBox>
+        <InfoBox> aasd </InfoBox>
+        <InfoBox> aasd </InfoBox>
+        <InfoBox> aasd </InfoBox>
       </div>
     </div>
     <div class="bottom">

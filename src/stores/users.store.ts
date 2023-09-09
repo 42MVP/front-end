@@ -16,12 +16,10 @@ export const useUsersStore = defineStore('users', {
   getters: {},
   actions: {
     addFriends(user: OthersInfo) {
-      if(!this.friends.some(u => u.id === user.id))
-        this.friends.push(user);
+      if (!this.friends.some(u => u.id === user.id)) this.friends.push(user);
     },
     addBlocks(user: OthersInfo) {
-      if (!this.blocks.some(u => u.id === user.id)) 
-        this.blocks.push(user);
+      if (!this.blocks.some(u => u.id === user.id)) this.blocks.push(user);
     },
     deleteFriends(id: number) {
       this.friends = this.friends.filter(user => user.id !== id);

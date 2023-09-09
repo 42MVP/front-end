@@ -44,7 +44,6 @@ const rightPlayer = ref<GameUser | undefined>(undefined);
 const gameBoard = ref<null | HTMLCanvasElement>(null);
 const ctx = ref<null | CanvasRenderingContext2D>(null);
 
-
 const gameSettings = {
   gameWidth: 1100,
   gameHeight: 700,
