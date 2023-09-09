@@ -2,13 +2,15 @@
   <ManageChannelMemberModal :isShow="modalName === '멤버 관리'" @close="modalName = ''" />
   <ChangeChannelPasswordModal :isShow="modalName === '비밀번호 변경'" @close="modalName = ''" />
   <SetChannelPasswordModal :isShow="modalName === '비밀번호 설정'" @close="modalName = ''" @submit="modalName = ''" />
-  <DeleteChannelPasswordModal
-    :isShow="modalName === '비밀번호 해제'"
-    @close="modalName = ''"
-    @submit="modalName = ''"
-  />
-  <SetChannelPrivateModal :isShow="modalName === '프라이빗 설정'" @submit="modalName = ''" />
-  <UndoChannelPrivateModal :isShow="modalName === '프라이빗 해제'" @submit="modalName = ''" />
+  <DeleteChannelPasswordModal :isShow="modalName === '비밀번호 해제'" @close="modalName = ''" @submit="
+    modalName = '';
+  " />
+  <SetChannelPrivateModal :isShow="modalName === '프라이빗 설정'" @close="modalName = ''" @submit="
+    modalName = '';
+  " />
+  <UndoChannelPrivateModal :isShow="modalName === '프라이빗 해제'" @close="modalName = ''" @submit="
+    modalName = '';
+  " />
 
   <div class="chat-list-container">
     <div class="chat-box-list-name">
@@ -22,12 +24,8 @@
           </div>
           <DropdownMenu v-if="isActiveDropdown" style="min-width: max-content">
             <template #dropdown-item>
-              <BasicList
-                :items="chatStore.chatRoom?.users"
-                @chooseItem="showUserProfile"
-                :iconButtons="[{ emoji: '✉️', event: 'invite' }]"
-                @clickIconButton="inviteGame"
-              />
+              <BasicList :items="chatStore.chatRoom?.users" @chooseItem="showUserProfile"
+                :iconButtons="[{ emoji: '✉️', event: 'invite' }]" @clickIconButton="inviteGame" />
             </template>
           </DropdownMenu>
         </div>
@@ -35,26 +33,18 @@
       <div v-if="!isDM && chatStore.chatRoom?.self.role !== 'USER'" class="chat-box-list-name-right">
         <div class="list-element-icon-container">
           <div class="chat-box-icon" @click="setModal('멤버 관리')">✅</div>
-          <button
-            v-show="chatStore.chatRoom?.self.role === 'OWNER'"
-            v-for="(modeButton, index) in roomModeIcon[roomMode]"
-            :key="index"
-            @click="setModal(modeButton.modal)"
-          >
+          <button v-show="chatStore.chatRoom?.self.role === 'OWNER'" v-for="(modeButton, index) in roomModeIcon[roomMode]"
+            :key="index" @click="setModal(modeButton.modal)">
             {{ modeButton.emoji }}
           </button>
         </div>
       </div>
     </div>
     <MessageList :chats="chatStore.chat" />
-    <ChatInputBox
-      @response="
-        newMessage => {
-          addChat(newMessage);
-        }
-      "
-      :maxLength="150"
-    />
+    <ChatInputBox @response="newMessage => {
+      addChat(newMessage);
+    }
+      " :maxLength="150" />
   </div>
 </template>
 
