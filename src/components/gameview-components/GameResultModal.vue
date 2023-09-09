@@ -5,14 +5,14 @@
         <div class="user-info-div">
           <span class="bold">Win👑</span>
           <AvatarItem :username="gameResult?.winner" :avartarUrl="gameResult?.winnerAvatarUrl" imgSize="100">
-            <span class="rate">{{ gameResult?.winnerRate as number }} (+12)</span>
+            <span class="rate">{{ gameResult?.winnerRate as number }}</span>
           </AvatarItem>
         </div>
         <span class="score">{{ gameResult?.winnerScore }} : {{ gameResult?.loserScore }} </span>
         <div class="user-info-div">
           <span class="bold">Lose🍂</span>
           <AvatarItem :username="gameResult?.loser" :avartarUrl="gameResult?.loserAvatarUrl" imgSize="100">
-            <span class="rate">{{ gameResult?.loserRate as number }} (-12)</span>
+            <span class="rate">{{ gameResult?.loserRate as number }}</span>
           </AvatarItem>
         </div>
       </div>

@@ -3,6 +3,13 @@
     <template #body>
       <div class="radio-button-out-div">
         <RadioButton
+          :value="0"
+          text="default"
+          @click="selectButton"
+          :isActive="setActive(0)"
+          style="margin: 10px"
+        />
+        <RadioButton
           :value="1"
           text="게임 옵션 1"
           @click="selectButton"
