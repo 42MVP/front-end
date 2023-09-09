@@ -82,19 +82,21 @@ import DropdownMenuItem from '@/components/dropdown-component/DropdownMenuItem.v
 // store
 import { useChatStore } from '@/stores/chat.store';
 import { useLoginStore } from '@/stores/login.store';
+import { useModalStore } from '@/stores/modal.store';
 // services
 import { UserService } from '@/services/user.service';
-import { ChatService } from '@/services/chat.service';
+import { ChatService, createChatUserByEvent, Role, Mode } from '@/services/chat.service';
 // interfaces
 import type { User } from '@/interfaces/user/User.interface';
 import type { IconButton } from '@/interfaces/IconButton.interface';
 import type { IconEmitResponse } from '@/interfaces/IconEmitResponse.interface';
 // utiles
-import { createChatUserByEvent, Role, Mode } from '@/utils/chatuser.utils';
 import { ms } from '@/utils/time.utils';
+import { ApiError } from '@/services/utils/apiError.utils';
 
 const chatStore = useChatStore();
 const loginStore = useLoginStore();
+const modalStore = useModalStore();
 
 const props = defineProps<{
   isShow: boolean;
@@ -123,11 +125,15 @@ const isUserTab = ref(true);
 const joinableUsers = ref<User[]>([] as User[]);
 
 const searchUser = async () => {
-  const allUsers: User[] = await UserService.getAllUser();
-  const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
-  const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
-  const filteredOutUserIds = new Set([...channelUserIds, ...banUserIds, loginStore.id]);
-  joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
+  try {
+    const allUsers: User[] = await UserService.getAllUser();
+    const channelUserIds = new Set(chatStore.chatRoom?.users.map(user => user.id));
+    const banUserIds = new Set(chatStore.chatRoom?.banUsers.map(banUser => banUser.id));
+    const filteredOutUserIds = new Set([...channelUserIds, ...banUserIds, loginStore.id]);
+    joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
+  } catch (error) {
+    if (error instanceof ApiError) modalStore.notify(error.message);
+  }
 };
 
 const searchName = ref<string>('');
@@ -200,8 +206,12 @@ const serviceChatUser = async (id: number, event: string, muteTime?: Date) => {
   const service = ChatService.getServiceChatUser(event);
   if (!chatStore.isSelected) return;
   const chatUser = createChatUserByEvent(id, chatStore.selectedID, event, muteTime);
-  if (!chatUser) throw '채팅 유저 관리 모달 오류';
-  await service(chatUser);
+  if (!chatUser) return;
+  try {
+    await service(chatUser);
+  } catch (error) {
+    if (error instanceof ApiError) modalStore.notify(error.message);
+  }
 };
 
 const emits = defineEmits<{

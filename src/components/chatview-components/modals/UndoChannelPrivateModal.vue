@@ -3,7 +3,13 @@
     <template #body> 채팅방이 더이상 Private 상태가 아니며, 검색 결과에 포함됩니다 </template>
     <template #footer>
       <BasicButton :type="false" text="취소" @click="emits('close')" style="margin-right: 5px" />
-      <BasicButton text="확인" @click="changeRoomModePublic(); emits('close');" />
+      <BasicButton
+        text="확인"
+        @click="
+          changeRoomModePublic();
+          emits('close');
+        "
+      />
     </template>
   </Modal>
 </template>
@@ -32,8 +38,7 @@ const changeRoomModePublic = async () => {
     roomId: chatStore.selectedID,
     roomMode: 'PUBLIC',
   };
-  ChatService.changeRoomMode(roomMode);
-  chatSotre.setRoomMode(roomMode.roomId, roomMode.roomMode);
+  chatStore.changeRoomMode(roomMode);
 };
 </script>
 

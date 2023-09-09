@@ -44,10 +44,9 @@ import { useLoginStore } from '@/stores/login.store';
 import { useUsersStore } from '@/stores/users.store';
 import { useChatStore } from '@/stores/chat.store';
 import { UserService } from '@/services/user.service';
-import { ChatService } from '@/services/chat.service';
 import type { User } from '@/interfaces/user/User.interface';
-import type { ChatInfo } from '@/interfaces/chat/ChatInfo.interface';
 import type { ChatRoomCreateDM } from '@/interfaces/chat/ChatRoom.interface';
+import { ApiError } from '@/services/utils/apiError.utils';
 
 const loginStore = useLoginStore();
 const userStore = useUsersStore();
@@ -72,7 +71,7 @@ const searchUser = async () => {
     const filteredOutUserIds = new Set([...blockedUserIds, loginStore.id, ...dmUserIds]);
     joinableUsers.value = allUsers.filter(user => !filteredOutUserIds.has(user.id));
   } catch (e) {
-    console.warn(e);
+    if (e instanceof ApiError) alert(e.message);
   }
 };
 
@@ -100,25 +99,11 @@ const createRoom = async () => {
   if (selectedUser.value === undefined) {
     return;
   }
-  try {
-    const chatRoom: ChatRoomCreateDM = {
-      userId: selectedUser.value?.id,
-      roomMode: 'DIRECT',
-    };
-    const room = await ChatService.createRoom(chatRoom);
-    const chatInfo: ChatInfo = {
-      id: room.id,
-      name: room.name,
-      roomMode: room.roomMode,
-      isChannel: false,
-      self: loginStore.owner,
-      users: [],
-      banUsers: [],
-    };
-    chatStore.addChatRoom(room.id, chatInfo);
-  } catch (e) {
-    console.warn(e);
-  }
+  const chatRoom: ChatRoomCreateDM = {
+    userId: selectedUser.value?.id,
+    roomMode: 'DIRECT',
+  };
+  chatStore.createRoom(chatRoom, false, loginStore.owner);
 };
 
 const close = () => {
